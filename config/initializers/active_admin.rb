@@ -350,3 +350,16 @@ ActiveAdmin.setup do |config|
   #
   # config.use_webpacker = true
 end
+
+# == Friendly Id addon
+ActiveAdmin.after_load do
+  ActiveAdmin::ResourceController.class_eval do
+    def find_resource
+      if resource_class.is_a?(FriendlyId)
+        scoped_collection.friendly.find(params[:id])
+      else
+        scoped_collection.find(params[:id])
+      end
+    end
+  end
+end

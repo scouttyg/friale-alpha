@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html id="layout_dashboard">
+  <head>
+    <%= render '/layouts/head' %>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "dashboard", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <%= yield(:head) %>
+  </head>
+  <body>
+    <div class="antialiased bg-gray-50 dark:bg-gray-900">
+      <%= render partial: "shared/topbar" %>
+      <%= render partial: "shared/sidebar" %>
+      <main class="p-4 md:ml-64 h-auto min-h-screen pt-20">
+        <div id="flash">
+          <%= render "layouts/flash" %>
+        </div>
+        <%= yield %>
+      </main>
+    </div>
+  </body>
+</html>

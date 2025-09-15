@@ -1,0 +1,53 @@
+<!-- Notifications -->
+<button type="button" data-dropdown-toggle="notification-dropdown" class="p-2 mr-1 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" onclick="loadNotifications()">
+  <span class="sr-only">View notifications</span>
+  <!-- Bell icon -->
+  <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
+  </svg>
+  <span id="notification-badge" class="hidden absolute -top-0.5 -right-0.5 z-10 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"></span>
+</button>
+<!-- Dropdown menu -->
+<div class="hidden overflow-hidden z-50 my-4 max-w-sm text-base list-none bg-white rounded divide-y divide-gray-100 shadow-lg dark:divide-gray-600 dark:bg-gray-700 rounded-xl" id="notification-dropdown">
+  <div id="notification-content">
+    <div class="px-4 py-2 text-center text-gray-500 dark:text-gray-400">
+      Loading...
+    </div>
+  </div>
+</div>
+
+<script>
+  function loadNotifications() {
+    fetch('<%= dropdown_content_notifications_path %>', {
+      headers: {
+        'Accept': 'text/html',
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('notification-content').innerHTML = html;
+    })
+    .catch(error => {
+      console.error('Error loading notifications:', error);
+      document.getElementById('notification-content').innerHTML = '<div class="px-4 py-2 text-center text-red-500">Error loading notifications</div>';
+    });
+  }
+
+  // Load initial notification count
+  fetch('<%= dropdown_content_notifications_path %>')
+    .then(response => response.text())
+    .then(html => {
+      // Extract unread count from the response
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+      const badge = tempDiv.querySelector('.bg-red-600');
+      if (badge && badge.textContent.trim() !== '') {
+        const count = badge.textContent.trim();
+        const notificationBadge = document.getElementById('notification-badge');
+        notificationBadge.textContent = count;
+        notificationBadge.classList.remove('hidden');
+      }
+    })
+    .catch(error => console.error('Error loading notification count:', error));
+</script>

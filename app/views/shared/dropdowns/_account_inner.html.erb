@@ -1,0 +1,20 @@
+<div class="avatar">
+  <% avatar = account.avatar.attached? ? account.avatar : (account.personal? && current_user.avatar.attached? ? current_user.avatar : nil) %>
+
+  <% if avatar %>
+    <%= image_tag(url_for(avatar), class: "mr-2 w-7 h-7 rounded-full") %>
+  <% else %>
+    <div class="relative inline-flex items-center justify-center mr-2 w-7 h-7 rounded-full overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+      <span class="font-medium text-gray-600 dark:text-gray-300"><%= account.initials %></span>
+    </div>
+  <% end %>
+</div>
+<div class="text-left">
+  <div
+    class="font-semibold leading-none text-gray-900 dark:text-white mb-0.5 text-sm">
+    <%= account.name %>
+  </div>
+  <div class="text-xs text-gray-500 dark:text-gray-400">
+    Created <%= account.created_at.strftime("%B, %Y") %>
+  </div>
+</div>

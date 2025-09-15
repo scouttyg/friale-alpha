@@ -1,0 +1,7 @@
+<li>
+  <% active_classes = active ? "bg-gray-100 dark:bg-gray-700" : "" %>
+  <%= link_to link, class: "flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group #{active_classes}" do %>
+    <%= render partial: "shared/sidebar/sidebar_icon", locals: { icon_name: icon_name } %>
+    <span class="ml-3"><%= title %></span>
+  <% end %>
+</li>

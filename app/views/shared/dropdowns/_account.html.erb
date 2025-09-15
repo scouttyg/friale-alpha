@@ -1,0 +1,3 @@
+<%= link_to switch_account_path(account), class: "flex items-center py-3 px-4 rounded hover:bg-gray-50 dark:hover:bg-gray-600", data: { turbo_method: "post" } do %>
+  <% render partial: "shared/dropdowns/account_inner", locals: { account: account } %>
+<% end %>

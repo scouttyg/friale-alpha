@@ -14,7 +14,24 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
 
   authenticated :admin_user do
-    mount Sidekiq::Web => '/sidekiq'
+    mount Sidekiq::Web => "/sidekiq"
+  end
+
+  authenticated :user do
+    scope module: :dashboard do
+      root to: "example#index", as: :authenticated_root
+
+      resources :notifications do
+        member do
+          patch :mark_as_read
+          patch :mark_as_unread
+        end
+        collection do
+          patch :mark_all_as_read
+          get :dropdown_content
+        end
+      end
+    end
   end
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
@@ -23,10 +40,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-
-  authenticated :user do
-    root to: "pages#home", as: :authenticated_root
-  end
 
   root to: "pages#home"
   get "contact", to: "pages#contact"

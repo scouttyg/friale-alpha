@@ -1,0 +1,21 @@
+<title>
+  <%= content_for?(:title) ? yield(:title) + " | #{t(:application_name)}" : "#{t(:application_name)}" %>
+</title>
+<%= favicon_link_tag "/favicon.ico" %>
+<%= favicon_link_tag "/apple-touch-icon.png", rel: "apple-touch-icon", sizes: "180x180", type: 'image/png' %>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<%= favicon_link_tag "/safari-pinned-tab.svg", rel: "mask-icon", color: Utils::Settings::Frontend::COLORS[:primary], type: nil %>
+<meta name="theme-color" content="<%= Utils::Settings::Frontend::COLORS[:primary] %>">
+<link rel="manifest" href="/site.webmanifest">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="application-name" content="<%= t(:application_name) %>">
+<meta name="keywords" content="<%= Utils::Settings::Frontend::SEO[:keywords] %>">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="<%= content_for?(:description) ? yield(:description) : Utils::Settings::Frontend::DEFAULT_DESCRIPTION %>">
+<meta name="apple-mobile-web-app-title" content="<%= t(:application_name) %>">
+<meta name="theme-color" content="<%= Utils::Settings::Frontend::COLORS[:primary] %>">
+<meta name="msapplication-TileColor" content="<%= Utils::Settings::Frontend::COLORS[:primary] %>">
+<meta name="msapplication-TileImage" content="/mstile-310x310.png">
+<%= render "/layouts/meta/open_graph" %>
+<%= render "/layouts/meta/twitter" %>

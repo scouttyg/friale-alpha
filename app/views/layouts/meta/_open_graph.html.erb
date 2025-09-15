@@ -1,0 +1,9 @@
+<meta property="og:site_name", content="<%=t(:application_name) %>">
+<% if content_for?(:share_url) %>
+  <meta property="og:url", content=<%= yield(:share_url) %> >
+<% end %>
+<% og_title = content_for?(:full_title) ? yield(:full_title) : (content_for?(:title) ? yield(:title) + " | #{t(:application_name)}" : "#{t(:application_name)}") %>
+<meta property="og:title", content="<%= og_title %>">
+<meta property="og:image", content="<%= content_for?(:share_image_url) ? yield(:share_image_url) : "#{root_url}web-square-logo.png" %>">
+<meta property="og:description", content="<%= content_for?(:description) ? yield(:description) : Utils::Settings::Frontend::DEFAULT_DESCRIPTION %>" >
+<meta property="og:type", content="website" >

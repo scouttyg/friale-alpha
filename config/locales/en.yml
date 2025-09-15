@@ -28,4 +28,6 @@
 #       enabled: "ON"
 
 en:
+  application_name: "Starter Template 2025"
   hello: "Hello world"
+

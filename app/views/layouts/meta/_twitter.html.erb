@@ -1,0 +1,6 @@
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="<%= Utils::Settings::Frontend::SOCIALS[:twitter] %>">
+<% twitter_title = content_for?(:full_title) ? yield(:full_title) : (content_for?(:title) ? yield(:title) + " | #{t(:application_name)}" : "#{t(:application_name)}") %>
+<meta name="twitter:title" content="<%= twitter_title %>">
+<meta name="twitter:description" content="<%= content_for?(:description) ? yield(:description) : Utils::Settings::Frontend::DEFAULT_DESCRIPTION %>">
+<meta name="twitter:image:src" content="<%= content_for?(:share_image_url) ? yield(:share_image_url) : "#{root_url}web-square-logo.png" %>">

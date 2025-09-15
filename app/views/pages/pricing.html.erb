@@ -1,0 +1,22 @@
+<section class="bg-white dark:bg-gray-900">
+  <div class="py-8 lg:py-16 px-4 mx-auto max-w-screen-xl">
+    <div class="mx-auto max-w-screen-md text-center mb-8 lg:mb-12">
+      <h1 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Designed for development teams of all sizes</h1>
+      <p class="mb-5 font-light text-gray-500 sm:text-xl dark:text-gray-400">Choose the perfect plan for your team's API management needs. All plans include our core features with different usage limits.</p>
+    </div>
+
+    <div class="grid gap-8 mb-6 lg:mb-16 md:grid-cols-2 lg:grid-cols-3">
+      <% @plans.each do |plan| %>
+        <%= render "dashboard/settings/billings/plan_pricing_card",
+            plan: plan,
+            path_for_new_subscription: new_user_registration_path(plan_id: plan.id) %>
+      <% end %>
+    </div>
+
+    <div class="mx-auto max-w-screen-md text-center mt-8">
+      <p class="mb-5 font-light text-gray-500 sm:text-xl dark:text-gray-400">
+        Need a custom plan? <a href="<%= contact_path %>" class="text-primary-600 hover:underline dark:text-primary-500">Contact us</a> to discuss your specific requirements.
+      </p>
+    </div>
+  </div>
+</section>

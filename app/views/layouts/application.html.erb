@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html id="layout_application" class=<%= flash.present? ? "has_flashes" : "no_flashes" %>>
+<html id="layout_application" class="<%= flash.present? ? "has_flashes" : "no_flashes" %>">
   <head>
     <%= render '/layouts/head' %>
     <%= csrf_meta_tags %>
@@ -9,7 +9,7 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
     <%= Sentry.get_trace_propagation_meta.html_safe %>
   </head>
-  <body>
+  <body class="bg-white dark:bg-gray-900">
     <%= render partial: "shared/static/header" %>
     <div id="flash">
       <%= render "layouts/flash" %>

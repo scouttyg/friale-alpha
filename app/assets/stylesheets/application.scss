@@ -8,3 +8,9 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+#layout_application #flash {
+  position: fixed;
+  top: 4rem;
+  width: 100%;
+}

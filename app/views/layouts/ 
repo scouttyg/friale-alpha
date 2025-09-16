@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html id="layout_application" class=<%= flash.present? ? "has_flashes" : "no_flashes" %>>
+<html id="layout_application" class="cool">
   <head>
     <%= render '/layouts/head' %>
     <%= csrf_meta_tags %>

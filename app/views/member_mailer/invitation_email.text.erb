@@ -1,0 +1,24 @@
+Team Invitation
+================
+
+Hi there!
+
+<%= @creator.display_name %> has invited you to join <%= @account.name %> as a <%= @member.access_level.capitalize %>.
+
+Account Details:
+- Account Name: <%= @account.name %>
+- Account Type: <%= @account.team? ? 'Team Account' : 'Personal Account' %>
+- Your Role: <%= @member.access_level.capitalize %>
+- Invited by: <%= @creator.display_name %> (<%= @creator.email %>)
+
+To accept this invitation, visit the following link:
+<%= @invitation_url %>
+
+If you don't have an account yet, you'll be guided through the sign-up process after accepting the invitation.
+
+If you believe you received this email in error, you can safely ignore it.
+
+---
+
+This invitation was sent to <%= @member.invite_email %>
+If you have any questions, please contact the person who invited you.

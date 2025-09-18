@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+      /* Email styles */
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      }
+      .header {
+        text-align: center;
+        border-bottom: 2px solid #e7e7e7;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+      }
+      .header h1 {
+        color: #2c3e50;
+        margin: 0;
+      }
+      .content {
+        margin-bottom: 30px;
+      }
+      .btn {
+        display: inline-block;
+        padding: 12px 30px;
+        background-color: #3498db;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        text-align: center;
+      }
+      .btn:hover {
+        background-color: #2980b9;
+      }
+      .footer {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid #e7e7e7;
+        color: #666;
+        font-size: 14px;
+      }
+      .account-info {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Team Invitation</h1>
+      </div>
+      
+      <div class="content">
+        <p>Hi there!</p>
+        
+        <p><strong><%= @creator.display_name %></strong> has invited you to join <strong><%= @account.name %></strong> as a <strong><%= @member.access_level.capitalize %></strong>.</p>
+        
+        <div class="account-info">
+          <h3>Account Details:</h3>
+          <p><strong>Account Name:</strong> <%= @account.name %></p>
+          <p><strong>Account Type:</strong> <%= @account.team? ? 'Team Account' : 'Personal Account' %></p>
+          <p><strong>Your Role:</strong> <%= @member.access_level.capitalize %></p>
+          <p><strong>Invited by:</strong> <%= @creator.display_name %> (<%= @creator.email %>)</p>
+        </div>
+        
+        <p>To accept this invitation, click the button below:</p>
+        
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="<%= @invitation_url %>" class="btn">Accept Invitation</a>
+        </div>
+        
+        <p>If you don't have an account yet, you'll be guided through the sign-up process after accepting the invitation.</p>
+        
+        <p>If you believe you received this email in error, you can safely ignore it.</p>
+      </div>
+      
+      <div class="footer">
+        <p>This invitation was sent to <%= @member.invite_email %></p>
+        <p>If you have any questions, please contact the person who invited you.</p>
+      </div>
+    </div>
+  </body>
+</html>

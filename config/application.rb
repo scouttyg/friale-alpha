@@ -26,10 +26,12 @@ module StarterTemplate2025
     config.active_job.queue_adapter = :sidekiq
 
     config.autoload_paths += Dir[
-      Rails.root.join('app/models/members/**/')
+      Rails.root.join("app/models/accounts/**/"),
+      Rails.root.join("app/models/members/**/")
     ]
     config.eager_load_paths += Dir[
-      Rails.root.join('app/models/members/**/')
+      Rails.root.join("app/models/accounts/**/"),
+      Rails.root.join("app/models/members/**/")
     ]
   end
 end

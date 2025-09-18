@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_15_231213) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_18_232701) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "accounts", force: :cascade do |t|
+    t.string "name"
+    t.string "slug"
+    t.string "type"
+    t.string "stripe_customer_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
@@ -81,6 +90,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_15_231213) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "members", force: :cascade do |t|
+    t.integer "access_level"
+    t.string "invite_email"
+    t.string "invite_token"
+    t.string "source_type", null: false
+    t.bigint "source_id", null: false
+    t.string "type"
+    t.bigint "creator_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_members_on_creator_id"
+    t.index ["source_type", "source_id"], name: "index_members_on_source"
+    t.index ["user_id"], name: "index_members_on_user_id"
+  end
+
   create_table "notifications", force: :cascade do |t|
     t.text "body"
     t.datetime "read_at"
@@ -129,5 +154,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_15_231213) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "members", "users"
+  add_foreign_key "members", "users", column: "creator_id"
   add_foreign_key "notifications", "users"
 end

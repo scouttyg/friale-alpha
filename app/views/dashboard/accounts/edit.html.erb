@@ -30,45 +30,6 @@
                       <%= f.label :account_id, "Account ID (public)", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
                       <%= f.text_field :account_id, class: "bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: "WidgetCo Incorperated", value: @account.hashid, disabled: true %>
                     </div>
-                    <div class="w-full">
-                      <%= f.label :secret_token, "Secret Token (private)", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-                      <div class="relative" data-controller="password-visibility">
-                        <%= f.text_field :secret_token,
-                            type: "password",
-                            class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                            data: { "password-visibility-target": "input" },
-                            disabled: true %>
-                        <button type="button"
-                                class="absolute inset-y-0 right-0 flex items-center pr-3"
-                                data-action="click->password-visibility#toggle">
-                          <!-- Eye icon (show password) -->
-                          <svg data-password-visibility-target="showIcon" class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                          </svg>
-                          <!-- Eye-slash icon (hide password) -->
-                          <svg data-password-visibility-target="hideIcon" class="w-5 h-5 text-gray-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
-                          </svg>
-                        </button>
-                      </div>
-                      <div class="w-full mt-5">
-                        <strong>Configuring your account:</strong>
-                        <p>First, set an <code>ENV</code> variable for <code>DATA_LATER_ACCOUNT_SECRET_TOKEN</code>, which will hold your account "Secret Token" from above.</p>
-                        <p>Afterwards, place the following code in <code>config/initializers/data_later.rb</code>:</p>
-                        <pre class="text-sm font-mono text-gray-900 dark:text-white whitespace-pre-wrap bg-gray-50 dark:bg-gray-700 p-4 mt-4">
-                            <%=
-                              <<~CODE
-
-                                DataLater.configure do |config|
-                                  config.account_id = '#{@account.hashid}' # This is PUBLIC and does not need to be stored securely
-                                  config.account_secret_token = ENV['DATA_LATER_ACCOUNT_SECRET_TOKEN'] # This is a PRIVATE secret, so store it securely!
-                                  config.environment = 'production' # or 'staging', depending on your use case
-                                end
-                              CODE
-                            %>
-                        </pre>
-                    </div>
                 </div>
                 <div class="flex items-center space-x-4">
                     <%= f.submit "Update Account", class: "text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" %>

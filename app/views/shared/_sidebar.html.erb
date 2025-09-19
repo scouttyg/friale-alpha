@@ -33,6 +33,13 @@
                    title: "Example Sidebar Item",
                    active: request.fullpath.start_with?(/dashboard/)
                  } %>
+      <%= render partial: "shared/sidebar/item",
+                 locals: {
+                   link: settings_account_url(current_account),
+                   icon_name: "gear",
+                   title: "Settings",
+                   active: request.fullpath.start_with?(settings_account_url(current_account)),
+                 } %>
     </ul>
   </div>
   <div

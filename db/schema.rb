@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_19_043206) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_19_164314) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -153,6 +153,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_19_043206) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "push_subscriptions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "endpoint"
+    t.string "public_key"
+    t.string "auth_secret"
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "endpoint", "public_key", "auth_secret"], name: "index_push_subscriptions_on_user_id_endpoint_and_auth", unique: true
+    t.index ["user_id"], name: "index_push_subscriptions_on_user_id"
+  end
+
   create_table "subscriptions", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "plan_id", null: false
@@ -209,6 +221,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_19_043206) do
   add_foreign_key "notifications", "users"
   add_foreign_key "payment_methods", "accounts"
   add_foreign_key "plan_periods", "plans"
+  add_foreign_key "push_subscriptions", "users"
   add_foreign_key "subscriptions", "accounts"
   add_foreign_key "subscriptions", "plan_periods"
   add_foreign_key "subscriptions", "plans"

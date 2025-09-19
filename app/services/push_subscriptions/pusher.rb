@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-module Notifications
+module PushSubscriptions
   class Pusher
     VAPID_CONFIGURATION = {
       subject: "mailto:#{ENV.fetch('WEB_PUSH_EMAIL', nil)}",
-      public_key: ENV.fetch('WEB_PUSH_PUBLIC_KEY', nil),
-      private_key: ENV.fetch('WEB_PUSH_PRIVATE_KEY', nil)
+      public_key: ENV.fetch("WEB_PUSH_PUBLIC_KEY", nil),
+      private_key: ENV.fetch("WEB_PUSH_PRIVATE_KEY", nil)
     }.freeze
 
     STANDARD_NOTIFICATION_OPTIONS = [

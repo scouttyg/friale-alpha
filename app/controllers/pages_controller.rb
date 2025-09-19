@@ -23,10 +23,6 @@ class PagesController < ApplicationController
 
   private
 
-  def launch_notification_params
-    params.require(:launch_notification_email).permit(:email)
-  end
-
   def contact_form_message_params
     params.require(:contact_form_message).permit(:email, :subject, :message)
   end

@@ -36,6 +36,10 @@ class User < ApplicationRecord
   # :lockable, :timeoutable, and :omniauthable
   devise :confirmable, :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
 
+  has_many :members, dependent: :destroy
+  has_many :account_members, class_name: 'AccountMember', dependent: :destroy
+  has_many :accounts, through: :account_members
+
   has_many :notifications, dependent: :destroy
   has_one_attached :avatar
 
@@ -46,5 +50,13 @@ class User < ApplicationRecord
   def initials
     base_initials = [first_name, last_name].compact_blank.map { |name| name[0] }.join.presence || email[0]
     base_initials.upcase
+  end
+
+  def display_name
+    full_name.presence || email
+  end
+
+  def personal_account
+    accounts.find_by(type: 'PersonalAccount')
   end
 end

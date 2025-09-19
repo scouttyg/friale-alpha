@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_19_032305) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_19_043206) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -116,6 +116,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_19_032305) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
+  create_table "payment_methods", force: :cascade do |t|
+    t.string "brand"
+    t.boolean "default", default: false
+    t.datetime "deleted_at"
+    t.jsonb "metadata"
+    t.string "type"
+    t.bigint "account_id", null: false
+    t.string "stripe_payment_method_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_payment_methods_on_account_id"
+  end
+
   create_table "plan_periods", force: :cascade do |t|
     t.bigint "plan_id", null: false
     t.integer "price_cents", default: 0, null: false
@@ -194,6 +207,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_19_032305) do
   add_foreign_key "members", "users"
   add_foreign_key "members", "users", column: "creator_id"
   add_foreign_key "notifications", "users"
+  add_foreign_key "payment_methods", "accounts"
   add_foreign_key "plan_periods", "plans"
   add_foreign_key "subscriptions", "accounts"
   add_foreign_key "subscriptions", "plan_periods"

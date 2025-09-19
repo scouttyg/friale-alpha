@@ -1,0 +1,17 @@
+<ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800" id="defaultTab" data-tabs-toggle="#defaultTabContent" role="tablist">
+  <li class="me-2">
+    <%= link_to "Overview",
+    overview_settings_billings_path(current_account),
+    class: "inline-block p-4 #{active == :overview ? 'text-blue-600 rounded-ss-lg bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300'}" %>
+  </li>
+  <li class="me-2">
+    <%= link_to "Plan",
+    plan_settings_billings_path(current_account),
+    class: "inline-block p-4 #{active == :plan ? 'text-blue-600 rounded-ss-lg bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300'}" %>
+  </li>
+  <li class="me-2">
+    <%= link_to "Payment Methods",
+    settings_payment_methods_path(current_account),
+    class: "inline-block p-4 #{active == :payment_methods ? 'text-blue-600 rounded-ss-lg bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300'}" %>
+  </li>
+</ul>

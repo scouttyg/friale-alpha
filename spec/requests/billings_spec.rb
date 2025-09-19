@@ -19,7 +19,7 @@ RSpec.describe 'Billings', type: :request do
   end
 
   context 'when checking the billings pages' do
-    let!(:user) { create(:user) }
+    let!(:user) { create(:user, :confirmed) }
 
     describe 'GET /plan' do
       it 'returns http success' do

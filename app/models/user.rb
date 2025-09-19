@@ -29,6 +29,9 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 class User < ApplicationRecord
+  has_paper_trail
+  include UserAccountSetup
+
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable, and :omniauthable
   devise :confirmable, :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable

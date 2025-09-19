@@ -39,49 +39,6 @@
               </span>
             </div>
 
-            <div class="flex justify-between items-center">
-              <span class="text-gray-900 dark:text-white">Webhook Endpoints</span>
-              <span class="text-gray-900 dark:text-white">
-                <% if @current_plan %>
-                  <%= current_account.webhook_endpoints.size %>
-                  <span class="text-gray-500 dark:text-gray-400">of</span>
-                  <%= @current_plan.webhook_endpoint_limit %>
-                <% else %>
-                  <span class="text-gray-500 dark:text-gray-400">N/A</span>
-                <% end %>
-              </span>
-            </div>
-
-            <div class="flex justify-between items-center">
-              <span class="text-gray-900 dark:text-white">API Events</span>
-              <span class="text-gray-900 dark:text-white">
-                <% if @current_plan %>
-                  <%= current_account.api_event_breakdown[:total] %>
-                  <span class="text-gray-500 dark:text-gray-400">of</span>
-                  <%= @current_plan.api_event_limit %>
-                <% else %>
-                  <span class="text-gray-500 dark:text-gray-400">N/A</span>
-                <% end %>
-              </span>
-            </div>
-
-            <% if @current_plan && current_account.api_event_breakdown[:total] > 0 %>
-              <div class="flex items-center space-x-4 pt-2">
-                <div class="flex items-center">
-                  <div class="me-2 h-2 w-2 rounded-full bg-primary-700"></div>
-                  <div class="text-sm text-gray-500 dark:text-gray-400">
-                    <span class="font-medium text-gray-900 dark:text-white"><%= current_account.api_event_breakdown[:api_requests] %></span> API Requests
-                  </div>
-                </div>
-                <div class="flex items-center">
-                  <div class="me-2 h-2 w-2 rounded-full bg-primary-500"></div>
-                  <div class="text-sm text-gray-500 dark:text-gray-400">
-                    <span class="font-medium text-gray-900 dark:text-white"><%= current_account.api_event_breakdown[:webhook_events] %></span> Webhook Events
-                  </div>
-                </div>
-              </div>
-            <% end %>
-
             <% unless @current_plan %>
               <div class="pt-4 border-t border-gray-200 dark:border-gray-600">
                 <p class="text-sm text-gray-500 dark:text-gray-400">

@@ -44,34 +44,6 @@
                 <div class="h-3 rounded-sm bg-primary-600" style="width: <%= (current_account.members.size/@current_plan.member_limit.to_f)*100 %>%"></div>
               </div>
             </div>
-            <div class="webhook-endpoint-limit">
-              <div class="mb-2 flex justify-between text-base font-medium text-gray-900 dark:text-white">
-                <span>Webhook Endpoint Limit</span>
-                <span><%= current_account.webhook_endpoints.size %> <span class="font-normal text-gray-500 dark:text-gray-400">of</span> <%= @current_plan.webhook_endpoint_limit %> <span class="font-normal text-gray-500 dark:text-gray-400">webhook endpoints</span></span>
-              </div>
-              <div class="mb-2 h-3 w-full rounded-sm bg-gray-200 dark:bg-gray-700">
-                <div class="h-3 rounded-sm bg-primary-600" style="width: <%= (current_account.webhook_endpoints.size/@current_plan.webhook_endpoint_limit.to_f)*100 %>%"></div>
-              </div>
-            </div>
-            <div class="api-event-limit">
-              <div class="mb-2 flex justify-between text-base font-medium text-gray-900 dark:text-white">
-                <span>API Event Limit</span>
-                <span><%= current_account.api_event_breakdown[:total] %> <span class="font-normal text-gray-500 dark:text-gray-400">of</span> <%= @current_plan.api_event_limit %> <span class="font-normal text-gray-500 dark:text-gray-400"> events</span></span>
-              </div>
-              <div class="mb-2 h-3 w-full rounded-sm bg-gray-200 dark:bg-gray-700">
-                <div class="h-3 rounded-sm bg-primary-600" style="width: <%= (current_account.api_event_breakdown[:total]/@current_plan.api_event_limit.to_f)*100 %>%"></div>
-              </div>
-              <div class="mb-4 flex items-center space-x-4 sm:mb-6">
-                <div class="flex items-center">
-                  <div class="me-2 h-2.5 w-2.5 rounded-full bg-primary-700"></div>
-                  <div class="text-sm text-gray-500 dark:text-gray-400"><span class="font-medium text-gray-900 dark:text-white"><%= current_account.api_event_breakdown[:api_requests] %></span> API Requests</div>
-                </div>
-                <div class="flex items-center">
-                  <div class="me-2 h-2.5 w-2.5 rounded-full bg-primary-500"></div>
-                  <div class="text-sm text-gray-500 dark:text-gray-400"><span class="font-medium text-gray-900 dark:text-white"><%= current_account.api_event_breakdown[:webhook_events] %></span> Webhook Events</div>
-                </div>
-              </div>
-            </div>
           </div>
           <h4 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Current plan benefits</h4>
           <div class="mb-4 space-y-3 sm:mb-6 sm:flex sm:space-x-24 sm:space-y-0 xl:block xl:space-x-0 xl:space-y-3 2xl:flex 2xl:space-x-24 2xl:space-y-0">
@@ -79,14 +51,6 @@
               <li class="flex items-center space-x-3">
                 <svg class="flex-shrink-0 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
                 <span>Member Limit: <span class="font-semibold"><%= @current_plan.member_limit %></span></span>
-              </li>
-              <li class="flex items-center space-x-3">
-                <svg class="flex-shrink-0 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Webhook Endpoints: <span class="font-semibold"><%= @current_plan.webhook_endpoint_limit %></span></span>
-              </li>
-              <li class="flex items-center space-x-3">
-                <svg class="flex-shrink-0 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>API Event Limit: <span class="font-semibold"><%= @current_plan.api_event_limit %></span></span>
               </li>
             </ul>
           </div>

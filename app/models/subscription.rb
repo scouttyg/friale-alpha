@@ -27,4 +27,18 @@ class Subscription < ApplicationRecord
   belongs_to :account
   belongs_to :plan
   belongs_to :plan_period
+
+  def renewal_date
+    # just for testing purposes
+    start_date = created_at || Time.zone.now
+
+    case plan_period.interval.to_sym
+    when :MONTH
+      start_date + 1.month
+    when :YEAR
+      start_date + 1.year
+    else
+      raise "Unknown interval: #{plan_period.interval}"
+    end
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_18_232701) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_19_032305) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -116,6 +116,43 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_18_232701) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
+  create_table "plan_periods", force: :cascade do |t|
+    t.bigint "plan_id", null: false
+    t.integer "price_cents", default: 0, null: false
+    t.string "price_currency", default: "USD", null: false
+    t.integer "interval"
+    t.string "stripe_price_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_id"], name: "index_plan_periods_on_plan_id"
+    t.index ["stripe_price_id"], name: "index_plan_periods_on_stripe_price_id", unique: true
+  end
+
+  create_table "plans", force: :cascade do |t|
+    t.datetime "activated_at"
+    t.datetime "deactivated_at"
+    t.text "description"
+    t.string "name"
+    t.integer "position"
+    t.jsonb "usage_limits"
+    t.string "stripe_product_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "plan_id", null: false
+    t.bigint "plan_period_id", null: false
+    t.jsonb "usage_limits"
+    t.string "stripe_subscription_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_subscriptions_on_account_id"
+    t.index ["plan_id"], name: "index_subscriptions_on_plan_id"
+    t.index ["plan_period_id"], name: "index_subscriptions_on_plan_period_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -157,4 +194,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_18_232701) do
   add_foreign_key "members", "users"
   add_foreign_key "members", "users", column: "creator_id"
   add_foreign_key "notifications", "users"
+  add_foreign_key "plan_periods", "plans"
+  add_foreign_key "subscriptions", "accounts"
+  add_foreign_key "subscriptions", "plan_periods"
+  add_foreign_key "subscriptions", "plans"
 end

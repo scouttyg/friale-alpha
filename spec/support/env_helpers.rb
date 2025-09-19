@@ -12,7 +12,7 @@ end
 # rubocop:disable Naming/AccessorMethodName
 def set_temporary_env(temporary_env_hash)
   @old_env = ENV.to_hash
-  ENV.update(temporary_env_hash.to_h { |k, v| [k.to_s, v.to_s] })
+  ENV.update(temporary_env_hash.to_h { |k, v| [ k.to_s, v.to_s ] })
 end
 # rubocop:enable Naming/AccessorMethodName
 
@@ -37,9 +37,9 @@ def reset_and_reload_class(klass)
   relative_file_path_of_class = absolute_file_path_of_class.delete_prefix(Rails.root.to_s)
   final_file_path = if relative_file_path_of_class.start_with?("/")
                       relative_file_path_of_class.delete_prefix("/")
-                    else
+  else
                       relative_file_path_of_class
-                    end
+  end
 
   # Load class again via filepath to reload constants after removing them
   load final_file_path

@@ -53,8 +53,8 @@ class PaymentMethod < ApplicationRecord
   def display_name
     parts = []
     parts << display_details if respond_to?(:display_details)
-    parts << '(Default)' if default?
-    parts.join(' ')
+    parts << "(Default)" if default?
+    parts.join(" ")
   end
 
   # This should be implemented by subclasses

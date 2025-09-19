@@ -2,27 +2,27 @@ module Dashboard
   module Settings
     module Billings
       class SubscriptionsController < SecureController
-        before_action :set_plan, only: [:new, :create]
-        before_action :set_plan_period, only: [:create]
-        before_action :set_payment_methods, only: [:new, :create]
+        before_action :set_plan, only: [ :new, :create ]
+        before_action :set_plan_period, only: [ :create ]
+        before_action :set_payment_methods, only: [ :new, :create ]
 
-        before_action :ensure_payment_method_exists, only: [:new]
+        before_action :ensure_payment_method_exists, only: [ :new ]
 
         def new
           @subscription = current_account.build_subscription(plan: @plan)
           @plan_period = @plan.plan_periods.find_by(id: params[:plan_period_id])
-          @plan_periods = @plan_period.present? ? [@plan_period] : @plan.plan_periods
+          @plan_periods = @plan_period.present? ? [ @plan_period ] : @plan.plan_periods
         end
 
         def create
           stripe_subscription = Stripe::Subscription.create(
             customer: current_account.stripe_customer_id,
-            items: [{
+            items: [ {
               price: @plan_period.stripe_price_id
-            }],
+            } ],
             default_payment_method: payment_method.stripe_payment_method_id,
-            payment_behavior: 'default_incomplete',
-            expand: ['latest_invoice.payment_intent']
+            payment_behavior: "default_incomplete",
+            expand: [ "latest_invoice.payment_intent" ]
           )
 
           @subscription = current_account.create_subscription!(
@@ -32,7 +32,7 @@ module Dashboard
           )
 
           redirect_to plan_settings_billings_path(current_account),
-                      notice: 'Subscription was successfully created.'
+                      notice: "Subscription was successfully created."
         rescue Stripe::StripeError => e
           flash.now[:error] = e.message
           render :new, status: :unprocessable_entity
@@ -54,14 +54,14 @@ module Dashboard
               )
               @subscription.update!(status: :cancelled)
               redirect_to plan_settings_billings_path(current_account),
-                          notice: 'Your subscription has been cancelled and will end at the current billing period.'
+                          notice: "Your subscription has been cancelled and will end at the current billing period."
             rescue Stripe::StripeError => e
               redirect_to plan_settings_billings_path(current_account),
                           alert: "Unable to cancel subscription: #{e.message}"
             end
           else
             redirect_to plan_settings_billings_path(current_account),
-                        alert: 'No active subscription found.'
+                        alert: "No active subscription found."
           end
         end
 
@@ -71,14 +71,14 @@ module Dashboard
           @plan = Plan.find(params[:plan_id] || params[:subscription][:plan_id])
         rescue ActiveRecord::RecordNotFound
           redirect_to plan_settings_billings_path(current_account),
-                      alert: 'Selected plan not found.'
+                      alert: "Selected plan not found."
         end
 
         def set_plan_period
           @plan_period = @plan.plan_periods.find(params[:subscription][:plan_period_id])
         rescue ActiveRecord::RecordNotFound
           redirect_to new_settings_subscription_path(plan_id: @plan.id),
-                      alert: 'Selected billing period not found.'
+                      alert: "Selected billing period not found."
         end
 
         def set_payment_methods
@@ -93,7 +93,7 @@ module Dashboard
           return if current_account.active_payment_methods.any?
 
           redirect_to settings_payment_methods_path(current_account),
-                      alert: 'Please add a payment method before selecting a subscription plan.'
+                      alert: "Please add a payment method before selecting a subscription plan."
         end
       end
     end

@@ -73,7 +73,7 @@ class InvitationsController < ApplicationController
     # If user is signed in, check if they"re trying to accept someone else"s invitation
     if user_signed_in? && current_user.email != @member.invite_email
       redirect_to root_path, alert: "This invitation is for a different email address. Please sign out first if you want to accept this invitation."
-      return
+      nil
     end
   end
 end

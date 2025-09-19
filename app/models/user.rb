@@ -59,6 +59,6 @@ class User < ApplicationRecord
   end
 
   def personal_account
-    accounts.find_by(type: 'PersonalAccount')
+    accounts.find_by(type: "PersonalAccount")
   end
 end

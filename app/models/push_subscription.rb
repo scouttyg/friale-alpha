@@ -36,7 +36,7 @@ class PushSubscription < ApplicationRecord
   validate :check_valid_vendor
 
   scope :expires_before, ->(date_time = Time.current) { where(expires_at: ...date_time) }
-  scope :expires_after, ->(date_time = Time.current) { where('expires_at IS NULL OR expires_at >= ?', date_time) }
+  scope :expires_after, ->(date_time = Time.current) { where("expires_at IS NULL OR expires_at >= ?", date_time) }
 
   scope :expired, -> { expires_before(Time.current) }
   scope :active, -> { expires_after(Time.current) }

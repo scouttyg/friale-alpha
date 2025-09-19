@@ -8,7 +8,7 @@ class MemberMailer < ApplicationMailer
     mail(
       to: member.invite_email,
       subject: "You've been invited to join #{@account.name}",
-      from: ENV['DEFAULT_FROM_EMAIL'] || "noreply@example.com"
+      from: ENV["DEFAULT_FROM_EMAIL"] || "noreply@example.com"
     )
   end
 end

@@ -11,7 +11,7 @@
 #
 class ContactFormMessage < ApplicationRecord
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :email, 'valid_email_2/email': { disposable: true, deny_list: true, message: 'domain is not permitted' }, on: :create
+  validates :email, 'valid_email_2/email': { disposable: true, deny_list: true, message: "domain is not permitted" }, on: :create
   validates :subject, presence: true
   validates :message, presence: true
 end

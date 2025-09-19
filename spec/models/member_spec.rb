@@ -105,7 +105,7 @@ RSpec.describe Member, type: :model do
       expect do
         Member.create!(source: account, creator: creator, invite_email: 'test@example.com')
       end.to have_enqueued_job(ActionMailer::MailDeliveryJob)
-        .with('MemberMailer', 'invitation_email', 'deliver_now', args: [an_instance_of(Member)])
+        .with('MemberMailer', 'invitation_email', 'deliver_now', args: [ an_instance_of(Member) ])
     end
 
     it 'does not send invitation email when user is present' do

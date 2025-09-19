@@ -87,7 +87,7 @@ RSpec.describe 'Member Invitations Security', type: :request do
         expect(response).to redirect_to(root_path)
         follow_redirect!
         # Follow any additional redirects (authenticated users get redirected to dashboard)
-        follow_redirect! while response.status.in?([301, 302])
+        follow_redirect! while response.status.in?([ 301, 302 ])
         expect(response.body).to include('This invitation is for a different email address. Please sign out first if you want to accept this invitation.')
       end
 
@@ -105,7 +105,7 @@ RSpec.describe 'Member Invitations Security', type: :request do
         expect(response).to redirect_to(root_path)
         follow_redirect!
         # Follow any additional redirects (authenticated users get redirected to dashboard)
-        follow_redirect! while response.status.in?([301, 302])
+        follow_redirect! while response.status.in?([ 301, 302 ])
         expect(response.body).to include('This invitation is for a different email address. Please sign out first if you want to accept this invitation.')
 
         # Verify invitation wasn't accepted
@@ -121,7 +121,7 @@ RSpec.describe 'Member Invitations Security', type: :request do
         expect(response).to redirect_to(root_path)
         follow_redirect!
         # Follow any additional redirects (authenticated users get redirected to dashboard)
-        follow_redirect! while response.status.in?([301, 302])
+        follow_redirect! while response.status.in?([ 301, 302 ])
         expect(response.body).to include('Invitation declined')
       end
 
@@ -133,7 +133,7 @@ RSpec.describe 'Member Invitations Security', type: :request do
         expect(response).to redirect_to(root_path)
         follow_redirect!
         # Follow any additional redirects (authenticated users get redirected to dashboard)
-        follow_redirect! while response.status.in?([301, 302])
+        follow_redirect! while response.status.in?([ 301, 302 ])
         expect(response.body).to include('You cannot decline an invitation for a different email address')
       end
     end

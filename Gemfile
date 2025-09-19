@@ -33,7 +33,7 @@ gem "redis", ">= 4.0.1"
 # gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: [:windows, :jruby]
+gem "tzinfo-data", platforms: [ :windows, :jruby ]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -84,7 +84,7 @@ group :development, :test do
   gem "better_errors"
   gem "binding_of_caller"
   gem "bullet"
-  gem "debug", platforms: [:mri, :windows]
+  gem "debug", platforms: [ :mri, :windows ]
   gem "dotenv-rails"
   gem "factory_bot_rails"
   gem "faker"
@@ -102,6 +102,7 @@ group :development, :test do
 end
 
 group :development do
+  gem "rubocop-rails-omakase"
   gem "dockerfile-rails", ">= 1.7"
   gem "tidewave"
   # Use console on exceptions pages [https://github.com/rails/web-console]

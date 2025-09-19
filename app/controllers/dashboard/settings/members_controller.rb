@@ -20,14 +20,14 @@ module Dashboard
         authorize @member
 
         if @member.save
-          redirect_to settings_members_path, notice: 'Member invited successfully'
+          redirect_to settings_members_path, notice: "Member invited successfully"
         else
-          flash[:error] = 'Member could not be invited'
+          flash[:error] = "Member could not be invited"
           render :new
         end
       rescue Pundit::NotAuthorizedError
         redirect_to settings_members_path,
-                    alert: 'Cannot add more members. Please upgrade your plan to increase member limit.'
+                    alert: "Cannot add more members. Please upgrade your plan to increase member limit."
       end
 
       def edit
@@ -37,7 +37,7 @@ module Dashboard
       def update
         @member = @account.members.find(params[:id])
         if @member.update(member_params)
-          redirect_to settings_members_path, notice: 'Member updated successfully'
+          redirect_to settings_members_path, notice: "Member updated successfully"
         else
           render :edit
         end
@@ -48,10 +48,10 @@ module Dashboard
         authorize @member
 
         @member.destroy
-        redirect_to settings_members_path, notice: 'Member deleted successfully'
+        redirect_to settings_members_path, notice: "Member deleted successfully"
       rescue Pundit::NotAuthorizedError
         redirect_to settings_members_path,
-                    alert: 'You are not authorized to remove this member.'
+                    alert: "You are not authorized to remove this member."
       end
 
       private

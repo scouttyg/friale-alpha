@@ -7,14 +7,14 @@ module AdminVersionable
     end
 
     def author_type
-      return 'No author information' if no_author?
-      return 'User' if user?
+      return "No author information" if no_author?
+      return "User" if user?
 
-      'Admin User'
+      "Admin User"
     end
 
     def email
-      return 'N/A' if no_author?
+      return "N/A" if no_author?
 
       author.email
     end
@@ -30,17 +30,17 @@ module AdminVersionable
     end
 
     def user?
-      @version.whodunnit_type == 'User'
+      @version.whodunnit_type == "User"
     end
 
     def admin_user?
-      @version.whodunnit_type == 'AdminUser'
+      @version.whodunnit_type == "AdminUser"
     end
   end
 
   def self.extended(base)
     base.instance_eval do
-      sidebar :version, partial: 'admin/shared/paper_trail/version', only: :show
+      sidebar :version, partial: "admin/shared/paper_trail/version", only: :show
 
       before_action :initialize_versions, only: :show
 

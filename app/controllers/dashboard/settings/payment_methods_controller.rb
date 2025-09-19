@@ -2,7 +2,7 @@ module Dashboard
   module Settings
     class PaymentMethodsController < SecureController
       before_action :ensure_stripe_customer
-      before_action :set_payment_method, only: [:make_default, :destroy]
+      before_action :set_payment_method, only: [ :make_default, :destroy ]
 
       def index
         @payment_methods = current_account.payment_methods.active.default_first
@@ -10,7 +10,7 @@ module Dashboard
         # Create SetupIntent for new payment method
         @setup_intent = Stripe::SetupIntent.create(
           customer: current_account.stripe_customer_id,
-          usage: 'off_session'
+          usage: "off_session"
         )
       end
 
@@ -30,7 +30,7 @@ module Dashboard
         # Make default if it's the first payment method
         @payment_method.mark_as_default! if current_account.payment_methods.count == 1
 
-        redirect_to settings_payment_methods_path(current_account), notice: 'Payment method added successfully'
+        redirect_to settings_payment_methods_path(current_account), notice: "Payment method added successfully"
       rescue Stripe::StripeError => e
         redirect_to settings_payment_methods_path(current_account), alert: e.message
       rescue ActiveRecord::RecordInvalid => e
@@ -39,13 +39,13 @@ module Dashboard
 
       def make_default
         @payment_method.mark_as_default!
-        redirect_to settings_payment_methods_path(current_account), notice: 'Default payment method updated'
+        redirect_to settings_payment_methods_path(current_account), notice: "Default payment method updated"
       end
 
       def destroy
         Stripe::PaymentMethod.detach(@payment_method.stripe_payment_method_id)
         @payment_method.soft_delete!
-        redirect_to settings_payment_methods_path(current_account), notice: 'Payment method removed'
+        redirect_to settings_payment_methods_path(current_account), notice: "Payment method removed"
       rescue Stripe::StripeError => e
         redirect_to settings_payment_methods_path(current_account), alert: e.message
       end
@@ -56,7 +56,7 @@ module Dashboard
         current_account.send(:ensure_stripe_customer) if current_account.stripe_customer_id.blank?
       rescue Stripe::StripeError
         redirect_to settings_payment_methods_path(current_account),
-                    alert: 'Unable to process payment methods at this time. Please try again later.'
+                    alert: "Unable to process payment methods at this time. Please try again later."
       end
 
       def set_payment_method
@@ -65,7 +65,7 @@ module Dashboard
 
       def build_payment_method(stripe_payment_method)
         case stripe_payment_method.type
-        when 'card'
+        when "card"
           PaymentMethods::Card.new(
             account: current_account,
             stripe_payment_method_id: stripe_payment_method.id,

@@ -1,5 +1,5 @@
 class Dashboard::NotificationsController < Dashboard::SecureController
-  before_action :set_notification, only: [:show, :destroy, :mark_as_read, :mark_as_unread]
+  before_action :set_notification, only: [ :show, :destroy, :mark_as_read, :mark_as_unread ]
 
   def index
     @notifications = current_user.notifications
@@ -17,13 +17,13 @@ class Dashboard::NotificationsController < Dashboard::SecureController
 
   def destroy
     @notification.destroy
-    redirect_to notifications_path, notice: 'Notification deleted.'
+    redirect_to notifications_path, notice: "Notification deleted."
   end
 
   def mark_as_read
     @notification.mark_as_read!
     respond_to do |format|
-      format.json { render json: { status: 'read' } }
+      format.json { render json: { status: "read" } }
       format.html { redirect_to notifications_path }
     end
   end
@@ -31,7 +31,7 @@ class Dashboard::NotificationsController < Dashboard::SecureController
   def mark_as_unread
     @notification.mark_as_unread!
     respond_to do |format|
-      format.json { render json: { status: 'unread' } }
+      format.json { render json: { status: "unread" } }
       format.html { redirect_to notifications_path }
     end
   end
@@ -39,8 +39,8 @@ class Dashboard::NotificationsController < Dashboard::SecureController
   def mark_all_as_read
     current_user.notifications.unread.update_all(read_at: Time.current)
     respond_to do |format|
-      format.json { render json: { status: 'all_read' } }
-      format.html { redirect_to notifications_path, notice: 'All notifications marked as read.' }
+      format.json { render json: { status: "all_read" } }
+      format.html { redirect_to notifications_path, notice: "All notifications marked as read." }
     end
   end
 
@@ -52,7 +52,7 @@ class Dashboard::NotificationsController < Dashboard::SecureController
 
     @unread_count = current_user.notifications.unread.count
 
-    render partial: 'dropdown_content'
+    render partial: "dropdown_content"
   end
 
   private

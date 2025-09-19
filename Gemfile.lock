@@ -508,6 +508,10 @@ GEM
       rack (>= 1.1)
       rubocop (>= 1.75.0, < 2.0)
       rubocop-ast (>= 1.44.0, < 2.0)
+    rubocop-rails-omakase (1.1.0)
+      rubocop (>= 1.72)
+      rubocop-performance (>= 1.24)
+      rubocop-rails (>= 2.30)
     rubocop-rspec (3.7.0)
       lint_roller (~> 1.1)
       rubocop (~> 1.72, >= 1.72.1)
@@ -670,6 +674,7 @@ DEPENDENCIES
   rubocop-factory_bot
   rubocop-performance
   rubocop-rails
+  rubocop-rails-omakase
   rubocop-rspec
   rubocop-rspec_rails (!= 2.29.0)
   selenium-webdriver

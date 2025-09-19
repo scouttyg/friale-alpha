@@ -10,6 +10,6 @@ class CreatePushSubscriptions < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :push_subscriptions, [:user_id, :endpoint, :public_key, :auth_secret], unique: true, if_not_exists: true, name: 'index_push_subscriptions_on_user_id_endpoint_and_auth'
+    add_index :push_subscriptions, [ :user_id, :endpoint, :public_key, :auth_secret ], unique: true, if_not_exists: true, name: 'index_push_subscriptions_on_user_id_endpoint_and_auth'
   end
 end

@@ -5,7 +5,7 @@ RSpec.describe "Push Subscriptions" do
   let(:unsaved_push_subscription) { build(:push_subscription, user: user) }
   let(:json_ps_attributes) do
     unsaved_push_subscription
-      .as_json(only: [:endpoint, :expires_at, :public_key, :auth_secret])
+      .as_json(only: [ :endpoint, :expires_at, :public_key, :auth_secret ])
       .with_indifferent_access
   end
 

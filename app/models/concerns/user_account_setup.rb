@@ -25,9 +25,9 @@ module UserAccountSetup
       # Create Stripe subscription
       stripe_subscription = Stripe::Subscription.create({
         customer: account.stripe_customer_id,
-        items: [{
+        items: [ {
           price: free_plan_period.stripe_price_id
-        }],
+        } ],
         metadata: {
           account_id: account.id
         }

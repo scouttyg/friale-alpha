@@ -85,7 +85,7 @@ module PushSubscriptions
     # @return [Boolean]
     def push!
       unless user.present? && user.is_a?(User)
-        Rails.logger.info '[PushSubscriptions::Pusher] Invalid user'
+        Rails.logger.info "[PushSubscriptions::Pusher] Invalid user"
         return false
       end
 
@@ -105,8 +105,8 @@ module PushSubscriptions
       def default_options
         {
           body: body,
-          icon: '/icons/icon-192x192-maskable.png',
-          lang: 'en-US'
+          icon: "/icons/icon-192x192-maskable.png",
+          lang: "en-US"
         }
       end
 
@@ -116,12 +116,12 @@ module PushSubscriptions
         end
 
         unless valid_payload?
-          Rails.logger.info '[PushSubscriptions::Pusher] Invalid payload'
+          Rails.logger.info "[PushSubscriptions::Pusher] Invalid payload"
           return false
         end
 
         unless valid_subscription?(push_subscription)
-          Rails.logger.info '[PushSubscriptions::Pusher] push_subscription missing, expired, or invalid'
+          Rails.logger.info "[PushSubscriptions::Pusher] push_subscription missing, expired, or invalid"
           return false
         end
 
@@ -136,16 +136,16 @@ module PushSubscriptions
 
           true
         rescue WebPush::ExpiredSubscription
-          Rails.logger.info '[PushSubscriptions::Pusher] Webpush could not be sent, push_subscription has expired.'
+          Rails.logger.info "[PushSubscriptions::Pusher] Webpush could not be sent, push_subscription has expired."
           push_subscription.update(expires_at: Time.current)
 
           false
         rescue WebPush::InvalidSubscription, WebPush::Unauthorized => e
           case e
           when WebPush::InvalidSubscription
-            Rails.logger.info '[PushSubscriptions::Pusher] Webpush could not be sent, push_subscription is invalid.'
+            Rails.logger.info "[PushSubscriptions::Pusher] Webpush could not be sent, push_subscription is invalid."
           when WebPush::Unauthorized
-            Rails.logger.info '[PushSubscriptions::Pusher] Webpush was unauthorized (were VAPID keys recently changed?)'
+            Rails.logger.info "[PushSubscriptions::Pusher] Webpush was unauthorized (were VAPID keys recently changed?)"
           end
           push_subscription.destroy
 

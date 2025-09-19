@@ -19,7 +19,7 @@ class Plan < ApplicationRecord
 
   LIMIT_TYPES = {
     member_limit: {
-      name: 'Member Limit',
+      name: "Member Limit",
       model: Member,
       type: :integer,
       limit_type: :hard
@@ -32,13 +32,13 @@ class Plan < ApplicationRecord
   has_many :plan_periods, -> { order(price_cents: :asc) }, dependent: :destroy, inverse_of: :plan
   has_many :subscriptions, dependent: :restrict_with_exception
 
-  scope :deactivated_after, ->(time) { where.not(deactivated_at: nil).where('deactivated_at >= ?', time) }
-  scope :deactivated_before, ->(time) { where.not(deactivated_at: nil).where('deactivated_at < ?', time) }
+  scope :deactivated_after, ->(time) { where.not(deactivated_at: nil).where("deactivated_at >= ?", time) }
+  scope :deactivated_before, ->(time) { where.not(deactivated_at: nil).where("deactivated_at < ?", time) }
   scope :deactivated, -> { deactivated_before(Time.current) }
   scope :not_deactivated, -> { where(deactivated_at: nil).or(deactivated_after(Time.current)) }
 
-  scope :activated_after, ->(time) { where.not(activated_at: nil).where('activated_at >= ?', time) }
-  scope :activated_before, ->(time) { where.not(activated_at: nil).where('activated_at < ?', time) }
+  scope :activated_after, ->(time) { where.not(activated_at: nil).where("activated_at >= ?", time) }
+  scope :activated_before, ->(time) { where.not(activated_at: nil).where("activated_at < ?", time) }
   scope :activated, -> { activated_before(Time.current) }
   scope :not_activated, -> { where(activated_at: nil).or(activated_after(Time.current)) }
 

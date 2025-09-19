@@ -1,0 +1,88 @@
+<!-- Pricing Card -->
+<div class="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg border border-gray-200 shadow-sm dark:border-gray-700 xl:p-8 dark:text-white dark:bg-gray-800" data-controller="plan-period" data-plan-period-plan-id-value="<%= plan.id %>">
+    <h3 class="mb-4 text-2xl font-semibold"><%= plan.name %></h3>
+    <p class="text-gray-500 text-light sm:text-lg dark:text-gray-400"><%= plan.description %></p>
+
+    <div class="my-4">
+      <!-- Billing period toggle -->
+      <% periods = plan.plan_periods.to_a %>
+      <div class="inline-flex p-1 space-x-1 bg-gray-200 rounded-lg dark:bg-gray-700 mb-4">
+        <% if periods.size > 1 %>
+          <%
+            monthly_period = periods.find { |p| p.interval == "MONTH" }
+            yearly_period = periods.find { |p| p.interval == "YEAR" }
+            if monthly_period && yearly_period
+              monthly_annual_cost = monthly_period.price * 12
+              yearly_cost = yearly_period.price
+              discount_percentage = ((monthly_annual_cost - yearly_cost) / monthly_annual_cost * 100).round
+            end
+          %>
+          <% periods.each_with_index do |period, index| %>
+            <button type="button"
+                    class="px-4 py-2 text-sm font-medium rounded-md focus:outline-none transition-colors duration-200"
+                    data-plan-period-target="radio"
+                    data-action="click->plan-period#toggle"
+                    data-price="<%= period.price.format(symbol: true, no_cents_if_whole: true) %>"
+                    data-interval="<%= period.interval.downcase %>"
+                    data-period-id="<%= period.id %>"
+                    data-selected="<%= index == 0 %>">
+              <%= period.interval.titleize %>
+            </button>
+          <% end %>
+        <% else %>
+          <button type="button"
+                  class="px-4 py-2 text-sm font-medium rounded-md cursor-default opacity-75 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300"
+                  disabled>
+            <%= (periods.first&.interval || "MONTH").titleize %>
+          </button>
+        <% end %>
+      </div>
+
+      <!-- Price display -->
+      <div class="flex justify-center items-baseline" data-plan-period-target="priceDisplay">
+        <span class="mr-2 text-5xl font-extrabold">
+          <%= periods.first&.price&.format(symbol: true, no_cents_if_whole: true) || "$0" %>
+        </span>
+        <span class="text-gray-500">/<%= periods.first&.interval&.downcase || "month" %></span>
+      </div>
+      <% if discount_percentage && discount_percentage > 0 %>
+        <div>
+          <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300 mb-2 inline-block">
+            Save <%= discount_percentage %>% yearly
+          </span>
+        </div>
+      <% elsif plan.name == "Free" %>
+        <div>
+          <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300 mb-2 inline-block">
+            Credit card required
+          </span>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- List -->
+    <ul role="list" class="mb-8 space-y-4 text-left">
+        <li class="flex items-center space-x-3">
+            <!-- Icon -->
+            <svg class="flex-shrink-0 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+            <span>Member Limit: <span class="font-semibold"><%= plan.member_limit %></span></span>
+        </li>
+        <li class="flex items-center space-x-3">
+            <!-- Icon -->
+            <svg class="flex-shrink-0 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+            <span>Webhook Endpoints: <span class="font-semibold"><%= plan.webhook_endpoint_limit %></span></span>
+        </li>
+        <li class="flex items-center space-x-3">
+            <!-- Icon -->
+            <svg class="flex-shrink-0 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+            <span>API Event Limit: <span class="font-semibold"><%= plan.api_event_limit %></span></span>
+        </li>
+    </ul>
+
+    <%= link_to "Get started", path_for_new_subscription,
+          class: "text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900",
+          data: {
+            plan_period_target: "link",
+            period_id: periods.first&.id
+          } %>
+</div>

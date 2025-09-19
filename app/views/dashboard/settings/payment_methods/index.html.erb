@@ -1,0 +1,86 @@
+<% content_for :head do %>
+  <script src="https://js.stripe.com/v3/" defer data-turbo-track="reload" id="stripe-js"></script>
+<% end %>
+
+<h1 class="flex items-center text-3xl font-extrabold dark:text-white mb-4 px-2">Settings</h1>
+<div class="px-2">
+  <div class="border-b border-gray-200 dark:border-gray-700">
+    <%= render "shared/tabs/list",
+        tabs: [
+          { name: "Account Details", link: settings_account_url(current_account), active: false },
+          { name: "Billing", link: overview_settings_billings_url(current_account), active: true },
+          { name: "Members", link: settings_members_url(current_account), active: false },
+        ]
+    %>
+  </div>
+</div>
+
+<section class="bg-gray-50 dark:bg-gray-900 py-3 sm:py-5">
+  <div class="w-full bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+    <%= render "shared/tabs/billing_tabs", current_account: current_account, active: :payment_methods %>
+    <div class="p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800">
+      <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4">Payment Methods</h2>
+        <div class="space-y-4">
+          <% @payment_methods.each do |payment_method| %>
+            <div class="flex items-center justify-between p-4 border rounded-lg">
+              <div class="flex items-center space-x-4">
+                <%= payment_method_icon(payment_method.brand) %>
+                <div>
+                  <p class="font-medium"><%= payment_method.brand.titleize %> ending in <%= payment_method.last_four %></p>
+                  <p class="text-sm text-gray-500">Expires <%= payment_method.metadata["exp_month"] %>/<%= payment_method.metadata["exp_year"] %></p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-4">
+                <% unless payment_method.default? %>
+                  <%= button_to "Make Default",
+                      make_default_settings_payment_method_path(current_account, payment_method),
+                      method: :patch,
+                      class: "text-sm text-blue-600 hover:text-blue-800" %>
+                <% end %>
+
+                <%= button_to "Remove",
+                    settings_payment_method_path(current_account, payment_method),
+                    method: :delete,
+                    class: "text-sm text-red-600 hover:text-red-800",
+                    data: { turbo_confirm: "Are you sure you want to remove this payment method?" } %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Add New Payment Method</h3>
+        <%= form_with url: settings_payment_methods_path(current_account),
+                      id: "payment-form",
+                      class: "space-y-4",
+                      data: {
+                        controller: "payment-methods",
+                        payment_methods_target: "form",
+                        payment_methods_key_value: ENV["STRIPE_PUBLIC_KEY"],
+                        payment_methods_client_secret_value: @setup_intent.client_secret
+                      } do |f| %>
+
+          <div class="p-4 border rounded-lg">
+            <div id="card-element"
+                 class="mb-4"
+                 data-payment-methods-target="cardElement">
+              <!-- Stripe Elements will insert the card input here -->
+            </div>
+            <div id="card-errors"
+                 class="text-red-600 text-sm"
+                 role="alert"
+                 data-payment-methods-target="errors"></div>
+          </div>
+
+          <button type="submit"
+                  class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                  disabled>
+            Add Payment Method
+          </button>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>

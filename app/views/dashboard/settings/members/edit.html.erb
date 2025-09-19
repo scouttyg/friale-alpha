@@ -1,0 +1,31 @@
+<h1 class="flex items-center text-3xl font-extrabold dark:text-white mb-4 px-2">Settings</h1>
+<div class="px-2">
+  <div class="border-b border-gray-200 dark:border-gray-700">
+    <%= render "shared/tabs/list",
+        tabs: [
+          { name: "Account Details", link: settings_account_url(current_account), active: false },
+          { name: "Billing", link: overview_settings_billings_url(current_account), active: false },
+          { name: "Members", link: settings_members_url(current_account), active: true },
+        ]
+    %>
+  </div>
+</div>
+
+<section class="bg-gray-50 dark:bg-gray-900 pt-5">
+  <div class="mx-auto">
+      <!-- Start coding here -->
+      <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+        <section class="bg-white dark:bg-gray-900">
+          <div class="py-8 px-4 mx-auto lg:py-16">
+              <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Edit an existing member of "<%= current_account.name %>"</h2>
+              <%= render partial: "form", locals: {
+                member: @member,
+                form_route: settings_member_url(current_account, @member),
+                form_method: :patch,
+                form_button_submit_text: "Update Account Member"
+              } %>
+          </div>
+        </section>
+      </div>
+  </div>
+</section>

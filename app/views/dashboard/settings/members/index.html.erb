@@ -1,0 +1,79 @@
+<h1 class="flex items-center text-3xl font-extrabold dark:text-white mb-4 px-2">Settings</h1>
+<div class="px-2">
+  <div class="border-b border-gray-200 dark:border-gray-700">
+    <%= render "shared/tabs/list",
+        tabs: [
+          { name: "Account Details", link: settings_account_url(current_account), active: false },
+          { name: "Billing", link: overview_settings_billings_url(current_account), active: false },
+          { name: "Members", link: settings_members_url(current_account), active: true },
+        ]
+    %>
+  </div>
+</div>
+
+<section class="bg-gray-50 dark:bg-gray-900 pt-5">
+  <div class="mx-auto">
+      <!-- Start coding here -->
+      <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+          <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+              <div class="w-full md:w-1/2">
+                  <form class="flex items-center">
+                      <label for="simple-search" class="sr-only">Search</label>
+                      <div class="relative w-full">
+                          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                              <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                              </svg>
+                          </div>
+                          <input type="text" id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Search" required="">
+                      </div>
+                  </form>
+              </div>
+              <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+                  <%= link_to !policy(@member).create? ? "#" : new_settings_member_url(current_account),
+                      class: "flex items-center justify-center text-white #{policy(@member).create? ? 'bg-primary-700 hover:bg-primary-800' : 'bg-gray-400 cursor-not-allowed'}
+                              focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2
+                              dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800",
+                      data: {
+                        tooltip_target: "invite-member-tooltip",
+                        disabled: !policy(@member).create?
+                      } do %>
+                    <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
+                    </svg>
+                    Invite Member
+                  <% end %>
+
+                  <% unless policy(@member).create? %>
+                    <div id="invite-member-tooltip" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                      <%= current_account.plan&.member_limit ?
+                            "You've reached your plan's member limit" :
+                            "You don't have permission to invite members" %>
+                      <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
+                  <% end %>
+              </div>
+          </div>
+          <div class="overflow-x-auto">
+              <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                  <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                      <tr>
+                          <th scope="col" class="px-4 py-3">Member Email</th>
+                          <th scope="col" class="px-4 py-3">Role</th>
+                          <th scope="col" class="px-4 py-3">Status</th>
+                          <th scope="col" class="px-4 py-3">
+                              <span class="sr-only">Actions</span>
+                          </th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    <% @members.each do |member| %>
+                      <%= render partial: "row", locals: { member: member }  %>
+                    <% end %>
+                  </tbody>
+              </table>
+          </div>
+          <%= render partial: "shared/paginator", locals: { kaminari_page: @members } %>
+      </div>
+  </div>
+</section>

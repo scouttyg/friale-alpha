@@ -32,17 +32,17 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :accounts, only: [:index, :show] do
+      resources :accounts, only: [ :index, :show ] do
         member do
           post :switch
-          get :settings, to: 'accounts#edit'
-          namespace 'settings' do
-            resources :billings, path: 'billing' do
+          get :settings, to: "accounts#edit"
+          namespace "settings" do
+            resources :billings, path: "billing" do
               collection do
-                get '/', to: redirect { |_params, req| "#{req.path}/overview" }
+                get "/", to: redirect { |_params, req| "#{req.path}/overview" }
                 get :plan
                 get :overview
-                resources :subscriptions, only: [:new, :create], controller: 'billings/subscriptions' do
+                resources :subscriptions, only: [ :new, :create ], controller: "billings/subscriptions" do
                   collection do
                     delete :cancel
                   end
@@ -50,7 +50,7 @@ Rails.application.routes.draw do
               end
             end
 
-            resources :payment_methods, only: [:index, :create, :destroy] do
+            resources :payment_methods, only: [ :index, :create, :destroy ] do
               member do
                 patch :make_default
               end
@@ -58,7 +58,7 @@ Rails.application.routes.draw do
 
             resources :members
           end
-          post :settings, to: 'accounts#update', as: :update_settings
+          post :settings, to: "accounts#update", as: :update_settings
         end
       end
     end
@@ -77,9 +77,9 @@ Rails.application.routes.draw do
   get "about", to: "pages#about"
   get "pricing", to: "pages#pricing"
 
-  get 'invitations/:token', to: 'invitations#show', as: :invitation
-  post 'invitations/:token/accept', to: 'invitations#accept', as: :accept_invitation
-  post 'invitations/:token/decline', to: 'invitations#decline', as: :decline_invitation
+  get "invitations/:token", to: "invitations#show", as: :invitation
+  post "invitations/:token/accept", to: "invitations#accept", as: :accept_invitation
+  post "invitations/:token/decline", to: "invitations#decline", as: :decline_invitation
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

@@ -2,7 +2,7 @@
 
 module Users
   class RegistrationsController < Devise::RegistrationsController
-    include Dashboard::AccountConcern
+    include AccountConcern
     include RegistrationConcern
 
     layout "dashboard", only: [ :edit, :update ]

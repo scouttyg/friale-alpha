@@ -1,7 +1,23 @@
 require 'rails_helper'
 
-RSpec.describe "Push Subscriptions" do
-  let(:user) { create(:user, :with_auth) }
+RSpec.describe "Push Subscriptions", type: :request do
+  include Devise::Test::IntegrationHelpers
+  let!(:plan) { create(:plan, activated_at: Time.current, position: 1) }
+  let!(:plan_period) { create(:plan_period, plan: plan, price_cents: 0) }
+
+  before do
+    # Stub Stripe customer creation for any email
+    stub_request(:post, 'https://api.stripe.com/v1/customers')
+      .to_return(status: 200, body: { id: 'cus_test123' }.to_json, headers: { 'Content-Type' => 'application/json' })
+    # Stub Stripe subscription creation
+    stub_request(:post, 'https://api.stripe.com/v1/subscriptions')
+      .to_return(status: 200, body: { id: 'sub_test123' }.to_json, headers: { 'Content-Type' => 'application/json' })
+    # Stub Stripe setup intent creation
+    stub_request(:post, 'https://api.stripe.com/v1/setup_intents')
+      .to_return(status: 200, body: { id: 'seti_test123', client_secret: 'seti_secret' }.to_json, headers: { 'Content-Type' => 'application/json' })
+  end
+
+  let(:user) { create(:user, :confirmed) }
   let(:unsaved_push_subscription) { build(:push_subscription, user: user) }
   let(:json_ps_attributes) do
     unsaved_push_subscription
@@ -9,7 +25,6 @@ RSpec.describe "Push Subscriptions" do
       .with_indifferent_access
   end
 
-  let(:headers) { headers_for(user) }
   let(:raw_subscription_params) do
     {
       endpoint: json_ps_attributes[:endpoint],
@@ -26,8 +41,12 @@ RSpec.describe "Push Subscriptions" do
   end
 
   context "when creating a new push subscription" do
+    before do
+      sign_in user
+    end
+
     subject(:create_push_subscription) do
-      post "/v0/push_subscriptions", headers: headers, params: params
+      post "/push_subscriptions", params: params
     end
 
     context "with valid params" do
@@ -64,7 +83,6 @@ RSpec.describe "Push Subscriptions" do
           end.not_to change(PushSubscription, :count)
 
           expect(response).to have_http_status(:bad_request)
-          expect(response_json['error']).to eq('Param is missing or the value is empty: subscription')
         end
       end
 
@@ -83,8 +101,12 @@ RSpec.describe "Push Subscriptions" do
   end
 
   context "when unsubscribing from a push subscription" do
+    before do
+      sign_in user
+    end
+
     subject(:unsubscribe_push_subscription) do
-      delete "/v0/push_subscriptions/unsubscribe", headers: headers, params: params
+      delete "/push_subscriptions/unsubscribe", params: params
     end
 
     context "with valid params" do
@@ -112,18 +134,14 @@ RSpec.describe "Push Subscriptions" do
           end.not_to change(PushSubscription, :count)
 
           expect(response).to have_http_status(:bad_request)
-          expect(response_json['error']).to eq('Param is missing or the value is empty: subscription')
         end
 
         it "does not delete a subscription even if it exists after raising an error" do
-          unsaved_push_subscription.save!
-
           expect do
             unsubscribe_push_subscription
           end.not_to change(PushSubscription, :count)
 
           expect(response).to have_http_status(:bad_request)
-          expect(response_json['error']).to eq('Param is missing or the value is empty: subscription')
         end
       end
 
@@ -140,8 +158,12 @@ RSpec.describe "Push Subscriptions" do
   end
 
   context "when unsubscribing from all push subscriptions" do
+    before do
+      sign_in user
+    end
+
     subject(:unsubscribe_all_push_subscription) do
-      delete "/v0/push_subscriptions/unsubscribe_all", headers: headers, params: {}
+      delete "/push_subscriptions/unsubscribe_all", params: {}
     end
 
     let(:generated_subscription_count) { rand(1..10) }

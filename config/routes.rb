@@ -62,6 +62,13 @@ Rails.application.routes.draw do
         end
       end
     end
+
+    resources :push_subscriptions, only: [ :create ] do
+      collection do
+        delete "unsubscribe", to: "push_subscriptions#unsubscribe"
+        delete "unsubscribe_all", to: "push_subscriptions#unsubscribe_all"
+      end
+    end
   end
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)

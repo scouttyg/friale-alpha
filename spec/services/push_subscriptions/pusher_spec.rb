@@ -4,7 +4,22 @@ require 'rails_helper'
 require 'support/env_helpers'
 
 RSpec.describe PushSubscriptions::Pusher do
-  let!(:user) { create(:user) }
+  before do
+    free_plan = create(:plan, name: 'Free', position: 1)
+    create(:plan_period, plan: free_plan, interval: 'MONTH', stripe_price_id: 'price_mock_123')
+
+    # Stub Stripe customer creation for any email
+    stub_request(:post, 'https://api.stripe.com/v1/customers')
+      .to_return(status: 200, body: { id: 'cus_test123' }.to_json, headers: { 'Content-Type' => 'application/json' })
+    # Stub Stripe subscription creation
+    stub_request(:post, 'https://api.stripe.com/v1/subscriptions')
+      .to_return(status: 200, body: { id: 'sub_test123' }.to_json, headers: { 'Content-Type' => 'application/json' })
+    # Stub Stripe setup intent creation
+    stub_request(:post, 'https://api.stripe.com/v1/setup_intents')
+      .to_return(status: 200, body: { id: 'seti_test123', client_secret: 'seti_secret' }.to_json, headers: { 'Content-Type' => 'application/json' })
+  end
+
+  let!(:user) { create(:user, :confirmed) }
   let!(:push_subscription) { create(:push_subscription, user: user) }
   let!(:stubbed_domain) do
     uri = Addressable::URI.parse(push_subscription.endpoint)

@@ -22,10 +22,25 @@
 #
 FactoryBot.define do
   factory :push_subscription do
-    auth_secret { "MyString" }
-    endpoint { "MyString" }
-    expires_at { "2025-09-19 09:43:14" }
-    public_key { "MyString" }
-    user { nil }
+    user
+    endpoint do
+      Faker::Internet.url(
+        host: PushSubscription::VALID_PUSH_DOMAINS_HASH.keys.sample
+      )
+    end
+    public_key do
+      group = 'prime256v1'
+      curve = OpenSSL::PKey::EC.generate(group)
+      ecdh_key = curve.public_key.to_bn.to_s(2)
+      Base64.urlsafe_encode64(ecdh_key)
+    end
+    auth_secret { Base64.urlsafe_encode64(Random.new.bytes(16)) }
+
+    trait :invalid do
+      after(:create) do |push_subscription|
+        push_subscription.auth_secret = nil
+        push_subscription.save!(validate: false)
+      end
+    end
   end
 end

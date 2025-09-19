@@ -85,6 +85,10 @@ jobs:
       - name: Notify Slack on test failure
         if: failure()
         run: |
-          curl -X POST -H 'Content-type: application/json' \
-            --data '{"text":"❌ Tests failed! Check the GitHub Actions logs for details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}' \
-            ${{ secrets.SLACK_WEBHOOK_URL }}
+          if [ -z "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
+            echo "⚠️ Could not notify Slack, you need to set secrets.SLACK_WEBHOOK_URL"
+          else
+            curl -X POST -H 'Content-type: application/json' \
+              --data '{"text":"❌ Tests failed! Check the GitHub Actions logs for details: '"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"'"}' \
+              ${{ secrets.SLACK_WEBHOOK_URL }}
+          fi

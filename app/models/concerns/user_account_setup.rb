@@ -1,4 +1,5 @@
 module UserAccountSetup
+  FakeStripeSubscription = Data.define(:id)
   extend ActiveSupport::Concern
 
   included do
@@ -22,16 +23,27 @@ module UserAccountSetup
       free_plan = Plan.active.order(position: :asc).first
       free_plan_period = free_plan.plan_periods.first
 
+      stripe_subscription = nil
+
       # Create Stripe subscription
-      stripe_subscription = Stripe::Subscription.create({
-        customer: account.stripe_customer_id,
-        items: [ {
-          price: free_plan_period.stripe_price_id
-        } ],
-        metadata: {
-          account_id: account.id
-        }
-      })
+      begin
+        stripe_subscription = Stripe::Subscription.create({
+          customer: account.stripe_customer_id,
+          items: [ {
+            price: free_plan_period.stripe_price_id
+          } ],
+          metadata: {
+            account_id: account.id
+          }
+        })
+      rescue Stripe::InvalidRequestError
+        raise unless Rails.env.development?
+      end
+
+      if Rails.env.development? && stripe_subscription.nil?
+        # If you see this, you haven't setup Stripe set locally correctly
+        stripe_subscription = FakeStripeSubscription.new(id: "stripe_subscription_mock_123")
+      end
 
       # Create subscription for the free plan
       account.create_subscription!(

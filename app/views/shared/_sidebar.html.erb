@@ -42,6 +42,35 @@
     "
   >
     <div class="flex flex-wrap">
+      <div class="flex w-full min-w-full">
+        <button
+          id="dropdownUserNameButton"
+          data-dropdown-toggle="dropdownUserName"
+          data-dropdown-placement="bottom"
+          class="
+            flex justify-between items-center p-2 rounded-lg dark:bg-gray-700 dark:hover:bg-gray-800 hover:bg-gray-100 dark:hover-bg-gray-700
+            focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 w-full border border-gray-200 dark:border-gray-700
+          "
+          type="button"
+        >
+          <span class="sr-only">Open user menu</span>
+          <div class="flex items-center mr-2">
+            <%= render partial: "shared/dropdowns/account_inner", locals: { account: current_account, link: false } %>
+          </div>
+          <%= render template: "shared/icons/up_down_arrow", locals: { html_class: "w-4 h-4 text-gray-500 dark:text-gray-400" } %>
+        </button>
+        <!-- Dropdown menu -->
+        <div
+          id="dropdownUserName"
+          class="hidden z-10 w-[90%] bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+          data-popper-placement="bottom"
+        >
+          <% @accounts.each do |account| %>
+            <%= render partial: "shared/dropdowns/account", locals: { account: account } %>
+          <% end %>
+
+        </div>
+      </div>
       <div class="flex w-full min-w-full grid grid-cols-3 mt-5">
         <a
           href="#"

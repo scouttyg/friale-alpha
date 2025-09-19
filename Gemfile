@@ -77,6 +77,8 @@ gem "paper_trail"
 gem "sentry-rails"
 gem "sentry-ruby"
 
+gem "web-push"
+
 group :development, :test do
   gem "annotaterb"
   gem "better_errors"

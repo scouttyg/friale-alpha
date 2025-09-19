@@ -10,12 +10,6 @@
 #  updated_at         :datetime         not null
 #  stripe_customer_id :string
 #
-# Indexes
-#
-#  index_accounts_on_name                (name) UNIQUE
-#  index_accounts_on_slug                (slug) UNIQUE
-#  index_accounts_on_stripe_customer_id  (stripe_customer_id) UNIQUE
-#
 require 'rails_helper'
 
 RSpec.describe Account, type: :model do

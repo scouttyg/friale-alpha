@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Invitations', type: :request do
   let(:account) { create(:account) }
-  let(:creator) { create(:user) }
+  let(:creator) { create(:user, :confirmed) }
   let(:member) { create(:member, :invited, source: account, creator: creator, invite_email: 'test@example.com') }
 
   before do
@@ -57,7 +57,7 @@ RSpec.describe 'Invitations', type: :request do
     end
 
     context 'when invitation already accepted' do
-      let(:accepted_user) { create(:user) }
+      let(:accepted_user) { create(:user, :confirmed) }
       let(:accepted_member) do
         # Create an accepted member but keep the token to test the controller logic
         m = create(:member, :invited, source: account, creator: creator, invite_email: 'accepted@example.com')
@@ -87,7 +87,7 @@ RSpec.describe 'Invitations', type: :request do
     end
 
     context 'when user already exists' do
-      let!(:existing_user) { create(:user, email: member.invite_email) }
+      let!(:existing_user) { create(:user, :confirmed, email: member.invite_email) }
 
       it 'accepts invitation and signs in user' do
         post accept_invitation_path(token: member.invite_token)

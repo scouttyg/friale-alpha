@@ -31,6 +31,36 @@ Rails.application.routes.draw do
           get :dropdown_content
         end
       end
+
+      resources :accounts, only: [:index, :show] do
+        member do
+          post :switch
+          get :settings, to: 'accounts#edit'
+          namespace 'settings' do
+            resources :billings, path: 'billing' do
+              collection do
+                get '/', to: redirect { |_params, req| "#{req.path}/overview" }
+                get :plan
+                get :overview
+                resources :subscriptions, only: [:new, :create], controller: 'billings/subscriptions' do
+                  collection do
+                    delete :cancel
+                  end
+                end
+              end
+            end
+
+            resources :payment_methods, only: [:index, :create, :destroy] do
+              member do
+                patch :make_default
+              end
+            end
+
+            resources :members
+          end
+          post :settings, to: 'accounts#update', as: :update_settings
+        end
+      end
     end
   end
 

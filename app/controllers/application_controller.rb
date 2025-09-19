@@ -23,6 +23,6 @@ class ApplicationController < ActionController::Base
   end
 
   def pundit_user
-    { user: current_user }
+    { user: current_user, account: current_account }
   end
 end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Member Invitation Security', type: :request do
+RSpec.describe 'Member Invitations Security', type: :request do
   include Devise::Test::IntegrationHelpers
   let(:account_owner) { create(:user, :confirmed, email: 'owner@example.com') }
   let(:account) { account_owner.personal_account }

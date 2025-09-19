@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe 'Member Invitation Security', type: :request do
   include Devise::Test::IntegrationHelpers
-  let(:account_owner) { create(:user, email: 'owner@example.com') }
+  let(:account_owner) { create(:user, :confirmed, email: 'owner@example.com') }
   let(:account) { account_owner.personal_account }
-  let(:existing_user) { create(:user, email: 'existing@example.com') }
+  let(:existing_user) { create(:user, :confirmed, email: 'existing@example.com') }
 
   before do
     free_plan = create(:plan, name: 'Free', position: 1)

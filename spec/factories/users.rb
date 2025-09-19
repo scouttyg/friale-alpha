@@ -33,5 +33,12 @@ FactoryBot.define do
     sequence(:email) { |n| "user#{n}@example.com" }
     password { 'password123' }
     password_confirmation { 'password123' }
+
+    trait :confirmed do
+      before(:create) { |u| u.skip_confirmation_notification! }
+      confirmed_at { Time.current }
+      confirmation_token { nil }
+      confirmation_sent_at { nil }
+    end
   end
 end

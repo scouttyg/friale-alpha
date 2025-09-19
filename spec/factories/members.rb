@@ -28,24 +28,24 @@
 FactoryBot.define do
   factory :member do
     association :source, factory: :account
-    association :creator, factory: :user
+    association :creator, factory: %i[user confirmed]
     access_level { 'collaborator' }
-    
+
     trait :invited do
       invite_email { Faker::Internet.email }
       user { nil }
     end
-    
+
     trait :accepted do
-      association :user
+      association :user, factory: %i[user confirmed]
       invite_email { nil }
       invite_token { nil }
     end
-    
+
     trait :owner do
       access_level { 'owner' }
     end
-    
+
     trait :guest do
       access_level { 'guest' }
     end

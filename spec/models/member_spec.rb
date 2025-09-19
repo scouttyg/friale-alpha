@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Member, type: :model do
   include ActiveJob::TestHelper
   let(:account) { create(:account) }
-  let(:creator) { create(:user) }
+  let(:creator) { create(:user, :confirmed) }
 
   before do
     # Clear ActionMailer deliveries and jobs before each test
@@ -51,7 +51,7 @@ RSpec.describe Member, type: :model do
     end
 
     it 'does not require invite_email when user is present' do
-      user = create(:user)
+      user = create(:user, :confirmed)
       member = Member.new(source: account, creator: creator, user: user)
       expect(member).to be_valid
     end
@@ -67,7 +67,7 @@ RSpec.describe Member, type: :model do
     end
 
     it 'does not generate invite_token when user is present' do
-      user = create(:user)
+      user = create(:user, :confirmed)
       member = Member.new(source: account, creator: creator, user: user)
       member.save!
       expect(member.invite_token).to be_nil
@@ -82,7 +82,7 @@ RSpec.describe Member, type: :model do
     end
 
     it 'does not send invitation email when user is present' do
-      user = create(:user)
+      user = create(:user, :confirmed)
       expect do
         Member.create!(source: account, creator: creator, user: user)
       end.not_to have_enqueued_job(ActionMailer::MailDeliveryJob)
@@ -91,7 +91,7 @@ RSpec.describe Member, type: :model do
 
   describe 'scopes' do
     let!(:invited_member) { create(:member, source: account, invite_email: 'invited@example.com') }
-    let!(:accepted_member) { create(:member, source: account, user: create(:user)) }
+    let!(:accepted_member) { create(:member, source: account, user: create(:user, :confirmed)) }
 
     it 'returns invited members' do
       expect(Member.invited).to include(invited_member)
@@ -116,14 +116,14 @@ RSpec.describe Member, type: :model do
     end
 
     it 'returns false when user_id is present' do
-      member = Member.new(source: account, user: create(:user))
+      member = Member.new(source: account, user: create(:user, :confirmed))
       expect(member.pending?).to be false
     end
   end
 
   describe '#accepted?' do
     it 'returns true when user_id is present' do
-      member = Member.new(source: account, user: create(:user))
+      member = Member.new(source: account, user: create(:user, :confirmed))
       expect(member.accepted?).to be true
     end
 
@@ -135,7 +135,7 @@ RSpec.describe Member, type: :model do
 
   describe '#accept!' do
     let(:member) { create(:member, source: account, invite_email: 'test@example.com', creator: creator) }
-    let(:user) { create(:user, email: 'test@example.com') }
+    let(:user) { create(:user, :confirmed, email: 'test@example.com') }
 
     it 'associates the member with the user and clears invitation data' do
       member.accept!(user)

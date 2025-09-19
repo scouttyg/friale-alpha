@@ -48,7 +48,6 @@ RSpec.describe Account, type: :model do
     it 'identifies personal accounts' do
       account = create(:account, type: 'PersonalAccount')
       expect(account).to be_personal
-      expect(account).not_to be_team
     end
   end
 

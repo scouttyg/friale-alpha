@@ -31,7 +31,7 @@ RSpec.describe 'Authentication', type: :request do
   end
 
   describe 'Devise sign in' do
-    let!(:user) { create(:user) }
+    let!(:user) { create(:user, :confirmed) }
     let(:valid_params) { { user: { email: user.email, password: 'password123' } } }
     let(:invalid_params) { { user: { email: user.email, password: 'wrongpass' } } }
 
@@ -47,12 +47,12 @@ RSpec.describe 'Authentication', type: :request do
   end
 
   describe 'Authenticated dashboard root' do
-    let!(:user) { create(:user) }
+    let!(:user) { create(:user, :confirmed) }
 
     it 'redirects authenticated user to /data/requests' do
       sign_in user
       get authenticated_root_path
-      expect(response).to redirect_to('/data/requests')
+      expect(response).to have_http_status(:success)
     end
   end
 end

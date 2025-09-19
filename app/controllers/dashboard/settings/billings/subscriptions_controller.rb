@@ -1,7 +1,7 @@
 module Dashboard
   module Settings
     module Billings
-      class SubscriptionsController < SecureController
+      class SubscriptionsController < BaseController
         before_action :set_plan, only: [ :new, :create ]
         before_action :set_plan_period, only: [ :create ]
         before_action :set_payment_methods, only: [ :new, :create ]

@@ -1,6 +1,6 @@
 module Dashboard
   module Settings
-    class MembersController < SecureController
+    class MembersController < BaseController
       include Pundit::Authorization
       before_action :set_account_from_url
 

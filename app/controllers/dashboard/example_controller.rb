@@ -1,5 +1,5 @@
 module Dashboard
-  class ExampleController < SecureController
+  class ExampleController < BaseController
     def index
     end
   end

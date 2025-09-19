@@ -1,6 +1,6 @@
 module Dashboard
   module Settings
-    class BillingsController < SecureController
+    class BillingsController < BaseController
       def plan
         @current_plan = current_account.plan
         @subscription = current_account.subscription

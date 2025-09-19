@@ -1,6 +1,6 @@
 module Dashboard
   module Settings
-    class PaymentMethodsController < SecureController
+    class PaymentMethodsController < BaseController
       before_action :ensure_stripe_customer
       before_action :set_payment_method, only: [ :make_default, :destroy ]
 

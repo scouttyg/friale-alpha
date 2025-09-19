@@ -26,9 +26,9 @@ jobs:
       DB_HOST: localhost
       DB_PORT: 5432
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
@@ -63,7 +63,7 @@ jobs:
     needs: test
     concurrency: deploy-group    # optional: ensure only one action runs at a time
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Create Sentry release

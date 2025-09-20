@@ -57,7 +57,7 @@ module Dashboard
       private
 
       def set_account_from_url
-        @account = current_user.accounts.friendly.find(params[:id])
+        @account = current_user.accounts.friendly.find(params[:account_id])
         # Override current_account for this controller
         @current_account = @account
       end

@@ -15,6 +15,10 @@ class AccountMemberPolicy < ApplicationPolicy
     current_member_count < limit
   end
 
+  def edit?
+    create?
+  end
+
   def destroy?
     account.owner == user || user == record
   end

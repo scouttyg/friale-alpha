@@ -20,5 +20,6 @@ FactoryBot.define do
     activated_at { Time.zone.now }
     deactivated_at { nil }
     stripe_product_id { "prod_#{SecureRandom.uuid}" }
+    member_limit { 10 } # Set a reasonable default limit
   end
 end

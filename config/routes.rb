@@ -36,30 +36,32 @@ Rails.application.routes.draw do
         member do
           post :switch
           get :settings, to: "accounts#edit"
-          namespace "settings" do
-            resources :billings, path: "billing" do
-              collection do
-                get "/", to: redirect { |_params, req| "#{req.path}/overview" }
-                get :plan
-                get :overview
-                resources :subscriptions, only: [ :new, :create ], controller: "billings/subscriptions" do
-                  collection do
-                    delete :cancel
-                  end
-                end
-              end
-            end
-
-            resources :payment_methods, only: [ :index, :create, :destroy ] do
-              member do
-                patch :make_default
-              end
-            end
-
-            resources :members
-          end
           post :settings, to: "accounts#update", as: :update_settings
         end
+      end
+
+      # Settings namespace with account_id parameter
+      scope "/accounts/:account_id/settings", as: "settings" do
+        resources :billings, path: "billing", controller: "settings/billings" do
+          collection do
+            get "/", to: redirect { |_params, req| "#{req.path}/overview" }
+            get :plan
+            get :overview
+            resources :subscriptions, only: [ :new, :create ], controller: "settings/billings/subscriptions" do
+              collection do
+                delete :cancel
+              end
+            end
+          end
+        end
+
+        resources :payment_methods, only: [ :index, :create, :destroy ], controller: "settings/payment_methods" do
+          member do
+            patch :make_default
+          end
+        end
+
+        resources :members, controller: "settings/members"
       end
     end
 

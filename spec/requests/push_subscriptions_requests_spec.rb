@@ -46,7 +46,7 @@ RSpec.describe "Push Subscriptions", type: :request do
     end
 
     subject(:create_push_subscription) do
-      post "/push_subscriptions", params: params
+      post push_subscriptions_path, params: params
     end
 
     context "with valid params" do
@@ -106,7 +106,7 @@ RSpec.describe "Push Subscriptions", type: :request do
     end
 
     subject(:unsubscribe_push_subscription) do
-      delete "/push_subscriptions/unsubscribe", params: params
+      delete unsubscribe_push_subscriptions_path, params: params
     end
 
     context "with valid params" do
@@ -163,7 +163,7 @@ RSpec.describe "Push Subscriptions", type: :request do
     end
 
     subject(:unsubscribe_all_push_subscription) do
-      delete "/push_subscriptions/unsubscribe_all", params: {}
+      delete unsubscribe_all_push_subscriptions_path, params: {}
     end
 
     let(:generated_subscription_count) { rand(1..10) }

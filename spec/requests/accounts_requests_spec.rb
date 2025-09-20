@@ -23,7 +23,7 @@ RSpec.describe 'Accounts', type: :request do
     describe 'GET /accounts/:id/settings' do
       it 'returns http success for account edit/settings page' do
         sign_in user
-        get "/accounts/#{account.id}/settings"
+        get settings_account_url(account)
         expect(response).to have_http_status(:success)
       end
     end

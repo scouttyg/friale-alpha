@@ -23,7 +23,7 @@ RSpec.describe 'Members', type: :request do
     describe 'GET /accounts/:id/settings/members' do
       it 'returns http success for members index' do
         sign_in user
-        get "/accounts/#{account.id}/settings/members"
+        get settings_members_path(account)
         expect(response).to have_http_status(:success)
       end
     end
@@ -31,7 +31,7 @@ RSpec.describe 'Members', type: :request do
     describe 'GET /accounts/:id/settings/members/new' do
       it 'returns http success for new member page' do
         sign_in user
-        get "/accounts/#{account.id}/settings/members/new"
+        get new_settings_member_path(account)
         expect(response).to have_http_status(:success)
       end
     end
@@ -41,7 +41,7 @@ RSpec.describe 'Members', type: :request do
 
       it 'returns http success for edit member page' do
         sign_in user
-        get "/accounts/#{account.id}/settings/members/#{member.id}/edit"
+        get edit_settings_member_path(account, member)
         expect(response).to have_http_status(:success)
       end
     end

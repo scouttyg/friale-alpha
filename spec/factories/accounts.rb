@@ -20,8 +20,4 @@ FactoryBot.define do
   factory :personal_account, class: 'PersonalAccount', parent: :account do
     type { 'PersonalAccount' }
   end
-
-  factory :team_account, class: 'TeamAccount', parent: :account do
-    type { 'TeamAccount' }
-  end
 end

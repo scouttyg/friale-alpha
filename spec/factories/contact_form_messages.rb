@@ -11,8 +11,8 @@
 #
 FactoryBot.define do
   factory :contact_form_message do
-    email { "MyString" }
-    message { "MyString" }
-    subject { "MyString" }
+    email { Faker::Internet.unique.email }
+    message { Faker::Lorem.paragraph }
+    subject { Faker::Lorem.sentence }
   end
 end

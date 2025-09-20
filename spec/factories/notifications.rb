@@ -20,9 +20,9 @@
 #
 FactoryBot.define do
   factory :notification do
-    body { "MyText" }
-    read_at { "2025-09-15 15:50:24" }
-    title { "MyString" }
+    body { Faker::Lorem.paragraph }
+    read_at { DateTime.parse(Faker::Time.between(from: 1.year.ago, to: DateTime.now).to_s) }
+    title { Faker::Lorem.sentence }
     user { nil }
   end
 end

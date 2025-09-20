@@ -23,5 +23,8 @@
 #
 FactoryBot.define do
   factory :admin_user do
+    sequence(:email) { Faker::Internet.unique.email }
+    password { 'p4ssw0rd!!!' }
+    password_confirmation { 'p4ssw0rd!!!' }
   end
 end

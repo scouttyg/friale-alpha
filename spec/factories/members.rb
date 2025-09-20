@@ -32,7 +32,7 @@ FactoryBot.define do
     access_level { 'collaborator' }
 
     trait :invited do
-      invite_email { Faker::Internet.email }
+      invite_email { Faker::Internet.unique.email }
       user { nil }
     end
 

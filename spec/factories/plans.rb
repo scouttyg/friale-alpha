@@ -15,8 +15,8 @@
 #
 FactoryBot.define do
   factory :plan do
-    name { 'Default Plan' }
-    description { 'Lorem ipsum...' }
+    name { "#{Faker::Name.name} Plan" }
+    description { Faker::Lorem.paragraph }
     activated_at { Time.zone.now }
     deactivated_at { nil }
     stripe_product_id { "prod_#{SecureRandom.uuid}" }

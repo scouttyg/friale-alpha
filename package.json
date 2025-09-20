@@ -7,6 +7,10 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.13",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/typography": "^0.5.16",
     "apexcharts": "^4.5.0",
     "flowbite": "^3.1.1",
     "sass": "^1.86.0"
@@ -16,10 +20,10 @@
   },
   "scripts": {
     "build:all": "yarn build:js && yarn build:css",
-    "build:css": "sass --load-path=$(bundle info activeadmin --path)/app/assets/stylesheets ./app/assets/stylesheets:./app/assets/builds --no-source-map & tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/tailwind.css --config ./config/tailwind.config.js",
+    "build:css": "sass --load-path=$(bundle info activeadmin --path)/app/assets/stylesheets ./app/assets/stylesheets:./app/assets/builds --no-source-map & tailwindcss -i ./app/assets/tailwind/application.css -o ./app/assets/builds/tailwind.css --config ./config/tailwind.config.js",
     "build:js": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets",
     "watch:all": "yarn watch:js && yarn watch:css",
-    "watch:css": "sass --load-path=$(bundle info activeadmin --path)/app/assets/stylesheets ./app/assets/stylesheets:./app/assets/builds --watch --no-source-map & tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/tailwind.css --config ./config/tailwind.config.js --watch",
+    "watch:css": "sass --load-path=$(bundle info activeadmin --path)/app/assets/stylesheets ./app/assets/stylesheets:./app/assets/builds --watch --no-source-map & tailwindcss -i ./app/assets/tailwind/application.css -o ./app/assets/builds/tailwind.css --config ./config/tailwind.config.js --watch",
     "watch:js": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets --watch"
   }
 }

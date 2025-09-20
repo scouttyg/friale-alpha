@@ -7,7 +7,7 @@ gem "rails", "~> 8.0.0"
 
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
-gem "tailwindcss-rails", "~> 3.3"
+gem "tailwindcss-rails", "~> 4.0"
 
 gem "pg"
 

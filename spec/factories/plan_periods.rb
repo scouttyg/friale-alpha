@@ -24,6 +24,6 @@ FactoryBot.define do
   factory :plan_period do
     association :plan
     interval { :MONTH }
-    sequence(:stripe_price_id) { |n| "price_test_#{n}" }
+    sequence(:stripe_price_id) { |n| "price_#{SecureRandom.uuid}" }
   end
 end

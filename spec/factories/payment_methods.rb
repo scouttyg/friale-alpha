@@ -29,6 +29,6 @@ FactoryBot.define do
     metadata { "" }
     type { "" }
     account { nil }
-    stripe_payment_method_id { "MyString" }
+    stripe_payment_method_id { "pm_#{SecureRandom.uuid}" }
   end
 end

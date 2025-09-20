@@ -7,7 +7,7 @@ Hi there!
 
 Account Details:
 - Account Name: <%= @account.name %>
-- Account Type: <%= @account.team? ? 'Team Account' : 'Personal Account' %>
+- Account Type: <%= @account.type.underscore.humanize.titleize %>
 - Your Role: <%= @member.access_level.capitalize %>
 - Invited by: <%= @creator.display_name %> (<%= @creator.email %>)
 

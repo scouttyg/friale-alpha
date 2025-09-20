@@ -66,31 +66,31 @@
       <div class="header">
         <h1>Team Invitation</h1>
       </div>
-      
+
       <div class="content">
         <p>Hi there!</p>
-        
+
         <p><strong><%= @creator.display_name %></strong> has invited you to join <strong><%= @account.name %></strong> as a <strong><%= @member.access_level.capitalize %></strong>.</p>
-        
+
         <div class="account-info">
           <h3>Account Details:</h3>
           <p><strong>Account Name:</strong> <%= @account.name %></p>
-          <p><strong>Account Type:</strong> <%= @account.team? ? 'Team Account' : 'Personal Account' %></p>
+          <p><strong>Account Type:</strong> <%= @account.type.underscore.humanize.titleize %></p>
           <p><strong>Your Role:</strong> <%= @member.access_level.capitalize %></p>
           <p><strong>Invited by:</strong> <%= @creator.display_name %> (<%= @creator.email %>)</p>
         </div>
-        
+
         <p>To accept this invitation, click the button below:</p>
-        
+
         <div style="text-align: center; margin: 30px 0;">
           <a href="<%= @invitation_url %>" class="btn">Accept Invitation</a>
         </div>
-        
+
         <p>If you don't have an account yet, you'll be guided through the sign-up process after accepting the invitation.</p>
-        
+
         <p>If you believe you received this email in error, you can safely ignore it.</p>
       </div>
-      
+
       <div class="footer">
         <p>This invitation was sent to <%= @member.invite_email %></p>
         <p>If you have any questions, please contact the person who invited you.</p>

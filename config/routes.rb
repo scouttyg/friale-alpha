@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   end
 
   scope module: :dashboard do
-    root to: "example#index", as: :authenticated_root
+    get "/dashboard", to: "example#index", as: :dashboard
 
     resources :notifications do
       member do

@@ -37,7 +37,7 @@ RSpec.describe 'Authentication', type: :request do
 
     it 'signs in with valid credentials' do
       post user_session_path, params: valid_params
-      expect(response).to redirect_to(authenticated_root_path)
+      expect(response).to redirect_to(dashboard_path)
     end
 
     it 'shows errors with invalid credentials' do
@@ -49,9 +49,9 @@ RSpec.describe 'Authentication', type: :request do
   describe 'Authenticated dashboard root' do
     let!(:user) { create(:user, :confirmed) }
 
-    it 'redirects authenticated user to /data/requests' do
+    it 'redirects authenticated user to /dashboard' do
       sign_in user
-      get authenticated_root_path
+      get dashboard_path
       expect(response).to have_http_status(:success)
     end
   end

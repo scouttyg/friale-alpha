@@ -10,6 +10,10 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def after_sign_in_path_for(resource)
+    stored_location_for(resource) || dashboard_path
+  end
+
   # Its important that the location is NOT stored if:
   # - The request method is not GET (non idempotent)
   # - The request is handled by a Devise controller such as Devise::SessionsController as that could cause an
@@ -23,7 +27,6 @@ class ApplicationController < ActionController::Base
     # :user is the scope we are authenticating
     store_location_for(:user, request.fullpath)
   end
-
 
   def user_for_paper_trail
     admin_user_signed_in? ? current_admin_user.try(:id) : "Unknown User"

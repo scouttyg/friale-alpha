@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Invitations', type: :request do
   let(:account) { create(:account) }
   let(:creator) { create(:user, :confirmed) }
-  let(:member) { create(:member, :invited, source: account, creator: creator, invite_email: 'test@example.com') }
+  let(:member) { create(:member, :invited, source: account, creator: creator, invite_email: 'test@example.com', type: "AccountMember") }
 
   before do
     free_plan = create(:plan, name: 'Free', position: 1)

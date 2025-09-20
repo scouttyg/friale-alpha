@@ -17,59 +17,57 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => "/sidekiq"
   end
 
-  authenticated :user do
-    scope module: :dashboard do
-      root to: "example#index", as: :authenticated_root
+  scope module: :dashboard do
+    root to: "example#index", as: :authenticated_root
 
-      resources :notifications do
-        member do
-          patch :mark_as_read
-          patch :mark_as_unread
-        end
-        collection do
-          patch :mark_all_as_read
-          get :dropdown_content
-        end
+    resources :notifications do
+      member do
+        patch :mark_as_read
+        patch :mark_as_unread
       end
-
-      resources :accounts, only: [ :index, :show ] do
-        member do
-          post :switch
-          get :settings, to: "accounts#edit"
-          post :settings, to: "accounts#update", as: :update_settings
-        end
-      end
-
-      # Settings namespace with account_id parameter
-      scope "/accounts/:account_id/settings", as: "settings" do
-        resources :billings, path: "billing", controller: "settings/billings" do
-          collection do
-            get "/", to: redirect { |_params, req| "#{req.path}/overview" }
-            get :plan
-            get :overview
-            resources :subscriptions, only: [ :new, :create ], controller: "settings/billings/subscriptions" do
-              collection do
-                delete :cancel
-              end
-            end
-          end
-        end
-
-        resources :payment_methods, only: [ :index, :create, :destroy ], controller: "settings/payment_methods" do
-          member do
-            patch :make_default
-          end
-        end
-
-        resources :members, controller: "settings/members"
+      collection do
+        patch :mark_all_as_read
+        get :dropdown_content
       end
     end
 
-    resources :push_subscriptions, only: [ :create ] do
-      collection do
-        delete "unsubscribe", to: "push_subscriptions#unsubscribe"
-        delete "unsubscribe_all", to: "push_subscriptions#unsubscribe_all"
+    resources :accounts, only: [ :index, :show ] do
+      member do
+        post :switch
+        get :settings, to: "accounts#edit"
+        post :settings, to: "accounts#update", as: :update_settings
       end
+    end
+
+    # Settings namespace with account_id parameter
+    scope "/accounts/:account_id/settings", as: "settings" do
+      resources :billings, path: "billing", controller: "settings/billings" do
+        collection do
+          get "/", to: redirect { |_params, req| "#{req.path}/overview" }
+          get :plan
+          get :overview
+          resources :subscriptions, only: [ :new, :create ], controller: "settings/billings/subscriptions" do
+            collection do
+              delete :cancel
+            end
+          end
+        end
+      end
+
+      resources :payment_methods, only: [ :index, :create, :destroy ], controller: "settings/payment_methods" do
+        member do
+          patch :make_default
+        end
+      end
+
+      resources :members, controller: "settings/members"
+    end
+  end
+
+  resources :push_subscriptions, only: [ :create ] do
+    collection do
+      delete "unsubscribe", to: "push_subscriptions#unsubscribe"
+      delete "unsubscribe_all", to: "push_subscriptions#unsubscribe_all"
     end
   end
 

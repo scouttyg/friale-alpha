@@ -19,7 +19,7 @@ FactoryBot.define do
     description { Faker::Lorem.paragraph }
     activated_at { Time.zone.now }
     deactivated_at { nil }
-    stripe_product_id { "prod_#{SecureRandom.uuid}" }
+    stripe_product_id { "prod_#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
     member_limit { 10 } # Set a reasonable default limit
   end
 end

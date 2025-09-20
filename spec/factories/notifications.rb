@@ -24,5 +24,9 @@ FactoryBot.define do
     read_at { DateTime.parse(Faker::Time.between(from: 1.year.ago, to: DateTime.now).to_s) }
     title { Faker::Lorem.sentence }
     user { nil }
+
+    trait :with_user do
+      association :user, factory: %i[user confirmed]
+    end
   end
 end

@@ -29,6 +29,6 @@ FactoryBot.define do
     metadata { "" }
     type { "" }
     account { nil }
-    stripe_payment_method_id { "pm_#{SecureRandom.uuid}" }
+    stripe_payment_method_id { "pm_#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
   end
 end

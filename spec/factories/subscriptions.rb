@@ -30,6 +30,6 @@ FactoryBot.define do
     plan { nil }
     plan_period { nil }
     usage_limits { '' }
-    stripe_subscription_id { "sub_#{SecureRandom.uuid}" }
+    stripe_subscription_id { "sub_#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
   end
 end

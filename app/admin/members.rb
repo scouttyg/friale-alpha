@@ -34,7 +34,7 @@ ActiveAdmin.register Member do
   end
 
   filter :type, as: :select, collection: -> { Member.distinct.pluck(:type).compact }
-  filter :access_level, as: :select, collection: Member::ACCESS_LEVELS.keys.map { |key| [ key.to_s.humanize, key ] }
+  filter :access_level, as: :select, collection: -> { Member::ACCESS_LEVELS.keys.map { |key| [ key.to_s.humanize, key ] } }
   filter :source_type, as: :select, collection: -> { Member.distinct.pluck(:source_type).compact }
   filter :invite_email
   filter :created_at
@@ -87,7 +87,7 @@ ActiveAdmin.register Member do
 
   form do |f|
     f.inputs do
-      f.input :access_level, as: :select, collection: Member::ACCESS_LEVELS.keys.map { |key| [ key.humanize, key ] }
+      f.input :access_level, as: :select, collection: -> { Member::ACCESS_LEVELS.keys.map { |key| [ key.humanize, key ] } }
       f.input :invite_email
       f.input :source_type, as: :select, collection: [ "Account" ]
       f.input :source_id, as: :select, collection: -> { Account.all.map { |a| [ a.name, a.id ] } }

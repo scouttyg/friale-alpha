@@ -24,7 +24,7 @@ ActiveAdmin.register PlanPeriod do
   end
 
   filter :plan, as: :select, collection: -> { Plan.all.map { |p| [ p.name, p.id ] } }
-  filter :interval, as: :select, collection: PlanPeriod.intervals.keys.map { |key| [ key.humanize, key ] }
+  filter :interval, as: :select, collection: -> { PlanPeriod.intervals.keys.map { |key| [ key.humanize, key ] } }
   filter :price_cents
   filter :price_currency
   filter :stripe_price_id
@@ -69,7 +69,7 @@ ActiveAdmin.register PlanPeriod do
   form do |f|
     f.inputs do
       f.input :plan, as: :select, collection: -> { Plan.all.map { |p| [ p.name, p.id ] } }
-      f.input :interval, as: :select, collection: PlanPeriod.intervals.keys.map { |key| [ key.humanize, key ] }
+      f.input :interval, as: :select, collection: -> { PlanPeriod.intervals.keys.map { |key| [ key.humanize, key ] } }
       f.input :price_cents, label: "Price (in cents)"
       f.input :price_currency
       f.input :stripe_price_id

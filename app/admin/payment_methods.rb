@@ -80,7 +80,7 @@ ActiveAdmin.register PaymentMethod do
   form do |f|
     f.inputs do
       f.input :account, as: :select, collection: -> { Account.all.map { |a| [ a.name, a.id ] } }
-      f.input :type, as: :select, collection: PaymentMethod.descendants.map(&:name)
+      f.input :type, as: :select, collection: -> { PaymentMethod.descendants.map(&:name) }
       f.input :brand
       f.input :default
       f.input :stripe_payment_method_id

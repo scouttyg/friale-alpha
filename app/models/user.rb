@@ -43,6 +43,9 @@ class User < ApplicationRecord
   has_many :notifications, dependent: :destroy
   has_many :push_subscriptions, dependent: :destroy
 
+  scope :confirmed, -> { where.not(confirmed_at: nil) }
+  scope :unconfirmed, -> { where(confirmed_at: nil) }
+
   has_one_attached :avatar
 
   def full_name

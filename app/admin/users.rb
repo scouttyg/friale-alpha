@@ -179,8 +179,6 @@ ActiveAdmin.register User do
   end
 
   scope :all, default: true
-  scope "Confirmed", :confirmed
-  scope "Unconfirmed" do |scope|
-    scope.where(confirmed_at: nil)
-  end
+  scope :confirmed
+  scope :unconfirmed
 end

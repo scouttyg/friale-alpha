@@ -1,0 +1,11 @@
+<% if !@versions.empty? %>
+  <%= render partial: 'admin/shared/paper_trail/list', locals: {
+    version: @current_version.presence || @latest_version,
+    version_author: @current_version_author.presence || @latest_version_author,
+    version_label: @current_version_author.present? ? "Current Version" : "Latest Version",
+    previous_version: @previous_version,
+    latest_version: @latest_version
+  } %>
+<% else %>
+  <p>This item does not have any registered version.</p>
+<% end %>

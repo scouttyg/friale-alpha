@@ -1,0 +1,39 @@
+<div>
+  <dl>
+    <dt>
+      Version ID:
+    </dt>
+    <dd>
+      <%= version.id %>
+    </dd>
+    <dt>
+      Whodunnit Type:
+    </dt>
+    <dd>
+      <%= version_author.author_type %>
+    </dd>
+    <dt>
+      Whodunnit:
+    </dt>
+    <dd>
+      <%= render partial: 'admin/shared/paper_trail/version_author', locals: { version_author: version_author } %>
+    </dd>
+    <dt>
+      Created At / Modified_at:
+    </dt>
+    <dd>
+      <%= version.created_at %>
+    </dd>
+  </dl>
+  <% if previous_version.present? %>
+    <%= link_to "Previous version", { version: previous_version.id } %>
+  <% else %>
+    Previous version
+  <% end %>
+  |
+  <% if latest_version.present? && version != latest_version %>
+    <%= link_to "Latest version", { version: latest_version.id } %>
+  <% elsif version == latest_version %>
+    Latest version
+  <% end %>
+</div>

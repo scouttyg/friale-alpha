@@ -1,5 +1,7 @@
 <% if version_author.admin_user? %>
   <%= link_to version_author.email, admin_admin_user_path(version_author.author), target: '_blank' %>
-<% else %>
+<% elsif version_author.author %>
   <%= link_to version_author.email, admin_user_path(version_author.author), target: '_blank' %>
+<% else %>
+  <span>There was no known author for this version</span>
 <% end %>

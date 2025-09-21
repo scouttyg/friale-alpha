@@ -1,4 +1,6 @@
 ActiveAdmin.register User do
+  extend AdminVersionable
+
   permit_params :email, :password, :password_confirmation, :first_name, :last_name,
                 :confirmed_at, :confirmation_sent_at
 
@@ -181,4 +183,13 @@ ActiveAdmin.register User do
   scope :all, default: true
   scope :confirmed
   scope :unconfirmed
+
+  batch_action :confirm_account do |ids|
+    users_to_confirm = User.where(id: ids, confirmed_at: nil)
+    users_to_confirm.find_each do |user|
+      user.confirmed_at = Time.zone.now
+      user.save!
+    end
+    redirect_to collection_path(scope: :unconfirmed), alert: "Confirmed accounts selected."
+  end
 end

@@ -26,7 +26,7 @@ module AdminVersionable
     end
 
     def no_author?
-      @version.whodunnit.nil?
+      @version.whodunnit.nil? || @version.whodunnit == "Unknown User"
     end
 
     def user?
@@ -46,7 +46,10 @@ module AdminVersionable
 
       controller do
         def initialize_versions
-          @resource = resource_class.includes(versions: :item).friendly.find(params[:id])
+          base_resource = resource_class.includes(versions: :item)
+          is_friendly = resource_class.respond_to?(:friendly)
+
+          @resource = is_friendly ? base_resource.friendly.find(params[:id]) : base_resource.find(params[:id])
           @versions = @resource.versions
           @latest_version = @versions.last
           @latest_version_author = VersionAuthor.new(@latest_version)

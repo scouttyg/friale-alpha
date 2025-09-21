@@ -117,7 +117,7 @@ RSpec.describe Member, type: :model do
   end
 
   describe 'scopes' do
-    let!(:invited_member) { create(:member, source: account, invite_email: 'invited@example.com') }
+    let!(:invited_member) { create(:member, source: account, invite_email: 'invited@example.com', user: nil) }
     let!(:accepted_member) { create(:member, source: account, user: create(:user, :confirmed)) }
 
     it 'returns invited members' do

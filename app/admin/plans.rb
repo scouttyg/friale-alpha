@@ -49,13 +49,13 @@ ActiveAdmin.register Plan do
       row :position
       row :status do |plan|
         if plan.active?
-          status_tag "Active", :ok
+          status_tag "Active", class: :ok
         elsif plan.activated? && plan.deactivated?
-          status_tag "Deactivated", :error
+          status_tag "Deactivated", class: :error
         elsif !plan.activated?
-          status_tag "Not Activated", :warning
+          status_tag "Not Activated", class: :warning
         else
-          status_tag "Unknown", :error
+          status_tag "Unknown", class: :error
         end
       end
       row :activated_at

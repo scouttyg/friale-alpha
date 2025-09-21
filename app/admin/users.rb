@@ -9,9 +9,9 @@ ActiveAdmin.register User do
     column :full_name
     column :status do |user|
       if user.confirmed_at?
-        status_tag "Confirmed", :ok
+        status_tag "Confirmed", class: :ok
       else
-        status_tag "Unconfirmed", :warning
+        status_tag "Unconfirmed", class: :warning
       end
     end
     column :accounts_count do |user|
@@ -45,9 +45,9 @@ ActiveAdmin.register User do
       row :initials
       row :status do |user|
         if user.confirmed_at?
-          status_tag "Confirmed", :ok
+          status_tag "Confirmed", class: :ok
         else
-          status_tag "Unconfirmed", :warning
+          status_tag "Unconfirmed", class: :warning
         end
       end
       row :confirmed_at
@@ -112,9 +112,9 @@ ActiveAdmin.register User do
         column :title
         column :status do |notification|
           if notification.read?
-            status_tag "Read", :ok
+            status_tag "Read", class: :ok
           else
-            status_tag "Unread", :warning
+            status_tag "Unread", class: :warning
           end
         end
         column :created_at
@@ -133,9 +133,9 @@ ActiveAdmin.register User do
         column :vendor
         column :status do |ps|
           if ps.active?
-            status_tag "Active", :ok
+            status_tag "Active", class: :ok
           else
-            status_tag "Expired", :error
+            status_tag "Expired", class: :error
           end
         end
         column :created_at

@@ -15,9 +15,9 @@ ActiveAdmin.register PushSubscription do
     end
     column :status do |ps|
       if ps.active?
-        status_tag "Active", :ok
+        status_tag "Active", class: :ok
       else
-        status_tag "Expired", :error
+        status_tag "Expired", class: :error
       end
     end
     column :expires_at
@@ -42,9 +42,9 @@ ActiveAdmin.register PushSubscription do
       row :auth_secret
       row :status do |ps|
         if ps.active?
-          status_tag "Active", :ok
+          status_tag "Active", class: :ok
         else
-          status_tag "Expired", :error
+          status_tag "Expired", class: :error
         end
       end
       row :expires_at
@@ -55,7 +55,7 @@ ActiveAdmin.register PushSubscription do
     panel "Vendor Information" do
       attributes_table_for resource do
         row "Detected Vendor" do |ps|
-          status_tag ps.vendor.to_s.humanize, ps.vendor == :unknown ? :error : :ok
+          status_tag ps.vendor.to_s.humanize, class: (ps.vendor == :unknown ? :error : :ok)
         end
         row "Valid Domains" do
           ul do

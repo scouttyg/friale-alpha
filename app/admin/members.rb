@@ -73,11 +73,11 @@ ActiveAdmin.register Member do
       row :invite_token
       row :status do |member|
         if member.pending?
-          status_tag "Pending", :warning
+          status_tag "Pending", class: :warning
         elsif member.accepted?
-          status_tag "Accepted", :ok
+          status_tag "Accepted", class: :ok
         else
-          status_tag "Unknown", :error
+          status_tag "Unknown", class: :error
         end
       end
       row :created_at

@@ -83,9 +83,9 @@ ActiveAdmin.register Subscription do
         row :description
         row :status do |plan|
           if plan.active?
-            status_tag "Active", :ok
+            status_tag "Active", class: :ok
           else
-            status_tag "Inactive", :error
+            status_tag "Inactive", class: :error
           end
         end
         row :member_limit

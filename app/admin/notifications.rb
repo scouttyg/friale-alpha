@@ -15,9 +15,9 @@ ActiveAdmin.register Notification do
     end
     column :status do |notification|
       if notification.read?
-        status_tag "Read", :ok
+        status_tag "Read", class: :ok
       else
-        status_tag "Unread", :warning
+        status_tag "Unread", class: :warning
       end
     end
     column :read_at
@@ -41,9 +41,9 @@ ActiveAdmin.register Notification do
       end
       row :status do |notification|
         if notification.read?
-          status_tag "Read", :ok
+          status_tag "Read", class: :ok
         else
-          status_tag "Unread", :warning
+          status_tag "Unread", class: :warning
         end
       end
       row :read_at

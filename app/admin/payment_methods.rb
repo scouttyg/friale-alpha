@@ -18,9 +18,9 @@ ActiveAdmin.register PaymentMethod do
     column :stripe_payment_method_id
     column :status do |pm|
       if pm.deleted_at?
-        status_tag "Deleted", :error
+        status_tag "Deleted", class: :error
       else
-        status_tag "Active", :ok
+        status_tag "Active", class: :ok
       end
     end
     column :created_at
@@ -50,9 +50,9 @@ ActiveAdmin.register PaymentMethod do
       row :stripe_payment_method_id
       row :status do |pm|
         if pm.deleted_at?
-          status_tag "Deleted", :error
+          status_tag "Deleted", class: :error
         else
-          status_tag "Active", :ok
+          status_tag "Active", class: :ok
         end
       end
       row :deleted_at

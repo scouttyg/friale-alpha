@@ -15,11 +15,12 @@
 #
 FactoryBot.define do
   factory :plan do
-    name { "#{Faker::Name.name} Plan" }
+    name { "#{Faker::Company.name} Plan" }
     description { Faker::Lorem.paragraph }
     activated_at { Time.zone.now }
     deactivated_at { nil }
+    position { 1 }
+    usage_limits { {} }
     stripe_product_id { "prod_#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
-    member_limit { 10 } # Set a reasonable default limit
   end
 end

@@ -52,6 +52,17 @@ RSpec.configure do |config|
     Rails.application.reload_routes_unless_loaded
   end
 
+  config.before(:each) do
+    # Stub Stripe calls to prevent actual API calls during factory creation
+    allow(Stripe::Customer).to receive(:create).and_return(
+      double('customer', id: 'cus_test_123')
+    )
+
+    allow(Stripe::Subscription).to receive(:create).and_return(
+      double('subscription', id: 'sub_test_123')
+    )
+  end
+
   # You can uncomment this line to turn off ActiveRecord support entirely.
   # config.use_active_record = false
 

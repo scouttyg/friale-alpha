@@ -28,16 +28,18 @@
 FactoryBot.define do
   factory :member do
     association :source, factory: :account
-    association :creator, factory: %i[user confirmed]
+    association :creator, factory: [ :user, :confirmed, :skip_account_setup ]
+    association :user, factory: [ :user, :confirmed, :skip_account_setup ]
     access_level { 'collaborator' }
 
     trait :invited do
       invite_email { Faker::Internet.unique.email }
       user { nil }
+      invite_token { SecureRandom.urlsafe_base64(32) }
     end
 
     trait :accepted do
-      association :user, factory: %i[user confirmed]
+      association :user, factory: [ :user, :confirmed, :skip_account_setup ]
       invite_email { nil }
       invite_token { nil }
     end
@@ -46,12 +48,19 @@ FactoryBot.define do
       access_level { 'owner' }
     end
 
+    trait :collaborator do
+      access_level { 'collaborator' }
+    end
+
     trait :guest do
       access_level { 'guest' }
     end
 
     factory :account_member, class: 'AccountMember' do
       association :source, factory: :account
+      association :creator, factory: [ :user, :confirmed, :skip_account_setup ]
+      association :user, factory: [ :user, :confirmed, :skip_account_setup ]
+      access_level { 'collaborator' }
     end
   end
 end

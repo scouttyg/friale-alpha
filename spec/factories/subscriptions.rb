@@ -26,10 +26,10 @@
 
 FactoryBot.define do
   factory :subscription do
-    account { nil }
-    plan { nil }
-    plan_period { nil }
-    usage_limits { '' }
+    association :account
+    association :plan
+    plan_period { association(:plan_period, plan: plan) }
+    usage_limits { {} }
     stripe_subscription_id { "sub_#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
   end
 end

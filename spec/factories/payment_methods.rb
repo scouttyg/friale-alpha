@@ -23,12 +23,12 @@
 #
 FactoryBot.define do
   factory :payment_method do
-    brand { "MyString" }
+    brand { "visa" }
     default { false }
-    deleted_at { "2025-09-18 21:32:06" }
-    metadata { "" }
-    type { "" }
-    account { nil }
+    deleted_at { nil }
+    metadata { { last_four: "1234" } }
+    type { "CreditCard" }
+    association :account
     stripe_payment_method_id { "pm_#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
   end
 end

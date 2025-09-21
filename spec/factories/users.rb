@@ -33,12 +33,23 @@ FactoryBot.define do
     sequence(:email) { |n| "user#{n}@example.com" }
     password { 'password123' }
     password_confirmation { 'password123' }
+    first_name { Faker::Name.first_name }
+    last_name { Faker::Name.last_name }
 
     trait :confirmed do
       before(:create) { |u| u.skip_confirmation_notification! }
       confirmed_at { Time.current }
       confirmation_token { nil }
       confirmation_sent_at { nil }
+    end
+
+    trait :skip_account_setup do
+      after(:build) do |user|
+        # Stub the setup_personal_account method to prevent execution
+        user.define_singleton_method(:setup_personal_account) do
+          # Do nothing - skip account setup
+        end
+      end
     end
   end
 end

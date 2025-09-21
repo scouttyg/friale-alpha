@@ -22,12 +22,8 @@
 #
 FactoryBot.define do
   factory :push_subscription do
-    user
-    endpoint do
-      Faker::Internet.url(
-        host: PushSubscription::VALID_PUSH_DOMAINS_HASH.keys.sample
-      )
-    end
+    association :user, factory: [ :user, :confirmed, :skip_account_setup ]
+    endpoint { "https://fcm.googleapis.com/fcm/send/#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
     public_key do
       group = 'prime256v1'
       curve = OpenSSL::PKey::EC.generate(group)

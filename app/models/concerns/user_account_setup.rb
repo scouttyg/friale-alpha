@@ -9,6 +9,8 @@ module UserAccountSetup
   private
 
   def setup_personal_account
+    return if accounts.where(type: "PersonalAccount").exists?
+
     ActiveRecord::Base.transaction do
       # Create personal account
       account = PersonalAccount.create!(
@@ -37,10 +39,10 @@ module UserAccountSetup
           }
         })
       rescue Stripe::InvalidRequestError
-        raise unless Rails.env.development?
+        raise unless Rails.env.development? || Rails.env.test?
       end
 
-      if Rails.env.development? && stripe_subscription.nil?
+      if (Rails.env.development? || Rails.env.test?) && stripe_subscription.nil?
         # If you see this, you haven't setup Stripe set locally correctly
         stripe_subscription = FakeStripeSubscription.new(id: "stripe_subscription_mock_123")
       end
@@ -53,7 +55,7 @@ module UserAccountSetup
       )
     end
   rescue Stripe::StripeError => e
-    Rails.logger.error "Failed to create Stripe subscription for account #{account&.id}: #{e.message}"
+    Rails.logger.error "Failed to create Stripe subscription: #{e.message}"
     raise
   end
 end

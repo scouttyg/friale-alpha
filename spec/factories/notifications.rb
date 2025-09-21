@@ -2,13 +2,14 @@
 #
 # Table name: notifications
 #
-#  id         :bigint           not null, primary key
-#  body       :text
-#  read_at    :datetime
-#  title      :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  user_id    :bigint           not null
+#  id                :bigint           not null, primary key
+#  body              :text
+#  notification_type :string
+#  read_at           :datetime
+#  title             :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  user_id           :bigint           not null
 #
 # Indexes
 #
@@ -23,10 +24,7 @@ FactoryBot.define do
     body { Faker::Lorem.paragraph }
     read_at { DateTime.parse(Faker::Time.between(from: 1.year.ago, to: DateTime.now).to_s) }
     title { Faker::Lorem.sentence }
-    user { nil }
-
-    trait :with_user do
-      association :user, factory: %i[user confirmed]
-    end
+    notification_type { 'info' }
+    association :user, factory: [ :user, :confirmed, :skip_account_setup ]
   end
 end

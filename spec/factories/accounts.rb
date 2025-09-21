@@ -15,9 +15,39 @@ FactoryBot.define do
     name { Faker::Company.name }
     type { 'Account' }
     stripe_customer_id { "cus_#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
+
+    # Create owner member after account is created
+    after(:create) do |account, context|
+      unless account.members.exists?
+        owner_user = create(:user, :confirmed, :skip_account_setup)
+        create(:account_member, :owner, source: account, user: owner_user, creator: owner_user)
+      end
+    end
+
+    trait :with_subscription do
+      after(:create) do |account, context|
+        create(:subscription, account: account) unless account.subscription
+      end
+    end
   end
 
   factory :personal_account, class: 'PersonalAccount', parent: :account do
+    name { Faker::Name.name }
     type { 'PersonalAccount' }
+    stripe_customer_id { "cus_#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
+
+    # Create owner member after account is created
+    after(:create) do |account, context|
+      unless account.members.exists?
+        owner_user = create(:user, :confirmed, :skip_account_setup)
+        create(:account_member, :owner, source: account, user: owner_user, creator: owner_user)
+      end
+    end
+
+    trait :with_subscription do
+      after(:create) do |account, context|
+        create(:subscription, account: account) unless account.subscription
+      end
+    end
   end
 end

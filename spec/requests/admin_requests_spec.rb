@@ -136,7 +136,7 @@ RSpec.describe 'Admin', type: :request do
         stubbed_path = path_for_klass(action, nil, admin_resource_class)
         traits_for_factory.each do |trait|
           # rubocop:disable RSpec/ExampleLength
-          it "loads the #{action} path for #{factory_name} #{"with trait #{trait}" if trait.present?} (#{stubbed_path})" do
+          it "loads the #{action} path for #{factory_name} #{"with trait :#{trait}" if trait.present?} (#{stubbed_path})" do
             model_instance = trait.present? ? create(factory_name, trait) : create(factory_name)
             next unless klass_name.constantize.exists?(model_instance.id)
 
@@ -155,6 +155,9 @@ RSpec.describe 'Admin', type: :request do
             found_path = path_for_klass(action, model_instance, admin_resource_class)
 
             get found_path
+            if factory_name.to_s.downcase == "user" && trait.present?
+              puts "response: #{response.body}"
+            end
             expect(response).to be_successful
           end
           # rubocop:enable RSpec/ExampleLength

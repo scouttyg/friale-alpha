@@ -35,12 +35,12 @@ module Dashboard
                       notice: "Subscription was successfully created."
         rescue Stripe::StripeError => e
           flash.now[:error] = e.message
-          render :new, status: :unprocessable_entity
+          render :new, status: :unprocessable_content
         rescue ActiveRecord::RecordInvalid => e
           # If local subscription creation fails, cancel the Stripe subscription
           Stripe::Subscription.cancel(stripe_subscription.id) if stripe_subscription
           flash.now[:error] = e.record.errors.full_messages.to_sentence
-          render :new, status: :unprocessable_entity
+          render :new, status: :unprocessable_content
         end
 
         def cancel

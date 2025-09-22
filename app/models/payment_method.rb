@@ -3,7 +3,6 @@
 # Table name: payment_methods
 #
 #  id                       :bigint           not null, primary key
-#  brand                    :string
 #  default                  :boolean          default(FALSE)
 #  deleted_at               :datetime
 #  metadata                 :jsonb

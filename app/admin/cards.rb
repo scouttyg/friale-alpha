@@ -1,5 +1,7 @@
-ActiveAdmin.register PaymentMethod do
-  permit_params :account_id, :brand, :default, :stripe_payment_method_id, :type
+ActiveAdmin.register Card do
+  menu parent: "Payment Methods"
+
+  permit_params :account_id, :brand, :default, :exp_month, :exp_year, :last_four, :stripe_payment_method_id, :type
 
   index do
     selectable_column
@@ -8,6 +10,8 @@ ActiveAdmin.register PaymentMethod do
     column :account do |pm|
       link_to pm.account.name, admin_account_path(pm.account)
     end
+    column :brand
+    column :last_four
     column :default do |pm|
       status_tag (pm.default? ? "Yes" : "No"), class: (pm.default? ? :ok : nil)
     end
@@ -38,6 +42,8 @@ ActiveAdmin.register PaymentMethod do
       row :account do |pm|
         link_to pm.account.name, admin_account_path(pm.account)
       end
+      row :brand
+      row :last_four
       row :default do |pm|
         status_tag (pm.default? ? "Yes" : "No"), class: (pm.default? ? :ok : nil)
       end
@@ -72,12 +78,16 @@ ActiveAdmin.register PaymentMethod do
   end
 
   form do |f|
+    f.semantic_errors *f.object.errors.full_messages
     f.inputs do
       f.input :account, as: :select, collection: Account.all.map { |a| [ a.name, a.id ] }
       f.input :type, as: :select, collection: PaymentMethod.descendants.map(&:name)
-      f.input :brand
-      f.input :default
-      f.input :stripe_payment_method_id
+      f.input :brand, as: :select, collection: Card::CARD_BRANDS
+      f.input :last_four
+      f.input :exp_month
+      f.input :exp_year
+      f.input :default, as: :boolean
+      f.input :stripe_payment_method_id, placeholder: "pm_..."
     end
     f.actions
   end

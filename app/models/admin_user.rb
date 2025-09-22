@@ -22,6 +22,7 @@
 #  index_admin_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 class AdminUser < ApplicationRecord
+  PAPER_TRAIL_WHODUNNIT_TYPE = "admin"
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, and :omniauthable
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable

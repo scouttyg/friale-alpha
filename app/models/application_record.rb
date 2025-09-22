@@ -1,5 +1,6 @@
 class ApplicationRecord < ActiveRecord::Base
   include Hashid::Rails
+  include AdminUserPaperTrail
   primary_abstract_class
 
   scope :oldest_first, -> { order(id: :asc) }

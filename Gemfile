@@ -92,6 +92,7 @@ group :development, :test do
   gem "foreman"
   gem "leftovers"
   gem "letter_opener"
+  gem "ostruct" # Required for ActiveAdmin batch actions fix in Rails 8
   gem "rspec-rails"
   gem "rubocop", ">= 1.74.0", require: false
   gem "rubocop-factory_bot", require: false

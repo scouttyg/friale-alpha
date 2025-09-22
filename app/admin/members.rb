@@ -13,7 +13,11 @@ ActiveAdmin.register Member do
     column :source do |member|
       case member.source_type
       when "Account"
-        link_to member.source.name, admin_account_path(member.source)
+        if member.source.present?
+          link_to (defined?(member.source.name) ? member.source.name : "N/A"), admin_account_path(member.source)
+        else
+          "No source found"
+        end
       else
         "#{member.source_type} ##{member.source_id}"
       end
@@ -87,12 +91,12 @@ ActiveAdmin.register Member do
 
   form do |f|
     f.inputs do
-      f.input :access_level, as: :select, collection: -> { Member::ACCESS_LEVELS.keys.map { |key| [ key.humanize, key ] } }
+      f.input :access_level, as: :select, collection: Member::ACCESS_LEVELS.keys.map { |key| [ key.to_s.humanize, key ] }
       f.input :invite_email
       f.input :source_type, as: :select, collection: [ "Account" ]
-      f.input :source_id, as: :select, collection: -> { Account.all.map { |a| [ a.name, a.id ] } }
-      f.input :user, as: :select, collection: -> { User.all.map { |u| [ u.display_name, u.id ] } }, include_blank: true
-      f.input :creator, as: :select, collection: -> { User.all.map { |u| [ u.display_name, u.id ] } }, include_blank: true
+      f.input :source_id, as: :select, collection: Account.all.map { |a| [ a.name, a.id ] }
+      f.input :user, as: :select, collection: User.all.map { |u| [ u.display_name, u.id ] }, include_blank: true
+      f.input :creator, as: :select, collection: User.all.map { |u| [ u.display_name, u.id ] }, include_blank: true
     end
     f.actions
   end

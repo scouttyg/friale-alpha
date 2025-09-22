@@ -21,13 +21,26 @@
 #
 #  fk_rails_...  (account_id => accounts.id)
 #
-FactoryBot.define do
-  factory :payment_method do
-    default { false }
-    deleted_at { nil }
-    metadata { { last_four: "1234", brand: "visa" } }
-    type { "Card" }
-    association :account
-    stripe_payment_method_id { "pm_#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
+class Card < PaymentMethod
+  store_accessor :metadata, :brand, :exp_month, :exp_year
+
+  validates :brand, presence: true
+  validates :last_four, presence: true, format: { with: /\A\d{4}\z/, message: "must be exactly 4 digits" }
+  validates :exp_month, presence: true, numericality: { in: 1..12 }
+  validates :exp_year, presence: true, numericality: { only_integer: true }
+
+  def self.model_name
+    PaymentMethod.model_name
+  end
+
+  def display_details
+    "#{brand.titleize} •••• #{last_four}"
+  end
+
+  def expired?
+    return false if exp_year.nil? || exp_month.nil?
+
+    expiration_date = Date.new(exp_year.to_i, exp_month.to_i).end_of_month
+    expiration_date < Date.current
   end
 end

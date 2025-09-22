@@ -64,7 +64,7 @@ ActiveAdmin.register Notification do
     f.inputs do
       f.input :title
       f.input :body, as: :text
-      f.input :user, as: :select, collection: -> { User.all.map { |u| [ u.display_name, u.id ] } }
+      f.input :user, as: :select, collection: User.all.map { |u| [ u.display_name, u.id ] }
     end
     f.actions
   end

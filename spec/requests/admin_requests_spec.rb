@@ -56,128 +56,201 @@ RSpec.describe 'Admin', type: :request do
     end
     delegate :factory_name_for_klass_name, to: :class
 
-    # Load ActiveAdmin resources here at class definition time
-    def self.load_admin_resources_now
-      return if @resources_loaded
-
-      puts "Loading ActiveAdmin resources..."
-
-      # Require necessary modules
-      require 'active_admin/batch_actions/resource_extension'
-      require 'ostruct'
-
-      # Fix batch_actions initialization issue in ActiveAdmin 3.3.0
-      ActiveAdmin::Resource.class_eval do
-        def batch_actions
-          @batch_actions ||= {}
-          batch_actions_enabled? ? @batch_actions.values.sort : []
-        end
-
-        def add_batch_action(sym, title, options = {}, &block)
-          @batch_actions ||= {}
-          # Create a simple BatchAction-like object
-          @batch_actions[sym] = OpenStruct.new(
-            sym: sym,
-            title: title,
-            options: options,
-            block: block,
-            confirm: options[:confirm]
-          )
-        end
-      end
-
-      Dir[Rails.root.join("app/admin/**/*.rb")].each { |f| require f }
-      ActiveAdmin.application.load!
-
-      @resources_loaded = true
-      puts "ActiveAdmin resources loaded!"
-    end
-
-    load_admin_resources_now
-
-    all_resources = ActiveAdmin.application.namespaces[:admin]&.resources&.values || []
-    puts "All resources count: #{all_resources.count}"
-    puts "All resource names: #{all_resources.map { |r| r.resource_class.model_name.name rescue 'unknown' }}"
-
-    initial_resources = all_resources.filter do |resource|
-      puts "Checking resource: #{resource.resource_class.model_name.name rescue 'unknown'}"
-      puts "  belongs_to?: #{resource.belongs_to?}"
-      puts "  belongs_to_config.optional?: #{resource.belongs_to_config&.optional? rescue 'N/A'}"
-      puts "  is Page?: #{resource.is_a?(ActiveAdmin::Page)}"
-      puts "  is Comment?: #{resource.resource_class.model_name.name == "ActiveAdmin::Comment" rescue false}"
-
-      condition = (!resource.belongs_to? || resource.belongs_to_config.optional?) &&
-        !resource.is_a?(ActiveAdmin::Page) &&
-        resource.resource_class.model_name.name != "ActiveAdmin::Comment"
-      puts "  passes filter?: #{condition}"
-      condition
-    end
-
-    valid_resources = initial_resources.uniq { |resource| resource.resource_class.model_name.name }
-    puts "Valid resources: #{valid_resources.map { |r| r.resource_class.model_name.name }}"
-
     supported_actions = [ :index, :edit, :show ]
 
     before do
       admin_user = create(:admin_user)
       sign_in(admin_user)
+
+      # Load ActiveAdmin resources at runtime, not at class definition time
+      # This ensures proper initialization of batch actions and other features
+      Dir[Rails.root.join("app/admin/**/*.rb")].each { |f| require f }
+      ActiveAdmin.application.load!
     end
 
-    valid_resources.each do |admin_resource_class|
-      defined_actions = admin_resource_class.defined_actions.filter { |action| supported_actions.include?(action) }
-      member_get_actions = admin_resource_class.member_actions.filter { |action| action.http_verb == :get }.map(&:name)
-      klass_name = admin_resource_class.resource_class.model_name.name
-      next unless klass_name == "User"
+    # Get valid resources dynamically after ActiveAdmin has loaded
+    def get_valid_resources
+      all_resources = ActiveAdmin.application.namespaces[:admin]&.resources&.values || []
 
-      factory_name = factory_name_for_klass_name(klass_name)
-      traits_for_factory = FactoryBot.factories[factory_name].defined_traits.map(&:name) | [ nil ]
+      initial_resources = all_resources.filter do |resource|
+        (!resource.belongs_to? || resource.belongs_to_config.optional?) &&
+          !resource.is_a?(ActiveAdmin::Page) &&
+          resource.resource_class.model_name.name != "ActiveAdmin::Comment"
+      end
 
-      defined_actions.each do |action|
-        stubbed_path = path_for_klass(action, nil, admin_resource_class)
-        traits_for_factory.each do |trait|
-          # rubocop:disable RSpec/ExampleLength
-          it "loads the #{action} path for #{factory_name} #{"with trait :#{trait}" if trait.present?} (#{stubbed_path})" do
-            model_instance = trait.present? ? create(factory_name, trait) : create(factory_name)
-            next unless klass_name.constantize.exists?(model_instance.id)
+      initial_resources.uniq { |resource| resource.resource_class.model_name.name }
+    end
 
-            if admin_resource_class.belongs_to?
-              to_param = admin_resource_class.belongs_to_config.to_param
-              if model_instance.respond_to?(to_param) && model_instance.send(to_param).blank?
-                associate_klass = admin_resource_class.belongs_to_config.target.resource_class.model_name.name
-                associate_factory_name = factory_name_for_klass_name(associate_klass)
-                associate_instance = create(associate_factory_name)
-                next unless associate_klass.constantize.exists?(associate_instance.id)
+    # Extract error details from better_errors HTML response
+    def extract_error_from_html(html_body)
+      return nil unless html_body.is_a?(String)
 
-                model_instance.update!(to_param => associate_instance.id)
-              end
-            end
+      # Look for better_errors exception header pattern
+      if match = html_body.match(/<header class="exception">\s*<h2><strong>([^<]+)<\/strong>\s*<span>at ([^<]+)<\/span><\/h2>\s*<p>([^<]+)<\/p>/m)
+        exception_type = decode_html_entities(match[1].strip)
+        message = decode_html_entities(match[3].strip)
 
-            found_path = path_for_klass(action, model_instance, admin_resource_class)
+        # Look for the first application frame (selected frame with application context)
+        app_frame_location = extract_application_frame(html_body)
+        location_info = app_frame_location || decode_html_entities(match[2].strip)
 
-            get found_path
-            if factory_name.to_s.downcase == "user" && trait.present?
-              puts "response: #{response.body}"
-            end
-            expect(response).to be_successful
-          end
-          # rubocop:enable RSpec/ExampleLength
+        "#{exception_type}: #{message} (at #{location_info})"
+      elsif match = html_body.match(/<h1>([^<]+)<\/h1>/)
+        # Fallback for simpler error pages
+        decode_html_entities(match[1].strip)
+      else
+        nil
+      end
+    end
+
+    # Extract the first application frame location from better_errors
+    def extract_application_frame(html_body)
+      # Look for selected application frame (try multiple patterns)
+      patterns = [
+        # Pattern 1: class="selected" with data-context="application"
+        /<li[^>]*class="selected"[^>]*data-context="application"[^>]*>.*?<span class="filename">([^<]+)<\/span>, line <span class="line">([^<]+)<\/span>/m,
+        # Pattern 2: data-context="application" with class="selected"
+        /<li[^>]*data-context="application"[^>]*class="selected"[^>]*>.*?<span class="filename">([^<]+)<\/span>, line <span class="line">([^<]+)<\/span>/m,
+        # Pattern 3: Just look for first application context frame
+        /<li[^>]*data-context="application"[^>]*>.*?<span class="filename">([^<]+)<\/span>, line <span class="line">([^<]+)<\/span>/m
+      ]
+
+      patterns.each do |pattern|
+        if match = html_body.match(pattern)
+          filename = decode_html_entities(match[1].strip)
+          line = decode_html_entities(match[2].strip)
+          return "#{filename}, line #{line}"
         end
       end
 
-      member_get_actions.each do |action|
-        stubbed_path = path_for_member_klass(action, nil, admin_resource_class)
+      # Debug: if no application frame found, let's see what frames exist
+      if Rails.env.test? && html_body.include?('class="filename"')
+        puts "DEBUG: Could not find application frame, available frames:"
+        html_body.scan(/<span class="filename">([^<]+)<\/span>, line <span class="line">([^<]+)<\/span>/) do |filename, line|
+          puts "  - #{decode_html_entities(filename)}, line #{decode_html_entities(line)}"
+        end
+      end
 
-        traits_for_factory.each do |trait|
-          it "loads the member #{action} path for #{factory_name} #{"with trait #{trait}" if trait.present?} (#{stubbed_path})" do
-            model_instance = trait.present? ? create(factory_name, trait) : create(factory_name)
-            next unless klass_name.constantize.exists?(model_instance.id)
+      nil
+    end
 
-            found_path = path_for_member_klass(action, model_instance, admin_resource_class)
+    # Decode common HTML entities
+    def decode_html_entities(text)
+      text.gsub(/&#39;/, "'")
+          .gsub(/&quot;/, '"')
+          .gsub(/&lt;/, '<')
+          .gsub(/&gt;/, '>')
+          .gsub(/&amp;/, '&')
+    end
 
-            get found_path
-            expect(response.status).to be_in([ 200, 302 ])
+    it "loads ActiveAdmin pages for all resources with all traits" do
+      valid_resources = get_valid_resources
+      failures = []
+      total_tests = 0
+
+      valid_resources.each do |admin_resource_class|
+        defined_actions = admin_resource_class.defined_actions.filter { |action| supported_actions.include?(action) }
+        member_get_actions = admin_resource_class.member_actions.filter { |action| action.http_verb == :get }.map(&:name)
+        klass_name = admin_resource_class.resource_class.model_name.name
+
+        factory_name = factory_name_for_klass_name(klass_name)
+        traits_for_factory = begin
+          FactoryBot.factories[factory_name].defined_traits.map(&:name) | [ nil ]
+        rescue KeyError
+          [ nil ] # If factory doesn't exist, just test without traits
+        end
+
+        defined_actions.each do |action|
+          traits_for_factory.each do |trait|
+            trait_description = trait ? " with trait :#{trait}" : ""
+
+            puts "Testing: #{klass_name} #{action}#{trait_description}"
+            total_tests += 1
+
+            begin
+              model_instance = trait.present? ? create(factory_name, trait) : create(factory_name)
+              next unless klass_name.constantize.exists?(model_instance.id)
+
+              if admin_resource_class.belongs_to?
+                to_param = admin_resource_class.belongs_to_config.to_param
+                if model_instance.respond_to?(to_param) && model_instance.send(to_param).blank?
+                  associate_klass = admin_resource_class.belongs_to_config.target.resource_class.model_name.name
+                  associate_factory_name = factory_name_for_klass_name(associate_klass)
+                  associate_instance = create(associate_factory_name)
+                  next unless associate_klass.constantize.exists?(associate_instance.id)
+
+                  model_instance.update!(to_param => associate_instance.id)
+                end
+              end
+
+              found_path = path_for_klass(action, model_instance, admin_resource_class)
+
+              get found_path
+              if !response.successful?
+                error_details = extract_error_from_html(response.body) if response.status == 500
+                error_msg = "#{found_path} (#{action})#{trait_description} for #{klass_name} - Status: #{response.status}"
+                error_msg += "\n    #{error_details}" if error_details
+                puts "  ❌ FAILED: #{error_msg}"
+                failures << error_msg
+              else
+                puts "  ✅ PASSED: #{found_path}"
+              end
+            rescue => e
+              error_msg = "#{klass_name} #{action}#{trait_description} - #{e.message}"
+              puts "  💥 ERROR: #{error_msg}"
+              failures << error_msg
+            end
           end
         end
+
+        member_get_actions.each do |action|
+          traits_for_factory.each do |trait|
+            trait_description = trait ? " with trait :#{trait}" : ""
+
+            puts "Testing: #{klass_name} member #{action}#{trait_description}"
+            total_tests += 1
+
+            begin
+              model_instance = trait.present? ? create(factory_name, trait) : create(factory_name)
+              next unless klass_name.constantize.exists?(model_instance.id)
+
+              found_path = path_for_member_klass(action, model_instance, admin_resource_class)
+
+              get found_path
+              if !response.status.in?([ 200, 302 ])
+                error_details = extract_error_from_html(response.body) if response.status == 500
+                error_msg = "#{found_path} (member #{action})#{trait_description} for #{klass_name} - Status: #{response.status}"
+                error_msg += "\n    #{error_details}" if error_details
+                puts "  ❌ FAILED: #{error_msg}"
+                failures << error_msg
+              else
+                puts "  ✅ PASSED: #{found_path}"
+              end
+            rescue => e
+              error_msg = "#{klass_name} member #{action}#{trait_description} - #{e.message}"
+              puts "  💥 ERROR: #{error_msg}"
+              failures << error_msg
+            end
+          end
+        end
+      end
+
+      puts "\n" + "="*80
+      puts "TEST SUMMARY:"
+      puts "Total tests run: #{total_tests}"
+      puts "Failures: #{failures.count}"
+      puts "Success rate: #{((total_tests - failures.count).to_f / total_tests * 100).round(1)}%"
+
+      if failures.any?
+        puts "\nFAILED TESTS:"
+        failures.each { |failure| puts "  - #{failure}" }
+        puts "="*80
+
+        # Fail the test with a summary
+        fail "#{failures.count} out of #{total_tests} ActiveAdmin page tests failed. See details above."
+      else
+        puts "All tests passed! 🎉"
+        puts "="*80
       end
     end
   end

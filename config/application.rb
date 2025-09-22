@@ -27,11 +27,13 @@ module StarterTemplate2025
 
     config.autoload_paths += Dir[
       Rails.root.join("app/models/accounts/**/"),
-      Rails.root.join("app/models/members/**/")
+      Rails.root.join("app/models/members/**/"),
+      Rails.root.join("app/models/payment_methods/**/")
     ]
     config.eager_load_paths += Dir[
       Rails.root.join("app/models/accounts/**/"),
-      Rails.root.join("app/models/members/**/")
+      Rails.root.join("app/models/members/**/"),
+      Rails.root.join("app/models/payment_methods/**/")
     ]
   end
 end

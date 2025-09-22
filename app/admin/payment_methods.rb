@@ -13,7 +13,7 @@ ActiveAdmin.register PaymentMethod do
     column :brand
     column :last_four
     column :default do |pm|
-      status_tag pm.default? ? "Yes" : "No", pm.default? ? :ok : nil
+      status_tag (pm.default? ? "Yes" : "No"), class: (pm.default? ? :ok : nil)
     end
     column :stripe_payment_method_id
     column :status do |pm|
@@ -45,7 +45,7 @@ ActiveAdmin.register PaymentMethod do
       row :brand
       row :last_four
       row :default do |pm|
-        status_tag pm.default? ? "Yes" : "No", pm.default? ? :ok : nil
+        status_tag (pm.default? ? "Yes" : "No"), class: (pm.default? ? :ok : nil)
       end
       row :stripe_payment_method_id
       row :status do |pm|
@@ -79,8 +79,8 @@ ActiveAdmin.register PaymentMethod do
 
   form do |f|
     f.inputs do
-      f.input :account, as: :select, collection: -> { Account.all.map { |a| [ a.name, a.id ] } }
-      f.input :type, as: :select, collection: -> { PaymentMethod.descendants.map(&:name) }
+      f.input :account, as: :select, collection: Account.all.map { |a| [ a.name, a.id ] }
+      f.input :type, as: :select, collection: PaymentMethod.descendants.map(&:name)
       f.input :brand
       f.input :default
       f.input :stripe_payment_method_id

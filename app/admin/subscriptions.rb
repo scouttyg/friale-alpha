@@ -98,9 +98,9 @@ ActiveAdmin.register Subscription do
 
   form do |f|
     f.inputs do
-      f.input :account, as: :select, collection: -> { Account.all.map { |a| [ a.name, a.id ] } }
-      f.input :plan, as: :select, collection: -> { Plan.all.map { |p| [ p.name, p.id ] } }
-      f.input :plan_period, as: :select, collection: -> { PlanPeriod.joins(:plan).map { |pp| [ "#{pp.plan.name} - #{pp.interval} (#{pp.price.format})", pp.id ] } }
+      f.input :account, as: :select, collection: Account.all.map { |a| [ a.name, a.id ] }
+      f.input :plan, as: :select, collection: Plan.all.map { |p| [ p.name, p.id ] }
+      f.input :plan_period, as: :select, collection: PlanPeriod.joins(:plan).map { |pp| [ "#{pp.plan.name} - #{pp.interval} (#{pp.price.format})", pp.id ] }
       f.input :stripe_subscription_id
     end
     f.actions

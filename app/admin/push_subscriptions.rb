@@ -70,7 +70,7 @@ ActiveAdmin.register PushSubscription do
 
   form do |f|
     f.inputs do
-      f.input :user, as: :select, collection: -> { User.all.map { |u| [ u.display_name, u.id ] } }
+      f.input :user, as: :select, collection: User.all.map { |u| [ u.display_name, u.id ] }
       f.input :endpoint, hint: "Must be from a valid push service domain"
       f.input :public_key
       f.input :auth_secret

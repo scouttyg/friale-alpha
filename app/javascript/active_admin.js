@@ -1,1 +1,11 @@
-//= require active_admin/base
+import "./add_jquery";
+import "jquery-ui";
+import "jquery-ujs";
+import "jquery-ui/ui/unique-id.js";
+import "jquery-ui/ui/widgets/mouse";
+import "jquery-ui/ui/widgets/sortable";
+import "jquery-ui/ui/widgets/tabs";
+import "jquery-ui/ui/widgets/dialog";
+import "jquery-ui/ui/widgets/datepicker";
+import "jquery-ui/ui/widget";
+import "@activeadmin/activeadmin";

@@ -23,7 +23,115 @@
                 class="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-500 disabled:cursor-not-allowed text-white border-none py-3 px-6 rounded-md cursor-pointer text-base mr-2 mb-2 transition-colors">
             Request Credentials
         </button>
+        <!-- License Display -->
+        <div id="licenseDisplay" class="mt-6 hidden">
+            <h3 class="text-lg font-semibold mb-4">Digital Driver's License</h3>
+            <div class="max-w-md mx-auto bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg p-6 text-white shadow-xl">
+                <!-- Header -->
+                <div class="text-center mb-4">
+                    <div class="text-xs font-semibold tracking-wider opacity-90">DIGITAL DRIVER LICENSE</div>
+                    <div class="text-xs opacity-75" id="licenseState">STATE OF CALIFORNIA</div>
+                </div>
 
+                <!-- Main Content -->
+                <div class="flex gap-4">
+                    <!-- Portrait -->
+                    <div class="flex-shrink-0">
+                        <div class="w-20 h-24 bg-gray-300 rounded border-2 border-white overflow-hidden">
+                            <img id="licensePortrait" class="w-full h-full object-cover" style="display: none;" alt="Portrait">
+                            <div id="licensePortraitPlaceholder" class="w-full h-full flex items-center justify-center text-gray-600 text-xs">
+                                NO PHOTO
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Personal Info -->
+                    <div class="flex-1 text-sm">
+                        <div class="mb-2">
+                            <div class="text-xs opacity-75">NAME</div>
+                            <div class="font-semibold" id="licenseName">N/A</div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div>
+                                <div class="opacity-75">DOB</div>
+                                <div id="licenseDOB">N/A</div>
+                            </div>
+                            <div>
+                                <div class="opacity-75">SEX</div>
+                                <div id="licenseSex">N/A</div>
+                            </div>
+                            <div>
+                                <div class="opacity-75">HEIGHT</div>
+                                <div id="licenseHeight">N/A</div>
+                            </div>
+                            <div>
+                                <div class="opacity-75">WEIGHT</div>
+                                <div id="licenseWeight">N/A</div>
+                            </div>
+                            <div>
+                                <div class="opacity-75">EYES</div>
+                                <div id="licenseEyes">N/A</div>
+                            </div>
+                            <div>
+                                <div class="opacity-75">HAIR</div>
+                                <div id="licenseHair">N/A</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div class="mt-4 text-xs">
+                    <div class="opacity-75">ADDRESS</div>
+                    <div id="licenseAddress">N/A</div>
+                    <div id="licenseCityStateZip">N/A</div>
+                </div>
+
+                <!-- Document Info -->
+                <div class="mt-4 grid grid-cols-2 gap-4 text-xs">
+                    <div>
+                        <div class="opacity-75">LICENSE #</div>
+                        <div id="licenseNumber">N/A</div>
+                    </div>
+                    <div>
+                        <div class="opacity-75">EXPIRES</div>
+                        <div id="licenseExpiry">N/A</div>
+                    </div>
+                    <div>
+                        <div class="opacity-75">COUNTRY</div>
+                        <div id="licenseCountry">N/A</div>
+                    </div>
+                    <div>
+                        <div class="opacity-75">ISSUING AUTHORITY</div>
+                        <div id="licenseIssuingAuthority">N/A</div>
+                    </div>
+                </div>
+
+                <!-- Driving Privileges -->
+                <div class="mt-4 text-xs">
+                    <div class="opacity-75">DRIVING PRIVILEGES</div>
+                    <div id="licenseDrivingPrivileges">N/A</div>
+                </div>
+
+                <!-- Age verification badge -->
+                <div class="mt-4 pt-3 border-t border-blue-400">
+                    <div class="flex justify-between items-center text-xs">
+                        <div>
+                            <div class="opacity-75">AGE VERIFICATION</div>
+                            <div class="flex gap-2 mt-1">
+                                <span id="ageOver18Badge" class="px-2 py-1 bg-green-500 rounded text-white font-semibold hidden">18+</span>
+                                <span id="ageOver21Badge" class="px-2 py-1 bg-green-500 rounded text-white font-semibold hidden">21+</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="opacity-75">CURRENT AGE</div>
+                            <div id="licenseAge">N/A</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="result" class="bg-white border border-gray-300 rounded-md p-4 mt-4 whitespace-pre-wrap font-mono text-sm overflow-x-auto hidden"></div>
     </div>
 
@@ -76,7 +184,8 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                 <!-- Personal Information -->
                 <div class="bg-white rounded-lg p-4 border border-gray-200">
-                    <h4 class="font-semibold text-gray-800 mb-3 text-sm uppercase tracking-wide">Personal Information</h4>
+                    <h4 class="font-semibold text-gray-800 mb-2 text-sm uppercase tracking-wide">Personal Information</h4>
+                    <button type="button" class="text-xs text-blue-600 hover:text-blue-800 underline mb-3" onclick="toggleCategorySelection('personal')">Select All</button>
                     <div class="space-y-3">
                         <label class="flex items-center">
                             <input type="checkbox" name="givenName" class="rounded text-blue-600 mr-2" checked>
@@ -152,7 +261,8 @@
 
                 <!-- Address Information -->
                 <div class="bg-white rounded-lg p-4 border border-gray-200">
-                    <h4 class="font-semibold text-gray-800 mb-3 text-sm uppercase tracking-wide">Address Information</h4>
+                    <h4 class="font-semibold text-gray-800 mb-2 text-sm uppercase tracking-wide">Address Information</h4>
+                    <button type="button" class="text-xs text-blue-600 hover:text-blue-800 underline mb-3" onclick="toggleCategorySelection('address')">Select All</button>
                     <div class="space-y-3">
                         <label class="flex items-center">
                             <input type="checkbox" name="address" class="rounded text-blue-600 mr-2">
@@ -183,7 +293,8 @@
 
                 <!-- Document Information -->
                 <div class="bg-white rounded-lg p-4 border border-gray-200">
-                    <h4 class="font-semibold text-gray-800 mb-3 text-sm uppercase tracking-wide">Document Information</h4>
+                    <h4 class="font-semibold text-gray-800 mb-2 text-sm uppercase tracking-wide">Document Information</h4>
+                    <button type="button" class="text-xs text-blue-600 hover:text-blue-800 underline mb-3" onclick="toggleCategorySelection('document')">Select All</button>
                     <div class="space-y-3">
                         <label class="flex items-center">
                             <input type="checkbox" name="documentNumber" class="rounded text-blue-600 mr-2">

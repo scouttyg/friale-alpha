@@ -2,3 +2,4 @@ web: bundle exec puma -C config/puma.rb
 sidekiq: bundle exec sidekiq --config ./config/sidekiq.yml
 css: yarn watch:css
 js: yarn watch:js
+ngrok: ngrok http 3000 --hostname=$NGROK_DOMAIN

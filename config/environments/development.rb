@@ -15,6 +15,9 @@ Rails.application.configure do
   # Enable server timing.
   config.server_timing = true
 
+  localhost_tunnels_array = [ /[-\w]+\.ngrok\.io/, /[-\w]+\.ngrok-free\.app/, /[-\w]+\.trycloudflare\.com/ ]
+  config.hosts |= localhost_tunnels_array
+
   # Enable/disable Action Controller caching. By default Action Controller caching is disabled.
   # Run rails dev:cache to toggle Action Controller caching.
   if Rails.root.join("tmp/caching-dev.txt").exist?

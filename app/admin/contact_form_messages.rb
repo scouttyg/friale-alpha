@@ -1,4 +1,6 @@
 ActiveAdmin.register ContactFormMessage do
+  permit_params :email, :subject, :message
+
   index do
     selectable_column
     id_column
@@ -19,5 +21,14 @@ ActiveAdmin.register ContactFormMessage do
       row :created_at
       row :updated_at
     end
+  end
+
+  form do |f|
+    f.inputs do
+      f.input :email
+      f.input :subject
+      f.input :message
+    end
+    f.actions
   end
 end

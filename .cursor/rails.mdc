@@ -1,0 +1,138 @@
+# Rails 8 Development Guidelines
+
+## 1. Rails 8 Core Features
+
+** Prefer the command line utilities to manually generated code **
+
+e.g use `rails generate model` instead of creating a model from scratch
+
+** IMPORTANT: Server Management **
+- Always use `foreman start -f Procfile.dev` to start the server
+- Check logs after every significant change
+- Monitor development.log for errors and performance issues
+- Use `tail -f log/development.log` for real-time monitoring
+- Review logs before considering any change complete
+
+1. **Modern Infrastructure**
+   - Use Thruster for asset compression and caching
+   - Utilize Sidekiq for background job processing
+   - Use Action Cable for real-time features
+   - Configure healthcheck silencing in production logs
+
+2. **Database Best Practices**
+   - Use proper database indexing strategies
+   - Configure connection pooling
+   - Implement proper backup strategies
+   - Use PostgreSQL-specific features (arrays, jsonb, etc)
+   - Monitor and optimize query performance
+
+3. **Controller Patterns**
+   - Silence healthcheck requests in production
+   - Keep controllers RESTful and focused
+   - Use service objects for complex business logic
+
+4. **Progressive Web App Features**
+   - Utilize default PWA manifest
+   - Implement service worker functionality
+   - Configure browser version requirements
+   - Use `allow_browser` to set minimum versions
+   - Implement offline capabilities
+   - Configure proper caching strategies
+
+5. **Admin Interface**
+   - Use ActiveAdmin (https://github.com/activeadmin/activeadmin/) to create administrator pages
+   - Create customized ActiveAdmin dashboards and resources for efficient management when relevant
+   - Follow ActiveAdmin DSL conventions.
+
+## 2. Development Standards
+
+1. **Code Organization**
+   - Follow Single Responsibility Principle
+   - Use service objects for complex business logic
+   - Keep controllers skinny
+   - Use concerns for shared functionality
+   - Follow Rails 8 conventions
+
+2. **Performance**
+   - Configure connection pooling
+   - Use Sidekiq for background jobs
+   - Monitor application metrics
+   - Regular performance profiling
+   - Optimize database queries
+   - Use proper indexing strategies
+
+3. **Testing**
+   - Write comprehensive RSpec tests
+   - Use factories instead of fixtures
+   - Test happy and edge cases
+   - Keep tests DRY but readable
+   - Use parallel testing by default
+   - Regular security testing
+   - Performance testing
+   - Load testing for critical paths
+
+4. **Security**
+   - Implement proper authorization
+   - Sanitize user input
+   - Follow OWASP guidelines
+   - Regular security audits
+   - Keep dependencies updated
+   - Use secure communication (HTTPS)
+
+5. **Hotwire Patterns**
+   - Use Turbo Frames for partial page updates
+   - Use Turbo Streams for real-time updates
+   - Keep Stimulus controllers focused and simple
+   - Use data attributes for JavaScript hooks
+   - Use Solid Cable for real-time features
+
+6. **Deployment**
+   - Configure healthcheck silencing
+   - Implement PWA features by default
+   - Use devcontainer for development
+   - Implement blue-green deployments
+   - Configure proper health checks
+   - Set up monitoring and alerts
+
+7. **Logging and Monitoring**
+   - Check logs after every code change
+   - Monitor development.log for errors
+   - Use `tail -f log/development.log` for real-time monitoring
+   - Review logs before marking tasks as complete
+   - Set up proper log rotation
+   - Configure log levels appropriately
+   - Monitor performance metrics
+   - Track error rates and patterns
+
+## 3. Directory Structure
+
+```
+/app
+├── controllers/    # Controllers
+├── models/         # Active Record models
+├── views/          # View templates
+├── helpers/        # View helpers
+├── javascript/     # Stimulus controllers
+│   └── controllers/
+├── services/       # Service objects
+├── policies/       # Pundit policies
+├── jobs/           # Background jobs
+├── mailers/        # Action Mailer classes
+└── assets/         # Assets
+```
+
+## 4. Tech Stack
+
+- **Backend**: Ruby on Rails 8
+- **Frontend**: Hotwire (Turbo + Stimulus)
+- **Styling**: Tailwind CSS
+- **Component Library**: Flowbite (https://flowbite.com/)
+- **Database**: PostgreSQL (via Docker)
+- **Testing**: RSpec, Capybara
+- **Background Jobs**: Sidekiq
+- **Real-time**: Action Cable
+- **Authentication**: Devise
+- **Authorization**: Pundit
+- **Asset Pipeline**: esbuild and propshaft
+- **Container**: Docker (development & production)
+- **Admin Interface**: ActiveAdmin (https://activeadmin.info/)

@@ -21,6 +21,7 @@ ActiveAdmin.register Plan do
         status_tag "Unknown", class: :error
       end
     end
+    column "Stripe Product ID", :stripe_product_id
     column :member_limit
     column :plan_periods_count do |plan|
       plan.plan_periods.count
@@ -37,7 +38,7 @@ ActiveAdmin.register Plan do
   filter :position
   filter :activated_at
   filter :deactivated_at
-  filter :stripe_product_id
+  filter :stripe_product_id, label: "Stripe Product ID"
   filter :member_limit
   filter :created_at
 
@@ -80,7 +81,7 @@ ActiveAdmin.register Plan do
         column :price do |pp|
           pp.price.format
         end
-        column :stripe_price_id
+        column "Stripe Price ID", :stripe_price_id
         column :created_at
         column :actions do |pp|
           link_to "View", admin_plan_period_path(pp), class: "button"
@@ -97,6 +98,7 @@ ActiveAdmin.register Plan do
         column :plan_period do |sub|
           sub.plan_period.name
         end
+        column "Stripe Subscription ID", :stripe_subscription_id
         column :created_at
         column :actions do |sub|
           link_to "View", admin_subscription_path(sub), class: "button"
@@ -121,7 +123,7 @@ ActiveAdmin.register Plan do
       f.input :position
       f.input :activated_at, as: :datetime_picker
       f.input :deactivated_at, as: :datetime_picker
-      f.input :stripe_product_id
+      f.input :stripe_product_id, label: "Stripe Product ID", placeholder: "prod_..."
       f.input :member_limit
     end
     f.actions

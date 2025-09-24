@@ -11,7 +11,7 @@ ActiveAdmin.register PaymentMethod do
     column :default do |pm|
       status_tag (pm.default? ? "Yes" : "No"), class: (pm.default? ? :ok : nil)
     end
-    column :stripe_payment_method_id
+    column "Stripe Payment Method ID", :stripe_payment_method_id
     column :status do |pm|
       if pm.deleted_at?
         status_tag "Deleted", class: :error
@@ -27,7 +27,7 @@ ActiveAdmin.register PaymentMethod do
   filter :account, as: :select, collection: -> { Account.all.map { |a| [ a.name, a.id ] } }
   filter :brand
   filter :default, as: :select, collection: [ [ "Yes", true ], [ "No", false ] ]
-  filter :stripe_payment_method_id
+  filter :stripe_payment_method_id, label: "Stripe Payment Method ID"
   filter :deleted_at
   filter :created_at
 
@@ -41,7 +41,7 @@ ActiveAdmin.register PaymentMethod do
       row :default do |pm|
         status_tag (pm.default? ? "Yes" : "No"), class: (pm.default? ? :ok : nil)
       end
-      row :stripe_payment_method_id
+      row ("Stripe Payment Method ID") { |pm| pm.stripe_payment_method_id }
       row :status do |pm|
         if pm.deleted_at?
           status_tag "Deleted", class: :error
@@ -77,7 +77,7 @@ ActiveAdmin.register PaymentMethod do
       f.input :type, as: :select, collection: PaymentMethod.descendants.map(&:name)
       f.input :brand
       f.input :default
-      f.input :stripe_payment_method_id
+      f.input :stripe_payment_method_id, label: "Stripe Payment Method ID", placeholder: "pm_..."
     end
     f.actions
   end

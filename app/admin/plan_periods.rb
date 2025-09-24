@@ -14,7 +14,7 @@ ActiveAdmin.register PlanPeriod do
       pp.price.format
     end
     column :price_currency
-    column :stripe_price_id
+    column "Stripe Price ID", :stripe_price_id
     column :subscriptions_count do |pp|
       PlanPeriod.joins(:plan).joins("LEFT JOIN subscriptions ON subscriptions.plan_period_id = plan_periods.id")
                  .where(id: pp.id).count
@@ -27,7 +27,7 @@ ActiveAdmin.register PlanPeriod do
   filter :interval, as: :select, collection: -> { PlanPeriod.intervals.keys.map { |key| [ key.humanize, key ] } }
   filter :price_cents
   filter :price_currency
-  filter :stripe_price_id
+  filter :stripe_price_id, label: "Stripe Price ID"
   filter :created_at
 
   show do
@@ -42,7 +42,7 @@ ActiveAdmin.register PlanPeriod do
       end
       row :price_cents
       row :price_currency
-      row :stripe_price_id
+      row ("Stripe Price ID") { |pp| pp.stripe_price_id }
       row :created_at
       row :updated_at
     end
@@ -55,6 +55,7 @@ ActiveAdmin.register PlanPeriod do
           column :account do |sub|
             link_to sub.account.name, admin_account_path(sub.account)
           end
+          column "Stripe Subscription ID", :stripe_subscription_id
           column :created_at
           column :actions do |sub|
             link_to "View", admin_subscription_path(sub), class: "button"
@@ -72,7 +73,7 @@ ActiveAdmin.register PlanPeriod do
       f.input :interval, as: :select, collection: PlanPeriod.intervals.keys.map { |key| [ key.humanize, key ] }
       f.input :price_cents, label: "Price (in cents)"
       f.input :price_currency
-      f.input :stripe_price_id
+      f.input :stripe_price_id, label: "Stripe Price ID", placeholder: "price_..."
     end
     f.actions
   end

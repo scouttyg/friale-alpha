@@ -16,7 +16,7 @@ ActiveAdmin.register Account do
     column :subscription do |account|
       account.subscription&.plan&.name
     end
-    column :stripe_customer_id
+    column "Stripe Customer ID", :stripe_customer_id
     column :created_at
     actions
   end
@@ -24,7 +24,7 @@ ActiveAdmin.register Account do
   filter :name
   filter :type, as: :select, collection: -> { Account.distinct.pluck(:type).compact }
   filter :slug
-  filter :stripe_customer_id
+  filter :stripe_customer_id, label: "Stripe Customer ID"
   filter :created_at
 
   show do
@@ -33,7 +33,7 @@ ActiveAdmin.register Account do
       row :name
       row :type
       row :slug
-      row :stripe_customer_id
+      row ("Stripe Customer ID") { |account| account.stripe_customer_id }
       row :created_at
       row :updated_at
     end
@@ -94,7 +94,7 @@ ActiveAdmin.register Account do
     f.inputs do
       f.input :name
       f.input :type, as: :select, collection: [ "Account", "PersonalAccount" ]
-      f.input :stripe_customer_id
+      f.input :stripe_customer_id, label: "Stripe Customer ID", placeholder: "cus_..."
     end
     f.actions
   end

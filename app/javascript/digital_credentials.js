@@ -62,8 +62,8 @@ class DigitalCredentialsPage {
     updateCategoryButtons() {
         const categories = {
             personal: [
-                'givenName', 'familyName', 'birthDate', 'birthYear', 'age', 
-                'ageOver18', 'ageOver21', 'sex', 'height', 'weight', 
+                'givenName', 'familyName', 'birthDate', 'birthYear', 'age',
+                'ageOver18', 'ageOver21', 'sex', 'height', 'weight',
                 'eyeColor', 'hairColor', 'nationality', 'placeOfBirth'
             ],
             address: [
@@ -77,7 +77,7 @@ class DigitalCredentialsPage {
 
         Object.keys(categories).forEach(category => {
             const checkboxNames = categories[category];
-            const checkboxes = checkboxNames.map(name => 
+            const checkboxes = checkboxNames.map(name =>
                 document.querySelector(`input[name="${name}"]`)
             ).filter(checkbox => checkbox !== null);
 
@@ -85,7 +85,7 @@ class DigitalCredentialsPage {
 
             const allSelected = checkboxes.every(checkbox => checkbox.checked);
             const button = document.querySelector(`button[onclick="toggleCategorySelection('${category}')"]`);
-            
+
             if (button) {
                 button.textContent = allSelected ? 'Deselect All' : 'Select All';
             }
@@ -249,7 +249,7 @@ class DigitalCredentialsPage {
         if (type === 'success' && message.includes('✅ Credential request successful!')) {
             const toggleId = 'responseToggle_' + Date.now();
             const contentId = 'responseContent_' + Date.now();
-            
+
             this.resultEl.innerHTML = `
                 <div class="flex justify-between items-start mb-2">
                     <span class="font-semibold">✅ Credential request successful!</span>
@@ -282,7 +282,7 @@ class DigitalCredentialsPage {
             // Convert object with numeric keys to Uint8Array
             const keys = Object.keys(portraitData).map(Number).sort((a, b) => a - b);
             const bytes = new Uint8Array(keys.length);
-            
+
             for (let i = 0; i < keys.length; i++) {
                 bytes[i] = portraitData[keys[i]];
             }
@@ -303,14 +303,14 @@ class DigitalCredentialsPage {
      */
     formatDate(dateString) {
         if (!dateString) return 'N/A';
-        
+
         try {
             const date = new Date(dateString);
             if (isNaN(date.getTime())) return dateString; // Return original if not parseable
-            
+
             return date.toLocaleDateString('en-US', {
                 month: '2-digit',
-                day: '2-digit', 
+                day: '2-digit',
                 year: 'numeric'
             });
         } catch (error) {
@@ -340,7 +340,7 @@ class DigitalCredentialsPage {
         // Update portrait
         const portraitImg = document.getElementById('licensePortrait');
         const portraitPlaceholder = document.getElementById('licensePortraitPlaceholder');
-        
+
         if (claims.portrait) {
             const imageUrl = this.convertPortraitToImage(claims.portrait);
             if (imageUrl) {
@@ -361,7 +361,7 @@ class DigitalCredentialsPage {
 
         // Update address
         document.getElementById('licenseAddress').textContent = claims.address || 'N/A';
-        
+
         const city = claims.city || '';
         const state = claims.state || '';
         const postalCode = claims.postalCode || claims.postal_code || '';
@@ -372,7 +372,7 @@ class DigitalCredentialsPage {
         document.getElementById('licenseNumber').textContent = claims.documentNumber || claims.document_number || 'N/A';
         document.getElementById('licenseExpiry').textContent = this.formatDate(claims.expiryDate || claims.expiry_date) || 'N/A';
         document.getElementById('licenseCountry').textContent = claims.country || claims.issuingCountry || claims.issuing_country || 'N/A';
-        
+
         // Show the actual issuing authority (before fallback processing)
         const rawIssuingAuthority = claims.issuingAuthority || claims.issuing_authority;
         document.getElementById('licenseIssuingAuthority').textContent = rawIssuingAuthority || 'N/A';
@@ -400,24 +400,24 @@ class DigitalCredentialsPage {
 
         // Update issuing state/jurisdiction with fallback logic
         let jurisdiction = claims.issuingJurisdiction || claims.issuing_jurisdiction || claims.issuingAuthority || claims.issuing_authority;
-        
+
         // If issuing authority is "XX-XX", fall back to state
         if (jurisdiction === 'XX-XX' || !jurisdiction) {
             jurisdiction = claims.state || 'COULD NOT DETERMINE';
         }
-        
+
         document.getElementById('licenseState').textContent = `STATE OF ${jurisdiction.toUpperCase()}`;
 
         // Update age verification badges
         const ageOver18Badge = document.getElementById('ageOver18Badge');
         const ageOver21Badge = document.getElementById('ageOver21Badge');
-        
+
         if (claims.ageOver18 === true || claims.age_over_18 === true) {
             ageOver18Badge.classList.remove('hidden');
         } else {
             ageOver18Badge.classList.add('hidden');
         }
-        
+
         if (claims.ageOver21 === true || claims.age_over_21 === true) {
             ageOver21Badge.classList.remove('hidden');
         } else {
@@ -503,9 +503,9 @@ class DigitalCredentialsPage {
 window.toggleResponseContent = function(contentId, toggleId) {
     const content = document.getElementById(contentId);
     const toggle = document.getElementById(toggleId);
-    
+
     if (!content || !toggle) return;
-    
+
     if (content.style.display === 'none') {
         content.style.display = 'block';
         toggle.textContent = 'Hide Response';
@@ -523,8 +523,8 @@ window.toggleCategorySelection = function(category) {
     // Define which checkboxes belong to each category
     const categoryCheckboxes = {
         personal: [
-            'givenName', 'familyName', 'birthDate', 'birthYear', 'age', 
-            'ageOver18', 'ageOver21', 'sex', 'height', 'weight', 
+            'givenName', 'familyName', 'birthDate', 'birthYear', 'age',
+            'ageOver18', 'ageOver21', 'sex', 'height', 'weight',
             'eyeColor', 'hairColor', 'nationality', 'placeOfBirth'
         ],
         address: [
@@ -540,7 +540,7 @@ window.toggleCategorySelection = function(category) {
     if (!checkboxNames) return;
 
     // Get all checkboxes in this category
-    const checkboxes = checkboxNames.map(name => 
+    const checkboxes = checkboxNames.map(name =>
         document.querySelector(`input[name="${name}"]`)
     ).filter(checkbox => checkbox !== null);
 
@@ -548,10 +548,10 @@ window.toggleCategorySelection = function(category) {
 
     // Check if all are currently selected
     const allSelected = checkboxes.every(checkbox => checkbox.checked);
-    
+
     // Toggle: if all are selected, deselect all; otherwise, select all
     const newState = !allSelected;
-    
+
     checkboxes.forEach(checkbox => {
         checkbox.checked = newState;
     });

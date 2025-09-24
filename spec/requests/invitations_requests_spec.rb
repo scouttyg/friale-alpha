@@ -41,8 +41,8 @@ RSpec.describe 'Invitations', type: :request do
 
         expect(response).to have_http_status(:success)
         expect(response.body).to include("You've been invited!")
-        expect(response.body).to include(account.name)
-        expect(response.body).to include(creator.display_name)
+        expect(response.body).to include(CGI.escapeHTML(account.name))
+        expect(response.body).to include(CGI.escapeHTML(creator.display_name))
       end
     end
 

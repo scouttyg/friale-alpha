@@ -54,13 +54,18 @@ RSpec.configure do |config|
 
   config.before(:each) do
     # Stub Stripe calls to prevent actual API calls during factory creation
-    allow(Stripe::Customer).to receive(:create).and_return(
-      double('customer', id: 'cus_test_123')
-    )
+    customer_number = 0
+    subscription_number = 0
 
-    allow(Stripe::Subscription).to receive(:create).and_return(
-      double('subscription', id: 'sub_test_123')
-    )
+    allow(Stripe::Customer).to receive(:create) do
+      customer_number += 1
+      double('customer', id: "cus_test_#{customer_number}_#{SecureRandom.alphanumeric(14)}")
+    end
+
+    allow(Stripe::Subscription).to receive(:create) do
+      subscription_number += 1
+      double('subscription', id: "sub_test_#{subscription_number}_#{SecureRandom.alphanumeric(14)}")
+    end
   end
 
   # You can uncomment this line to turn off ActiveRecord support entirely.

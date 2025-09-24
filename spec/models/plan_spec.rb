@@ -13,6 +13,10 @@
 #  updated_at        :datetime         not null
 #  stripe_product_id :string
 #
+# Indexes
+#
+#  index_plans_on_stripe_product_id  (stripe_product_id) UNIQUE
+#
 require 'rails_helper'
 
 RSpec.describe Plan, type: :model do

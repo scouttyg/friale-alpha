@@ -13,9 +13,10 @@
 #
 # Indexes
 #
-#  index_subscriptions_on_account_id      (account_id)
-#  index_subscriptions_on_plan_id         (plan_id)
-#  index_subscriptions_on_plan_period_id  (plan_period_id)
+#  index_subscriptions_on_account_id              (account_id)
+#  index_subscriptions_on_plan_id                 (plan_id)
+#  index_subscriptions_on_plan_period_id          (plan_period_id)
+#  index_subscriptions_on_stripe_subscription_id  (stripe_subscription_id) UNIQUE
 #
 # Foreign Keys
 #

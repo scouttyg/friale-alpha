@@ -14,7 +14,8 @@
 #
 # Indexes
 #
-#  index_payment_methods_on_account_id  (account_id)
+#  index_payment_methods_on_account_id                (account_id)
+#  index_payment_methods_on_stripe_payment_method_id  (stripe_payment_method_id) UNIQUE
 #
 # Foreign Keys
 #

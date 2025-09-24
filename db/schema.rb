@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_22_175534) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_24_184447) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -21,6 +21,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_22_175534) do
     t.string "stripe_customer_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["stripe_customer_id"], name: "index_accounts_on_stripe_customer_id", unique: true
   end
 
   create_table "active_admin_comments", force: :cascade do |t|
@@ -127,6 +128,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_22_175534) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_payment_methods_on_account_id"
+    t.index ["stripe_payment_method_id"], name: "index_payment_methods_on_stripe_payment_method_id", unique: true
   end
 
   create_table "plan_periods", force: :cascade do |t|
@@ -151,6 +153,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_22_175534) do
     t.string "stripe_product_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["stripe_product_id"], name: "index_plans_on_stripe_product_id", unique: true
   end
 
   create_table "push_subscriptions", force: :cascade do |t|
@@ -176,6 +179,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_22_175534) do
     t.index ["account_id"], name: "index_subscriptions_on_account_id"
     t.index ["plan_id"], name: "index_subscriptions_on_plan_id"
     t.index ["plan_period_id"], name: "index_subscriptions_on_plan_period_id"
+    t.index ["stripe_subscription_id"], name: "index_subscriptions_on_stripe_subscription_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|

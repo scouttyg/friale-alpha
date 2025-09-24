@@ -10,5 +10,9 @@
 #  updated_at         :datetime         not null
 #  stripe_customer_id :string
 #
+# Indexes
+#
+#  index_accounts_on_stripe_customer_id  (stripe_customer_id) UNIQUE
+#
 class PersonalAccount < Account
 end

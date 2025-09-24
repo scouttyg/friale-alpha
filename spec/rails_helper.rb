@@ -59,12 +59,12 @@ RSpec.configure do |config|
 
     allow(Stripe::Customer).to receive(:create) do
       customer_number += 1
-      double('customer', id: "cus_test_#{customer_number}_#{SecureRandom.alphanumeric(14)}")
+      double('customer', id: "cus_MOCK#{customer_number}#{SecureRandom.alphanumeric(14)}")
     end
 
     allow(Stripe::Subscription).to receive(:create) do
       subscription_number += 1
-      double('subscription', id: "sub_test_#{subscription_number}_#{SecureRandom.alphanumeric(14)}")
+      double('subscription', id: "sub_MOCK#{subscription_number}#{SecureRandom.alphanumeric(14)}")
     end
   end
 

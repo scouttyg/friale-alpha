@@ -28,7 +28,7 @@ class PaymentMethod < ApplicationRecord
   store_accessor :metadata, :last_four
 
   # Validations
-  validates :stripe_payment_method_id, presence: true, uniqueness: true
+  validates :stripe_payment_method_id, presence: true, uniqueness: true, format: { with: /\Apm_[a-zA-Z0-9]+\z/ }
   validates :type, presence: true
   validates :last_four, presence: true
 

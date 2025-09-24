@@ -5,18 +5,6 @@ RSpec.describe "Push Subscriptions", type: :request do
   let!(:plan) { create(:plan, activated_at: Time.current, position: 1) }
   let!(:plan_period) { create(:plan_period, plan: plan, price_cents: 0) }
 
-  before do
-    # Stub Stripe customer creation for any email
-    stub_request(:post, 'https://api.stripe.com/v1/customers')
-      .to_return(status: 200, body: { id: 'cus_test123' }.to_json, headers: { 'Content-Type' => 'application/json' })
-    # Stub Stripe subscription creation
-    stub_request(:post, 'https://api.stripe.com/v1/subscriptions')
-      .to_return(status: 200, body: { id: 'sub_test123' }.to_json, headers: { 'Content-Type' => 'application/json' })
-    # Stub Stripe setup intent creation
-    stub_request(:post, 'https://api.stripe.com/v1/setup_intents')
-      .to_return(status: 200, body: { id: 'seti_test123', client_secret: 'seti_secret' }.to_json, headers: { 'Content-Type' => 'application/json' })
-  end
-
   let(:user) { create(:user, :confirmed) }
   let(:unsaved_push_subscription) { build(:push_subscription, user: user) }
   let(:json_ps_attributes) do

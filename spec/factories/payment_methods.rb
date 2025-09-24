@@ -28,6 +28,6 @@ FactoryBot.define do
     metadata { { last_four: "1234", brand: "visa" } }
     type { "Card" }
     association :account
-    stripe_payment_method_id { "pm_#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
+    sequence(:stripe_payment_method_id) { |n| "pm_MOCK#{n}#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
   end
 end

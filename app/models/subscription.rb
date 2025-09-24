@@ -29,6 +29,8 @@ class Subscription < ApplicationRecord
   belongs_to :plan
   belongs_to :plan_period
 
+  validates :stripe_subscription_id, presence: true, uniqueness: true, format: { with: /\Asub_[a-zA-Z0-9]+\z/ }
+
   def renewal_date
     # just for testing purposes
     start_date = created_at || Time.zone.now

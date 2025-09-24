@@ -25,6 +25,6 @@ FactoryBot.define do
     deactivated_at { nil }
     position { 1 }
     usage_limits { {} }
-    stripe_product_id { "prod_#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
+    sequence(:stripe_product_id) { |n| "prod_MOCK#{n}#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
   end
 end

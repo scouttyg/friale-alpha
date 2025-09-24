@@ -19,16 +19,16 @@ end
 
 free_plan = Plan.where(name: 'Free').first_or_initialize
 if free_plan.new_record?
-  free_plan.stripe_product_id = 'stripe_product_mock_123'
+  free_plan.stripe_product_id = "prod_MOCK#{SecureRandom.alphanumeric(14)}"
   free_plan.activated_at = Time.now
   free_plan.position = 1
   free_plan.save!
   puts "Imported 'Free' Plan"
 end
 
-plan_period = PlanPeriod.where(plan: free_plan, interval: 'MONTH').first_or_initialize
+plan_period = PlanPeriod.where(plan: free_plan, interval: "MONTH").first_or_initialize
 if plan_period.new_record?
-  plan_period.stripe_price_id = 'stripe_price_mock_123'
+  plan_period.stripe_price_id = "price_MOCK#{SecureRandom.alphanumeric(14)}"
   plan_period.save!
   puts "Imported monthly PlanPeriod for 'Free' Plan"
 end

@@ -51,7 +51,7 @@ class Plan < ApplicationRecord
   after_initialize :set_default_usage_limits
 
   validates :name, presence: true
-  validates :stripe_product_id, presence: true, uniqueness: true
+  validates :stripe_product_id, presence: true, uniqueness: true, format: { with: /\Aprod_[a-zA-Z0-9]+\z/ }
 
   def activate!
     update!(activated_at: Time.current)

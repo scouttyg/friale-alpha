@@ -30,7 +30,7 @@ class PlanPeriod < ApplicationRecord
   }, validate: true
 
   validates :interval, presence: true
-  validates :stripe_price_id, presence: true, uniqueness: true
+  validates :stripe_price_id, presence: true, uniqueness: true, format: { with: /\Aprice_[a-zA-Z0-9]+\z/ }
 
   validates :price_cents, presence: true, numericality: {
     greater_than_or_equal_to: 0

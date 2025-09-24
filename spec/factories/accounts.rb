@@ -18,7 +18,7 @@ FactoryBot.define do
   factory :account do
     name { Faker::Company.name }
     type { 'Account' }
-    stripe_customer_id { "cus_#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
+    sequence(:stripe_customer_id) { |n| "cus_MOCK#{n}#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
 
     # Create owner member after account is created
     after(:create) do |account, context|
@@ -38,7 +38,7 @@ FactoryBot.define do
   factory :personal_account, class: 'PersonalAccount', parent: :account do
     name { Faker::Name.name }
     type { 'PersonalAccount' }
-    stripe_customer_id { "cus_#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
+    stripe_customer_id { "cus_MOCK#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
 
     # Create owner member after account is created
     after(:create) do |account, context|

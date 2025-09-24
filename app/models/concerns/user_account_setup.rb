@@ -44,7 +44,7 @@ module UserAccountSetup
 
       if (Rails.env.development? || Rails.env.test?) && stripe_subscription.nil?
         # If you see this, you haven't setup Stripe set locally correctly
-        stripe_subscription = FakeStripeSubscription.new(id: "stripe_subscription_mock_#{SecureRandom.alphanumeric(14)}")
+        stripe_subscription = FakeStripeSubscription.new(id: "sub_MOCK#{SecureRandom.alphanumeric(14)}")
       end
 
       # Create subscription for the free plan

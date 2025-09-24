@@ -7,31 +7,7 @@ RSpec.describe 'Invitations', type: :request do
 
   before do
     free_plan = create(:plan, name: 'Free', position: 1)
-    create(:plan_period, plan: free_plan, interval: 'MONTH', stripe_price_id: 'price_mock_123')
-
-    # Stub Stripe customer creation with unique IDs for each request
-    customer_counter = 0
-    stub_request(:post, 'https://api.stripe.com/v1/customers')
-      .to_return do
-        customer_counter += 1
-        {
-          status: 200,
-          body: { id: "cus_test#{customer_counter}" }.to_json,
-          headers: { 'Content-Type' => 'application/json' }
-        }
-      end
-
-    # Stub Stripe subscription creation with unique IDs for each request
-    subscription_counter = 0
-    stub_request(:post, 'https://api.stripe.com/v1/subscriptions')
-      .to_return do
-        subscription_counter += 1
-        {
-          status: 200,
-          body: { id: "sub_test#{subscription_counter}" }.to_json,
-          headers: { 'Content-Type' => 'application/json' }
-        }
-      end
+    create(:plan_period, plan: free_plan, interval: 'MONTH')
   end
 
   describe 'GET /invitations/:token' do

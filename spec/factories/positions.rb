@@ -30,7 +30,7 @@ FactoryBot.define do
     returned_capital { 1 }
     open_date { "2025-09-25 11:12:37" }
     close_date { "2025-09-25 11:12:37" }
-    company { nil }
-    fund { nil }
+    company
+    fund
   end
 end

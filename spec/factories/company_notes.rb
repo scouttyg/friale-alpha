@@ -24,11 +24,11 @@
 FactoryBot.define do
   factory :company_note do
     investor_visible { false }
-    note { "MyText" }
-    active { false }
+    note { Faker::Lorem.sentence }
+    active { true }
     performance { 1 }
     stage { 1 }
-    company { nil }
-    url { "MyString" }
+    company
+    url { Faker::Internet.url }
   end
 end

@@ -30,4 +30,20 @@ FactoryBot.define do
     association :account
     sequence(:stripe_payment_method_id) { |n| "pm_MOCK#{n}#{Faker::Alphanumeric.alphanumeric(number: 14)}" }
   end
+
+  factory :card, class: 'Card', parent: :payment_method do
+    last_four { "1234" }
+    brand { "visa" }
+    exp_month { 1 }
+    exp_year { 2025 }
+    type { "Card" }
+  end
+
+  factory :bank_account, class: 'BankAccount', parent: :payment_method do
+    bank_name { Faker::Company.name }
+    owner_name { Faker::Name.name }
+    account_number { Faker::Number.number(digits: 9) }
+    routing_number { Faker::Number.number(digits: 9) }
+    type { "BankAccount" }
+  end
 end

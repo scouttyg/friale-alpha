@@ -41,7 +41,7 @@ class Document < ApplicationRecord
   # Validate that at least one association is present
   validate :at_least_one_association
 
-  scope :for_firm_account, ->(firm) { where(firm_account: firm_account) }
+  scope :for_firm_account, ->(firm_account) { where(firm_account: firm_account) }
   scope :for_fund, ->(fund) { where(fund: fund) }
   scope :for_investor_account, ->(investor_account) { where(investor_account: investor_account) }
   scope :for_company, ->(company) { where(company: company) }
@@ -61,7 +61,7 @@ class Document < ApplicationRecord
   private
 
   def at_least_one_association
-    return if firm.present? || fund.present? || investor.present? || company.present?
+    return if firm_account.present? || fund.present? || investor_account.present? || company.present?
 
     errors.add(:base, "Document must be associated with at least one firm, fund, investor, or company")
   end

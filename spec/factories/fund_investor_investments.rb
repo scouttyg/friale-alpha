@@ -26,7 +26,7 @@ FactoryBot.define do
   factory :fund_investor_investment do
     capital_commitment { 1 }
     capital_funded { 1 }
-    fund { nil }
-    investor { nil }
+    fund
+    investor_account
   end
 end

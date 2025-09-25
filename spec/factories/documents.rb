@@ -28,11 +28,12 @@
 #
 FactoryBot.define do
   factory :document do
-    name { "MyString" }
-    date { "2025-09-25" }
-    firm { nil }
-    fund { nil }
-    account { nil }
-    company { nil }
+    name { Faker::Lorem.sentence }
+    date { Date.today }
+    firm_account
+    fund
+    investor_account
+    company
+    file { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'files', 'test.pdf'), 'application/pdf') }
   end
 end

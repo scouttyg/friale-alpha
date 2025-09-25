@@ -30,8 +30,8 @@ FactoryBot.define do
     date { "2025-09-25" }
     status { 1 }
     amount { 1 }
-    bank_account { nil }
-    fund_distribution { nil }
-    fund_investor_investment { nil }
+    bank_account
+    fund_distribution
+    fund_investor_investment
   end
 end

@@ -20,7 +20,7 @@
 #
 FactoryBot.define do
   factory :company_location do
-    company { nil }
-    location { nil }
+    company
+    location
   end
 end

@@ -15,12 +15,12 @@
 #
 FactoryBot.define do
   factory :location do
-    city { "MyString" }
-    region { "MyString" }
-    country { "MyString" }
-    time_zone { "MyString" }
+    city { Faker::Address.city }
+    region { Faker::Address.state }
+    country { "US" }
+    time_zone { "America/New_York" }
     latitude { 1.5 }
     longitude { 1.5 }
-    slug { "MyString" }
+    slug { Faker::Internet.slug }
   end
 end

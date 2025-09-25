@@ -20,10 +20,10 @@
 #
 FactoryBot.define do
   factory :company do
-    name { "MyString" }
-    website { "MyString" }
-    description { "MyText" }
-    account { nil }
-    location { nil }
+    name { Faker::Company.name }
+    website { Faker::Internet.url }
+    description { Faker::Lorem.sentence }
+    firm_account
+    locations { [] }
   end
 end

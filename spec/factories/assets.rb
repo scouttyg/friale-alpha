@@ -27,13 +27,13 @@
 #
 FactoryBot.define do
   factory :asset do
-    origination { 1 }
-    asset_type { 1 }
+    origination { :CONVERSION }
+    asset_type { :SAFE }
     quantity { 1 }
     current { false }
     converted_asset { nil }
-    position { nil }
-    cap { "" }
     discount { 1 }
+    position
+    cap { 1_500_000 }
   end
 end

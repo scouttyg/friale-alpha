@@ -25,6 +25,9 @@
 #  fk_rails_...  (fund_id => funds.id)
 #
 class Position < ApplicationRecord
+  monetize :invested_capital_cents
+  monetize :returned_capital_cents
+
   belongs_to :company
   belongs_to :fund
 

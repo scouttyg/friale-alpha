@@ -25,11 +25,11 @@
 #
 FactoryBot.define do
   factory :fund_distribution do
-    name { "MyString" }
-    date { "2025-09-25" }
-    amount { 1 }
-    notes { "MyText" }
-    fund { nil }
-    position { nil }
+    name { Faker::Lorem.sentence }
+    date { Date.today }
+    amount { 1_000_000  }
+    notes { Faker::Lorem.sentence }
+    fund
+    position
   end
 end

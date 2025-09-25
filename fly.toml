@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for starter-template-2025 on 2025-09-19T01:00:00-05:00
+# fly.toml app configuration file generated for friale-alpha-2025 on 2025-09-25T01:00:00-05:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'starter-template-2025'
+app = 'friale-alpha'
 primary_region = 'ord'
 console_command = '/rails/bin/rails console'
 

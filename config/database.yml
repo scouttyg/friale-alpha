@@ -16,7 +16,7 @@ development:
   adapter:  postgresql
   host:     localhost
   encoding: unicode
-  database: starter_template_2025_development
+  database: friale_alpha_development
   pool:     <%= ENV["DB_POOL"] || ENV["MAX_THREADS"] || 5 %>
   username: <%= ENV["DB_USERNAME"] %>
   password: <%= ENV["DB_PASSWORD"] %>
@@ -44,7 +44,7 @@ test:
   adapter:  postgresql
   host:     localhost
   encoding: unicode
-  database: starter_template_2025_test
+  database: friale_alpha_test
   pool:     <%= ENV["DB_POOL"] || ENV["MAX_THREADS"] || 5 %>
   username: <%= ENV["DB_USERNAME"] %>
   password: <%= ENV["DB_PASSWORD"] %>

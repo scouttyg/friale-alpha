@@ -26,7 +26,7 @@ class BankAccount < PaymentMethod
 
   validates :bank_name, presence: true
   validates :owner_name, presence: true
-  validates :account_number, presence: true, format: { with: /\A\d{9,17}\z/, message: "must be between 9 and 17 digits" }
+  validates :account_number, presence: true, format: { with: /\A\d{9,17}\z/, message: "must be between 9 and 17 digits" }, unless: :migrated?
   validates :routing_number, presence: true, format: { with: /\A\d{9}\z/, message: "must be exactly 9 digits" }
 
   def display_details

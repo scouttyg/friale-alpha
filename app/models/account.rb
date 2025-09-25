@@ -3,6 +3,7 @@
 # Table name: accounts
 #
 #  id                 :bigint           not null, primary key
+#  metadata           :jsonb
 #  name               :string
 #  slug               :string
 #  type               :string
@@ -37,7 +38,7 @@ class Account < ApplicationRecord
   has_one :default_payment_method, -> { active.default_first }, class_name: "PaymentMethod", dependent: :destroy, inverse_of: :account
   has_one_attached :avatar
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true
 
   after_create :ensure_stripe_customer
 
@@ -53,6 +54,7 @@ class Account < ApplicationRecord
 
   def ensure_stripe_customer
     return if stripe_customer_id.present?
+    return if owner.blank?
 
     customer = Stripe::Customer.create(email: owner.email, name: name, metadata: { account_id: id })
     update!(stripe_customer_id: customer.id)

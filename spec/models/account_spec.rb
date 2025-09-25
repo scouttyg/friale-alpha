@@ -3,6 +3,7 @@
 # Table name: accounts
 #
 #  id                 :bigint           not null, primary key
+#  metadata           :jsonb
 #  name               :string
 #  slug               :string
 #  type               :string

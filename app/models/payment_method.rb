@@ -25,7 +25,7 @@ class PaymentMethod < ApplicationRecord
   belongs_to :account
 
   # Common attributes shared by all payment methods
-  store_accessor :metadata, :last_four
+  store_accessor :metadata, :last_four, :migrated
 
   # Validations
   validates :stripe_payment_method_id, presence: true, uniqueness: true, format: { with: /\Apm_[a-zA-Z0-9]+\z/ }
@@ -60,5 +60,9 @@ class PaymentMethod < ApplicationRecord
   # This should be implemented by subclasses
   def display_details
     raise NotImplementedError, "#{self.class} must implement #display_details"
+  end
+
+  def migrated?
+    migrated == true || migrated == "true"
   end
 end

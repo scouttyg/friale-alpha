@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_25_185653) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_25_232424) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -21,6 +21,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_25_185653) do
     t.string "stripe_customer_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "metadata"
     t.index [ "stripe_customer_id" ], name: "index_accounts_on_stripe_customer_id", unique: true
   end
 
@@ -90,7 +91,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_25_185653) do
     t.boolean "current"
     t.bigint "converted_asset_id"
     t.bigint "position_id", null: false
-    t.integer "cap_cents", default: 0, null: false
+    t.bigint "cap_cents", default: 0, null: false
     t.string "cap_currency", default: "USD", null: false
     t.integer "discount"
     t.datetime "created_at", null: false
@@ -157,7 +158,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_25_185653) do
   create_table "fund_distributions", force: :cascade do |t|
     t.string "name"
     t.date "date"
-    t.integer "amount_cents", default: 0, null: false
+    t.bigint "amount_cents", default: 0, null: false
     t.string "amount_currency", default: "USD", null: false
     t.text "notes"
     t.bigint "fund_id", null: false
@@ -184,7 +185,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_25_185653) do
   create_table "fund_investor_transactions", force: :cascade do |t|
     t.date "date"
     t.integer "status"
-    t.integer "amount_cents", default: 0, null: false
+    t.bigint "amount_cents", default: 0, null: false
     t.string "amount_currency", default: "USD", null: false
     t.bigint "bank_account_id"
     t.bigint "fund_distribution_id"
@@ -219,7 +220,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_25_185653) do
 
   create_table "marks", force: :cascade do |t|
     t.date "mark_date"
-    t.integer "price_cents", default: 0, null: false
+    t.bigint "price_cents", default: 0, null: false
     t.string "price_currency", default: "USD", null: false
     t.integer "source"
     t.text "notes"
@@ -295,9 +296,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_25_185653) do
   end
 
   create_table "positions", force: :cascade do |t|
-    t.integer "invested_capital_cents", default: 0, null: false
+    t.bigint "invested_capital_cents", default: 0, null: false
     t.string "invested_capital_currency", default: "USD", null: false
-    t.integer "returned_capital_cents", default: 0, null: false
+    t.bigint "returned_capital_cents", default: 0, null: false
     t.string "returned_capital_currency", default: "USD", null: false
     t.datetime "open_date"
     t.datetime "close_date"

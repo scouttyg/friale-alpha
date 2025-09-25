@@ -3,7 +3,7 @@
 # Table name: fund_distributions
 #
 #  id              :bigint           not null, primary key
-#  amount_cents    :integer          default(0), not null
+#  amount_cents    :bigint           default(0), not null
 #  amount_currency :string           default("USD"), not null
 #  date            :date
 #  name            :string

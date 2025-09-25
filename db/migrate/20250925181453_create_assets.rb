@@ -7,7 +7,7 @@ class CreateAssets < ActiveRecord::Migration[8.0]
       t.boolean :current
       t.references :converted_asset, foreign_key: { to_table: :assets }, null: true
       t.references :position, null: false, foreign_key: true
-      t.monetize :cap
+      t.monetize :cap, amount: { limit: 8 }
       t.integer :discount
 
       t.timestamps

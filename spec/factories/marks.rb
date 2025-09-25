@@ -5,7 +5,7 @@
 #  id             :bigint           not null, primary key
 #  mark_date      :date
 #  notes          :text
-#  price_cents    :integer          default(0), not null
+#  price_cents    :bigint           default(0), not null
 #  price_currency :string           default("USD"), not null
 #  source         :integer
 #  created_at     :datetime         not null

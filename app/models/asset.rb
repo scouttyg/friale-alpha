@@ -4,7 +4,7 @@
 #
 #  id                 :bigint           not null, primary key
 #  asset_type         :integer
-#  cap_cents          :integer          default(0), not null
+#  cap_cents          :bigint           default(0), not null
 #  cap_currency       :string           default("USD"), not null
 #  current            :boolean
 #  discount           :integer

@@ -4,10 +4,10 @@
 #
 #  id                        :bigint           not null, primary key
 #  close_date                :datetime
-#  invested_capital_cents    :integer          default(0), not null
+#  invested_capital_cents    :bigint           default(0), not null
 #  invested_capital_currency :string           default("USD"), not null
 #  open_date                 :datetime
-#  returned_capital_cents    :integer          default(0), not null
+#  returned_capital_cents    :bigint           default(0), not null
 #  returned_capital_currency :string           default("USD"), not null
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null

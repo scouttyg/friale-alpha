@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module PushSubscriptions
   class Pusher
     VAPID_CONFIGURATION = {

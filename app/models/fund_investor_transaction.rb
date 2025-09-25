@@ -33,6 +33,8 @@ class FundInvestorTransaction < ApplicationRecord
   has_one :fund, through: :fund_investor_investment
   has_one :investor, through: :fund_investor_investment
 
+  monetize :amount_cents
+
   enum :status, {
     PENDING: 0,
     COMPLETE: 1

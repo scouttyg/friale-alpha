@@ -26,4 +26,6 @@
 class FundDistribution < ApplicationRecord
   belongs_to :fund
   belongs_to :position, optional: true
+
+  monetize :amount_cents
 end

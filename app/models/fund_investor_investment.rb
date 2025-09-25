@@ -25,4 +25,7 @@
 class FundInvestorInvestment < ApplicationRecord
   belongs_to :fund
   belongs_to :investor_account, class_name: "InvestorAccount", optional: true
+
+  monetize :capital_commitment_cents
+  monetize :capital_funded_cents
 end

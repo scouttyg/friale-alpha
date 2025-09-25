@@ -30,7 +30,9 @@ class Asset < ApplicationRecord
   belongs_to :position
   has_one :company, through: :position
 
-  # has_many :marks, dependent: :destroy
+  has_many :marks, dependent: :destroy
+
+  monetize :cap_cents
 
   enum :origination, {
     CONVERSION: 0,

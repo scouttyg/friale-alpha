@@ -1,0 +1,39 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 4,
+      "fingerprint": "ea654c616fca0f119243c79511532d72d9459ff1d000bca365f44916a641e1fe",
+      "check_name": "LinkToHref",
+      "message": "Potentially unsafe model attribute in `link_to` href",
+      "file": "app/views/dashboard/companies/show.html.erb",
+      "line": 26,
+      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
+      "code": "link_to(Company.find(params[:id]).website, Company.find(params[:id]).website, :target => \"_blank\", :rel => \"noopener noreferrer\", :class => \"text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 font-medium\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Dashboard::CompaniesController",
+          "method": "show",
+          "line": 110,
+          "file": "app/controllers/dashboard/companies_controller.rb",
+          "rendered": {
+            "name": "dashboard/companies/show",
+            "file": "app/views/dashboard/companies/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "dashboard/companies/show"
+      },
+      "user_input": "Company.find(params[:id]).website",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    }
+  ],
+  "brakeman_version": "7.1.0"
+}

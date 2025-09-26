@@ -7,7 +7,10 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-raise 'NoSeedsInProductionErrror' if Rails.env.production?
+if Rails.env.production?
+  puts "[Warning] Do not activate seeds in production environment"
+  return
+end
 
 admin_user = AdminUser.where(email: 'admin@example.com').first_or_initialize
 if admin_user.new_record?

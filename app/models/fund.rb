@@ -27,11 +27,11 @@ class Fund < ApplicationRecord
   has_many :positions, dependent: :destroy
 
   def deployed_capital
-    positions.sum(:invested_capital) || 0
+    (positions.sum(:invested_capital_cents) || 0) / 100.0
   end
 
   def returned_capital
-    positions.sum(:returned_capital) || 0
+    (positions.sum(:returned_capital_cents) || 0) / 100.0
   end
 
   def open_positions

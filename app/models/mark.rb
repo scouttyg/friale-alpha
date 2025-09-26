@@ -23,7 +23,7 @@
 class Mark < ApplicationRecord
   belongs_to :asset, optional: true
 
- monetize :price_cents
+  monetize :price_cents
 
   enum :source, {
     PURCHASE_PRICE: 0,

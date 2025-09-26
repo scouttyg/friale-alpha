@@ -56,7 +56,7 @@ class Position < ApplicationRecord
 
   # Gross capital = returned capital + current asset value
   def gross_capital
-    total = returned_capital || 0
+    total = (returned_capital_cents || 0) / 100.0
     if close_date.nil? # Only add asset value for open positions
       total += asset_value
     end
@@ -65,8 +65,8 @@ class Position < ApplicationRecord
 
   # Gross multiple = gross capital / invested capital
   def gross_multiple
-    return 0 if invested_capital.nil? || invested_capital == 0
-    gross_capital.to_f / invested_capital
+    return 0 if invested_capital_cents.nil? || invested_capital_cents == 0
+    gross_capital.to_f / (invested_capital_cents / 100.0)
   end
 
   # Check if position is new (opened within last 30 days)

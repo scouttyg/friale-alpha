@@ -12,7 +12,7 @@
         </span>
     <ul class="inline-flex items-stretch -space-x-px">
       <li>
-        <%= link_to url_for(page: kaminari_page.prev_page),
+        <%= link_to url_for(params.permit(:sort, :direction, :page).merge(page: kaminari_page.prev_page)),
                     class: "flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" do %>
           <span class="sr-only">Previous</span>
           <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -48,7 +48,7 @@
             <span class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">...</span>
           <% else %>
             <%= link_to page.to_s,
-                        url_for(page: page),
+                        url_for(params.permit(:sort, :direction, :page).merge(page: page)),
                         class: "flex items-center justify-center text-sm py-2 px-3 leading-tight #{page == current_page ?
                                                                                                      'text-primary-600 bg-primary-50 border border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white' :
                                                                                                      'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'}" %>
@@ -56,7 +56,7 @@
         </li>
       <% end %>
       <li>
-        <%= link_to url_for(page: kaminari_page.next_page),
+        <%= link_to url_for(params.permit(:sort, :direction, :page).merge(page: kaminari_page.next_page)),
                     class: "flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" do %>
           <span class="sr-only">Next</span>
           <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

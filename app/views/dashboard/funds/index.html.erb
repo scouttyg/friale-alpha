@@ -3,7 +3,11 @@
 <section class="bg-gray-50 dark:bg-gray-900 pt-5">
   <div class="mx-auto">
     <!-- Start coding here -->
-    <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+    <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden"
+         data-controller="sortable-table"
+         data-sortable-table-current-sort-value="<%= @current_sort[:column] %>"
+         data-sortable-table-current-direction-value="<%= @current_sort[:direction] %>"
+         data-sortable-table-base-url-value="<%= funds_path %>">
       <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
         <div class="w-full md:w-1/2">
           <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Your Fund Investments</h2>
@@ -14,12 +18,56 @@
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th scope="col" class="px-4 py-3">Fund</th>
-              <th scope="col" class="px-4 py-3">Initial Size</th>
-              <th scope="col" class="px-4 py-3">Deployed</th>
-              <th scope="col" class="px-4 py-3">Current Gross</th>
-              <th scope="col" class="px-4 py-3">Gross Multiple</th>
-              <th scope="col" class="px-4 py-3">Your Initial Investment</th>
+              <th scope="col" class="px-4 py-3">
+                <button type="button"
+                        class="flex items-center text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium cursor-pointer uppercase"
+                        data-sortable-table-target="header"
+                        data-sort-column="name"
+                        data-action="click->sortable-table#sort">
+                  Fund
+                  <span class="sort-indicator ml-1 inline-block w-4 h-4"></span>
+                </button>
+              </th>
+              <th scope="col" class="px-4 py-3">
+                <button type="button"
+                        class="flex items-center text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium cursor-pointer uppercase"
+                        data-sortable-table-target="header"
+                        data-sort-column="initial_capital"
+                        data-action="click->sortable-table#sort">
+                  Initial Size
+                  <span class="sort-indicator ml-1 inline-block w-4 h-4"></span>
+                </button>
+              </th>
+              <th scope="col" class="px-4 py-3">
+                <span class="flex items-center font-medium text-gray-700 dark:text-gray-400 uppercase">
+                  Deployed
+                </span>
+              </th>
+              <th scope="col" class="px-4 py-3">
+                <button type="button"
+                        class="flex items-center text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium cursor-pointer uppercase"
+                        data-sortable-table-target="header"
+                        data-sort-column="gross_capital"
+                        data-action="click->sortable-table#sort">
+                  Current Gross
+                  <span class="sort-indicator ml-1 inline-block w-4 h-4"></span>
+                </button>
+              </th>
+              <th scope="col" class="px-4 py-3">
+                <button type="button"
+                        class="flex items-center text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium cursor-pointer uppercase"
+                        data-sortable-table-target="header"
+                        data-sort-column="gross_multiple"
+                        data-action="click->sortable-table#sort">
+                  Gross Multiple
+                  <span class="sort-indicator ml-1 inline-block w-4 h-4"></span>
+                </button>
+              </th>
+              <th scope="col" class="px-4 py-3">
+                <span class="flex items-center font-medium text-gray-700 dark:text-gray-400 uppercase">
+                  Your Initial Investment
+                </span>
+              </th>
               <th scope="col" class="px-4 py-3">
                 <span class="sr-only">Actions</span>
               </th>
@@ -80,6 +128,9 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Pagination -->
+      <%= render 'shared/paginator', kaminari_page: @funds %>
     </div>
   </div>
 </section>

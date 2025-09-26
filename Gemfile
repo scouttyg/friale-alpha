@@ -81,6 +81,10 @@ gem "sentry-ruby"
 
 gem "web-push"
 
+group :production do
+  gem "dalli"
+end
+
 group :development, :test do
   gem "annotaterb"
   gem "better_errors"

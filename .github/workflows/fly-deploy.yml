@@ -70,7 +70,7 @@ jobs:
         uses: getsentry/action-release@v3
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_ORGANIZATION_AUTH_TOKEN }}
-          SENTRY_ORG: bibliotheque-gerard-85318
+          SENTRY_ORG: scottjg-test-organization
           SENTRY_PROJECT: friale-alpha
         with:
           environment: production

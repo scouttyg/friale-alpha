@@ -27,11 +27,11 @@ class Fund < ApplicationRecord
   has_many :positions, dependent: :destroy
 
   def deployed_capital
-    (positions.sum(:invested_capital_cents) || 0) / 100.0
+    Money.new(positions.sum(:invested_capital_cents) || 0, "USD")
   end
 
   def returned_capital
-    (positions.sum(:returned_capital_cents) || 0) / 100.0
+    Money.new(positions.sum(:returned_capital_cents) || 0, "USD")
   end
 
   def open_positions
@@ -53,21 +53,21 @@ class Fund < ApplicationRecord
         end
       end
     end
-    value
+    Money.new(value, "USD")
   end
 
   def gross_capital
-    asset_value + returned_capital
+    Money.new(asset_value.cents + returned_capital.cents, "USD")
   end
 
   def gross_multiple
-    return 0 if deployed_capital == 0
-    gross_capital.to_f / deployed_capital
+    return 0 if deployed_capital.cents == 0
+    gross_capital.to_f / deployed_capital.to_f
   end
 
   def deployment_rate
-    return 0 if initial_capital == 0
-    deployed_capital.to_f / initial_capital
+    return 0 if initial_capital.cents == 0
+    deployed_capital.to_f / initial_capital.to_f
   end
 
   # For now, we'll use deployed capital as initial capital since we don't have

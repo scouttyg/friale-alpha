@@ -17,4 +17,5 @@
 #
 class InvestorAccount < Account
   has_one :bank_account, class_name: "BankAccount", dependent: :destroy, inverse_of: :account
+  has_many :fund_investor_investments, dependent: :destroy
 end

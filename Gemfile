@@ -129,4 +129,4 @@ group :test do
   gem "database_cleaner-active_record"
 end
 
-gem "aws-sdk-s3", "~> 1.178", require: false
+gem "aws-sdk-s3", "~> 1.199", require: false

@@ -43,6 +43,7 @@ gem "image_processing", "~> 1.2"
 
 gem "activeadmin", "~> 3.3.0"
 gem "brakeman"
+gem "country_select"
 gem "data_migrate"
 gem "devise"
 gem "friendly_id", "~> 5.5.0"

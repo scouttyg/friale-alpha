@@ -35,6 +35,13 @@
                  } %>
       <%= render partial: "shared/sidebar/item",
                  locals: {
+                   link: funds_path,
+                   icon_name: "currency_dollar",
+                   title: "Funds",
+                   active: request.fullpath.start_with?(funds_path),
+                 } %>
+      <%= render partial: "shared/sidebar/item",
+                 locals: {
                    link: settings_account_url(current_account),
                    icon_name: "gear",
                    title: "Settings",

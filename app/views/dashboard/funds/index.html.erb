@@ -1,0 +1,85 @@
+<h1 class="flex items-center text-3xl font-extrabold dark:text-white mb-4 px-2">Funds</h1>
+
+<section class="bg-gray-50 dark:bg-gray-900 pt-5">
+  <div class="mx-auto">
+    <!-- Start coding here -->
+    <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+      <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+        <div class="w-full md:w-1/2">
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Your Fund Investments</h2>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Funds that <%= current_account.name %> has invested in</p>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" class="px-4 py-3">Fund</th>
+              <th scope="col" class="px-4 py-3">Initial Size</th>
+              <th scope="col" class="px-4 py-3">Deployed</th>
+              <th scope="col" class="px-4 py-3">Current Gross</th>
+              <th scope="col" class="px-4 py-3">Gross Multiple</th>
+              <th scope="col" class="px-4 py-3">Your Initial Investment</th>
+              <th scope="col" class="px-4 py-3">
+                <span class="sr-only">Actions</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @funds.each do |fund| %>
+              <%
+                fund_investment = current_account.fund_investor_investments.find_by(fund: fund)
+                initial_size = fund.initial_capital
+                deployed_capital = fund.deployed_capital
+                deployment_percentage = initial_size.to_f > 0 ? (deployed_capital.to_f / initial_size.to_f * 100).round(0) : 0
+                current_gross = fund.gross_capital
+                gross_multiple = fund.gross_multiple
+                your_investment = fund_investment&.capital_commitment || Money.new(0, 'USD')
+              %>
+              <tr class="border-b dark:border-gray-700">
+                <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <%= link_to fund.name, fund_path(fund), class: "text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300" %>
+                </th>
+                <td class="px-4 py-3">
+                  <%= number_to_currency(initial_size, precision: 0) %>
+                </td>
+                <td class="px-4 py-3">
+                  <span class="bg-primary-100 text-primary-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                    <%= deployment_percentage %>%
+                  </span>
+                </td>
+                <td class="px-4 py-3 font-medium">
+                  <%= number_to_currency(current_gross, precision: 0) %>
+                </td>
+                <td class="px-4 py-3">
+                  <% if gross_multiple >= 1.0 %>
+                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                      <%= number_with_precision(gross_multiple, precision: 2) %>x
+                    </span>
+                  <% else %>
+                    <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+                      <%= number_with_precision(gross_multiple, precision: 2) %>x
+                    </span>
+                  <% end %>
+                </td>
+                <td class="px-4 py-3 font-medium">
+                  <%= number_to_currency(your_investment, precision: 0) %>
+                </td>
+                <td class="px-4 py-3 flex items-center justify-end">
+                  <%= link_to "View Details", fund_path(fund), class: "font-medium text-primary-600 dark:text-primary-500 hover:underline" %>
+                </td>
+              </tr>
+            <% end %>
+            <% if @funds.empty? %>
+              <tr class="border-b dark:border-gray-700">
+                <td colspan="7" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                  No fund investments found for this account.
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

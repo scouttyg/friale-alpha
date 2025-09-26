@@ -39,6 +39,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :funds, only: [ :index, :show ]
+
     # Settings namespace with account_id parameter
     scope "/accounts/:account_id/settings", as: "settings" do
       resources :billings, path: "billing", controller: "settings/billings" do

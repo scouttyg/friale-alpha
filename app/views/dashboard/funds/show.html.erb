@@ -1,0 +1,340 @@
+<div class="flex items-center justify-between mb-4 px-2">
+  <h1 class="flex items-center text-3xl font-extrabold dark:text-white">
+    <%= @fund.name %>
+  </h1>
+  <%= link_to funds_path, class: "text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 font-medium" do %>
+    ← Back to Funds
+  <% end %>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <!-- Fund Summary Panel -->
+  <div class="bg-white dark:bg-gray-800 shadow-md sm:rounded-lg">
+    <div class="px-4 py-5 sm:p-6">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Fund Summary</h3>
+      <dl class="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Initial Fund Size</dt>
+          <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
+            <%= number_to_currency(@fund.initial_capital, precision: 0) %>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Capital Deployed</dt>
+          <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
+            <%= number_to_currency(@fund.deployed_capital, precision: 0) %>
+            <span class="ml-2 bg-primary-100 text-primary-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+              <%= number_to_percentage(@fund.deployment_rate * 100, precision: 0) %>
+            </span>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Capital Returned</dt>
+          <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
+            <%= number_to_currency(@fund.returned_capital, precision: 0) %>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Open Position Value</dt>
+          <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
+            <%= number_to_currency(@fund.asset_value, precision: 0) %>
+          </dd>
+        </div>
+        <div class="sm:col-span-2">
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Current Gross</dt>
+          <dd class="mt-1 flex items-center">
+            <span class="text-sm font-semibold text-gray-900 dark:text-white mr-2">
+              <%= number_to_currency(@fund.gross_capital, precision: 0) %>
+            </span>
+            <% if @fund.gross_multiple >= 1.0 %>
+              <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                <%= number_with_precision(@fund.gross_multiple, precision: 2) %>x
+              </span>
+            <% else %>
+              <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+                <%= number_with_precision(@fund.gross_multiple, precision: 2) %>x
+              </span>
+            <% end %>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
+  <!-- Your Summary Panel -->
+  <div class="bg-white dark:bg-gray-800 shadow-md sm:rounded-lg">
+    <div class="px-4 py-5 sm:p-6">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Your Summary</h3>
+      <% if @fund_investment %>
+        <dl class="grid grid-cols-1 gap-x-4 gap-y-4">
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Investor Name</dt>
+            <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
+              <%= current_account.name %>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Capital Committed</dt>
+            <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
+              <%= number_to_currency(@fund_investment.capital_commitment, precision: 0) %>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Capital Funded</dt>
+            <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
+              <%= number_to_currency(@fund_investment.capital_funded, precision: 0) %>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Fund Ownership</dt>
+            <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
+              <%
+                ownership_percentage = @fund.initial_capital.to_f > 0 ?
+                  (@fund_investment.capital_commitment.to_f / @fund.initial_capital.to_f * 100).round(2) : 0
+              %>
+              <%= number_to_percentage(ownership_percentage, precision: 2) %>
+            </dd>
+          </div>
+        </dl>
+      <% else %>
+        <p class="text-sm text-gray-500 dark:text-gray-400">No investment data found for this fund.</p>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Open Positions Panel -->
+<div class="mt-6 bg-white dark:bg-gray-800 shadow-md sm:rounded-lg">
+  <div class="px-4 py-5 sm:p-6">
+    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Open Positions</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+            <th scope="col" class="px-4 py-3">Company</th>
+            <th scope="col" class="px-4 py-3">Original Investment</th>
+            <th scope="col" class="px-4 py-3">Current Gross</th>
+            <th scope="col" class="px-4 py-3">Gross Multiple</th>
+            <th scope="col" class="px-4 py-3">Stage</th>
+            <th scope="col" class="px-4 py-3">Performance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @fund.positions.open.includes(:company).each do |position| %>
+            <tr class="border-b dark:border-gray-700">
+              <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <%= position.company.name %>
+                <% if position.is_new? %>
+                  <span class="ml-2 bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">New</span>
+                <% end %>
+              </th>
+              <td class="px-4 py-3">
+                <%= number_to_currency(position.invested_capital) if position.invested_capital %>
+              </td>
+              <td class="px-4 py-3 font-medium">
+                <%= number_to_currency(position.gross_capital) %>
+              </td>
+              <td class="px-4 py-3">
+                <% multiple = position.gross_multiple %>
+                <% if multiple >= 1.0 %>
+                  <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                    <%= number_with_precision(multiple, precision: 2) %>x
+                  </span>
+                <% else %>
+                  <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+                    <%= number_with_precision(multiple, precision: 2) %>x
+                  </span>
+                <% end %>
+              </td>
+              <td class="px-4 py-3">
+                <%= position.company.current_stage_display %>
+              </td>
+              <td class="px-4 py-3">
+                <% performance = position.company.current_performance&.to_s %>
+                <% case performance %>
+                <% when "HIGH" %>
+                  <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                    <%= position.company.current_performance_display %>
+                  </span>
+                <% when "ABOVE" %>
+                  <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                    <%= position.company.current_performance_display %>
+                  </span>
+                <% when "AVERAGE" %>
+                  <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">
+                    <%= position.company.current_performance_display %>
+                  </span>
+                <% when "BELOW" %>
+                  <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+                    <%= position.company.current_performance_display %>
+                  </span>
+                <% else %>
+                  <%= position.company.current_performance_display %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          <% if @fund.positions.open.empty? %>
+            <tr class="border-b dark:border-gray-700">
+              <td colspan="6" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                No open positions found.
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Closed Positions Panel -->
+<div class="mt-6 bg-white dark:bg-gray-800 shadow-md sm:rounded-lg">
+  <div class="px-4 py-5 sm:p-6">
+    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Closed Positions</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+            <th scope="col" class="px-4 py-3">Company</th>
+            <th scope="col" class="px-4 py-3">Invested Capital</th>
+            <th scope="col" class="px-4 py-3">Returned Capital</th>
+            <th scope="col" class="px-4 py-3">Return Multiple</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @fund.positions.closed.includes(:company).each do |position| %>
+            <tr class="border-b dark:border-gray-700">
+              <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <%= position.company.name %>
+              </th>
+              <td class="px-4 py-3">
+                <%= number_to_currency(position.invested_capital) if position.invested_capital %>
+              </td>
+              <td class="px-4 py-3 font-medium">
+                <%= number_to_currency(position.returned_capital) if position.returned_capital %>
+              </td>
+              <td class="px-4 py-3">
+                <% if position.returned_capital && position.invested_capital && position.invested_capital > 0 %>
+                  <% return_multiple = position.returned_capital.to_f / position.invested_capital.to_f %>
+                  <% if return_multiple >= 1.0 %>
+                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                      <%= number_with_precision(return_multiple, precision: 2) %>x
+                    </span>
+                  <% else %>
+                    <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+                      <%= number_with_precision(return_multiple, precision: 2) %>x
+                    </span>
+                  <% end %>
+                <% else %>
+                  -
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          <% if @fund.positions.closed.empty? %>
+            <tr class="border-b dark:border-gray-700">
+              <td colspan="4" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                No closed positions found.
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Transactions Panel -->
+<div class="mt-6 bg-white dark:bg-gray-800 shadow-md sm:rounded-lg">
+  <div class="px-4 py-5 sm:p-6">
+    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Transactions</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+            <th scope="col" class="px-4 py-3">ID</th>
+            <th scope="col" class="px-4 py-3">Date</th>
+            <th scope="col" class="px-4 py-3">Amount</th>
+            <th scope="col" class="px-4 py-3">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @fund.fund_investor_transactions.where(status: :COMPLETE).each do |transaction| %>
+            <tr class="border-b dark:border-gray-700">
+              <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <%= transaction.id %>
+              </th>
+              <td class="px-4 py-3">
+                <%= transaction.date&.strftime("%B %d, %Y") %>
+              </td>
+              <td class="px-4 py-3 font-medium">
+                <%= number_to_currency(transaction.amount) if transaction.amount %>
+              </td>
+              <td class="px-4 py-3">
+                <%= transaction.name %>
+              </td>
+            </tr>
+          <% end %>
+          <% if @fund.fund_investor_transactions.where(status: :COMPLETE).empty? %>
+            <tr class="border-b dark:border-gray-700">
+              <td colspan="4" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                No completed transactions found.
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Documents Panel -->
+<div class="mt-6 bg-white dark:bg-gray-800 shadow-md sm:rounded-lg">
+  <div class="px-4 py-5 sm:p-6">
+    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Documents</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+            <th scope="col" class="px-4 py-3">Document Name</th>
+            <th scope="col" class="px-4 py-3">Date</th>
+            <th scope="col" class="px-4 py-3">File</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @fund.documents.order(date: :asc).each do |document| %>
+            <tr class="border-b dark:border-gray-700">
+              <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <%= document.name %>
+              </th>
+              <td class="px-4 py-3">
+                <%= document.date&.strftime("%B %d, %Y") %>
+              </td>
+              <td class="px-4 py-3">
+                <% filename = document.file.filename.to_s rescue "Unknown file" %>
+                <% if document.file.attached? %>
+                  <%= link_to rails_blob_path(document.file, disposition: "attachment"),
+                      class: "text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 font-medium inline-flex items-center" do %>
+                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    Download
+                  <% end %>
+                <% else %>
+                  <span class="text-gray-400">No file attached</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          <% if @fund.documents.empty? %>
+            <tr class="border-b dark:border-gray-700">
+              <td colspan="3" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                No documents found.
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

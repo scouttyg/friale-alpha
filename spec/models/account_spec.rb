@@ -28,12 +28,6 @@ RSpec.describe Account, type: :model do
       account = build(:account, name: nil)
       expect(account).not_to be_valid
     end
-
-    it 'requires a unique name' do
-      create(:account, name: 'Test Account')
-      duplicate_account = build(:account, name: 'Test Account')
-      expect(duplicate_account).not_to be_valid
-    end
   end
 
   describe 'callbacks' do

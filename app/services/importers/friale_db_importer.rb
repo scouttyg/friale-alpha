@@ -299,7 +299,7 @@ module Importers
 
         user.first_name = row["first_name"]
         user.last_name = row["last_name"]
-        user.password = "temporary_password_123" if was_new_record # Set temporary password for new users
+        user.password = SecureRandom.uuid if was_new_record # Set temporary password for new users
         user.confirmed_at = Time.current if was_new_record # Auto-confirm imported users
 
         was_changed = user.changed?

@@ -14,8 +14,8 @@ end
 
 admin_user = AdminUser.where(email: 'admin@example.com').first_or_initialize
 if admin_user.new_record?
-  admin_user.password = 'password'
-  admin_user.password_confirmation = 'password'
+  admin_user.password = '$$p4ssword'
+  admin_user.password_confirmation = '$$p4ssword!!'
   admin_user.save!
   puts "Imported admin_user"
 end

@@ -70,8 +70,8 @@ jobs:
         uses: getsentry/action-release@v3
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_ORGANIZATION_AUTH_TOKEN }}
-          SENTRY_ORG: data-later
-          SENTRY_PROJECT: data-later-backend
+          SENTRY_ORG: bibliotheque-gerard-85318
+          SENTRY_PROJECT: friale-alpha
         with:
           environment: production
       - uses: superfly/flyctl-actions/setup-flyctl@master

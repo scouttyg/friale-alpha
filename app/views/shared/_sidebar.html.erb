@@ -29,9 +29,16 @@
       <%= render partial: "shared/sidebar/item",
                  locals: {
                    link: funds_path,
-                   icon_name: "currency_dollar",
+                   icon_name: "fund",
                    title: "Funds",
                    active: request.fullpath.start_with?(funds_path),
+                 } %>
+      <%= render partial: "shared/sidebar/item",
+                 locals: {
+                   link: companies_path,
+                   icon_name: "building",
+                   title: "Companies",
+                   active: request.fullpath.start_with?(companies_path),
                  } %>
       <%= render partial: "shared/sidebar/item",
                  locals: {

@@ -1,0 +1,306 @@
+<div class="flex items-center justify-between mb-4 px-2">
+  <h1 class="flex items-center text-3xl font-extrabold dark:text-white">
+    <%= @company.name %>
+  </h1>
+  <%= link_to companies_path, class: "text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 font-medium" do %>
+    ← Back to Companies
+  <% end %>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <!-- Company Panel -->
+  <div class="bg-white dark:bg-gray-800 shadow-md sm:rounded-lg">
+    <div class="px-4 py-5 sm:p-6">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Company Details</h3>
+      <dl class="grid grid-cols-1 gap-x-4 gap-y-4">
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Company Name</dt>
+          <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
+            <%= @company.name %>
+          </dd>
+        </div>
+        <% if @company.website.present? %>
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Website</dt>
+            <dd class="mt-1 text-sm">
+              <%= link_to @company.website, @company.website,
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                  class: "text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 font-medium" %>
+            </dd>
+          </div>
+        <% end %>
+        <% if @company.locations.any? %>
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Locations</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-white">
+              <% @company.locations.each do |location| %>
+                <div class="mb-1">
+                  <%= [location.city, location.region, location.country].compact.join(", ") %>
+                </div>
+              <% end %>
+            </dd>
+          </div>
+        <% end %>
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Current Stage</dt>
+          <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
+            <%= @company.current_stage_display %>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Current Performance</dt>
+          <dd class="mt-1">
+            <% performance = @company.current_performance&.to_s %>
+            <% case performance %>
+            <% when "HIGH" %>
+              <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                <%= @company.current_performance_display %>
+              </span>
+            <% when "ABOVE" %>
+              <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                <%= @company.current_performance_display %>
+              </span>
+            <% when "AVERAGE" %>
+              <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">
+                <%= @company.current_performance_display %>
+              </span>
+            <% when "BELOW" %>
+              <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+                <%= @company.current_performance_display %>
+              </span>
+            <% else %>
+              <span class="text-sm text-gray-900 dark:text-white">
+                <%= @company.current_performance_display %>
+              </span>
+            <% end %>
+          </dd>
+        </div>
+        <% if @company.description.present? %>
+          <div class="col-span-2">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Description</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-white">
+              <%= simple_format(@company.description) %>
+            </dd>
+          </div>
+        <% end %>
+      </dl>
+    </div>
+  </div>
+
+  <!-- Fund Panel -->
+  <% if @position %>
+    <div class="bg-white dark:bg-gray-800 shadow-md sm:rounded-lg">
+      <div class="px-4 py-5 sm:p-6">
+        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Fund Investment</h3>
+        <dl class="grid grid-cols-1 gap-x-4 gap-y-4">
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Fund</dt>
+            <dd class="mt-1 text-sm">
+              <%= link_to @position.fund.name, fund_path(@position.fund),
+                  class: "text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 font-medium" %>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Initial Investment</dt>
+            <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
+              <%= number_to_currency(@position.invested_capital) if @position.invested_capital %>
+            </dd>
+          </div>
+          <% if @position.open_date %>
+            <div>
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Investment Date</dt>
+              <dd class="mt-1 text-sm text-gray-900 dark:text-white">
+                <%= @position.open_date.strftime("%B %d, %Y") %>
+              </dd>
+            </div>
+          <% end %>
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Current Gross</dt>
+            <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
+              <%= number_to_currency(@position.gross_capital) %>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Gross Multiple</dt>
+            <dd class="mt-1">
+              <% multiple = @position.gross_multiple %>
+              <% if multiple >= 1.0 %>
+                <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                  <%= number_with_precision(multiple, precision: 2) %>x
+                </span>
+              <% else %>
+                <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+                  <%= number_with_precision(multiple, precision: 2) %>x
+                </span>
+              <% end %>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<!-- Current Assets Panel -->
+<% if @position&.current_assets&.any? %>
+  <div class="mt-6 bg-white dark:bg-gray-800 shadow-md sm:rounded-lg">
+    <div class="px-4 py-5 sm:p-6">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Current Assets</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" class="px-4 py-3">Asset Type</th>
+              <th scope="col" class="px-4 py-3">Quantity</th>
+              <th scope="col" class="px-4 py-3">Current</th>
+              <th scope="col" class="px-4 py-3">Cap</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @position.current_assets.each do |asset| %>
+              <tr class="border-b dark:border-gray-700">
+                <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">
+                  <%= asset.asset_type %>
+                </td>
+                <td class="px-4 py-3">
+                  <%= asset.quantity %>
+                </td>
+                <td class="px-4 py-3">
+                  <%= asset.current ? "Yes" : "No" %>
+                </td>
+                <td class="px-4 py-3">
+                  <%= number_to_currency(asset.cap / 100.0) if asset.cap %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<!-- Timeline Panel -->
+<% if @timeline_events.any? %>
+  <div class="mt-6 bg-white dark:bg-gray-800 shadow-md sm:rounded-lg">
+    <div class="px-4 py-5 sm:p-6">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Timeline</h3>
+      <div class="flow-root">
+        <ul role="list" class="-mb-8">
+          <% @timeline_events.each_with_index do |event, index| %>
+            <li>
+              <div class="relative pb-8">
+                <% unless index == @timeline_events.length - 1 %>
+                  <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200 dark:bg-gray-700" aria-hidden="true"></span>
+                <% end %>
+                <div class="relative flex space-x-3">
+                  <div>
+                    <span class="h-8 w-8 rounded-full bg-primary-500 flex items-center justify-center ring-8 ring-white dark:ring-gray-800">
+                      <svg class="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                      </svg>
+                    </span>
+                  </div>
+                  <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                    <div>
+                      <% if event.note.present? %>
+                        <p class="text-sm text-gray-900 dark:text-white">
+                          <%= simple_format(event.note) %>
+                        </p>
+                      <% end %>
+                      <% if event.stage.present? %>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                          Stage: <span class="font-medium"><%= event.stage.humanize %></span>
+                        </p>
+                      <% end %>
+                      <% if event.performance.present? %>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                          Performance:
+                          <% case event.performance.to_s %>
+                          <% when "HIGH" %>
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Very Good</span>
+                          <% when "ABOVE" %>
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Good</span>
+                          <% when "AVERAGE" %>
+                            <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Average</span>
+                          <% when "BELOW" %>
+                            <span class="bg-red-100 text-red-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Underperforming</span>
+                          <% else %>
+                            <span class="font-medium"><%= event.performance.humanize %></span>
+                          <% end %>
+                        </p>
+                      <% end %>
+                      <% if event.url.present? %>
+                        <p class="text-sm mt-1">
+                          <%= link_to "View Details", event.url,
+                              target: "_blank",
+                              rel: "noopener noreferrer",
+                              class: "text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 font-medium" %>
+                        </p>
+                      <% end %>
+                    </div>
+                    <div class="text-right text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                      <%= event.created_at.strftime("%b %d, %Y") %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<!-- Documents Panel -->
+<div class="mt-6 bg-white dark:bg-gray-800 shadow-md sm:rounded-lg">
+  <div class="px-4 py-5 sm:p-6">
+    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Documents</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+            <th scope="col" class="px-4 py-3">Document Name</th>
+            <th scope="col" class="px-4 py-3">Date</th>
+            <th scope="col" class="px-4 py-3">File</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @documents.each do |document| %>
+            <tr class="border-b dark:border-gray-700">
+              <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <%= document.name %>
+              </th>
+              <td class="px-4 py-3">
+                <%= document.date&.strftime("%B %d, %Y") %>
+              </td>
+              <td class="px-4 py-3">
+                <% filename = document.file.filename.to_s rescue "Unknown file" %>
+                <% if document.file.attached? %>
+                  <%= link_to rails_blob_path(document.file, disposition: "attachment"),
+                      class: "text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 font-medium inline-flex items-center" do %>
+                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    Download
+                  <% end %>
+                <% else %>
+                  <span class="text-gray-400">No file attached</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          <% if @documents.empty? %>
+            <tr class="border-b dark:border-gray-700">
+              <td colspan="3" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                No documents found.
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

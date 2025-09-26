@@ -1,0 +1,111 @@
+<div class="flex items-center justify-between mb-4 px-2">
+  <h1 class="flex items-center text-3xl font-extrabold dark:text-white">
+    Companies
+  </h1>
+</div>
+
+<!-- Companies List Panel -->
+<div class="bg-white dark:bg-gray-800 shadow-md sm:rounded-lg">
+  <div class="px-4 py-5 sm:p-6">
+    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Portfolio Companies</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+            <th scope="col" class="px-4 py-3">Company</th>
+            <th scope="col" class="px-4 py-3">Fund</th>
+            <th scope="col" class="px-4 py-3">Original Investment</th>
+            <th scope="col" class="px-4 py-3">Current Gross</th>
+            <th scope="col" class="px-4 py-3">Gross Multiple</th>
+            <th scope="col" class="px-4 py-3">Stage</th>
+            <th scope="col" class="px-4 py-3">Performance</th>
+            <th scope="col" class="px-4 py-3">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @companies.each do |company| %>
+            <% # Get the position for this company that the investor has access to %>
+            <% position = company.positions.joins(fund: :fund_investor_investments)
+                                         .where(fund_investor_investments: { investor_account: current_account })
+                                         .includes(:fund)
+                                         .first %>
+            <% if position %>
+              <tr class="border-b dark:border-gray-700">
+                <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <%= company.name %>
+                  <% if position.is_new? %>
+                    <span class="ml-2 bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">New</span>
+                  <% end %>
+                  <% if company.locations.any? %>
+                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      <%= company.locations.map { |loc| [loc.city, loc.region, loc.country].compact.join(", ") }.join(" | ") %>
+                    </div>
+                  <% end %>
+                </th>
+                <td class="px-4 py-3">
+                  <%= link_to position.fund.name, fund_path(position.fund),
+                      class: "text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 font-medium" %>
+                </td>
+                <td class="px-4 py-3">
+                  <%= number_to_currency(position.invested_capital) if position.invested_capital %>
+                </td>
+                <td class="px-4 py-3 font-medium">
+                  <%= number_to_currency(position.gross_capital) %>
+                </td>
+                <td class="px-4 py-3">
+                  <% multiple = position.gross_multiple %>
+                  <% if multiple >= 1.0 %>
+                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                      <%= number_with_precision(multiple, precision: 2) %>x
+                    </span>
+                  <% else %>
+                    <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+                      <%= number_with_precision(multiple, precision: 2) %>x
+                    </span>
+                  <% end %>
+                </td>
+                <td class="px-4 py-3">
+                  <%= company.current_stage_display %>
+                </td>
+                <td class="px-4 py-3">
+                  <% performance = company.current_performance&.to_s %>
+                  <% case performance %>
+                  <% when "HIGH" %>
+                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                      <%= company.current_performance_display %>
+                    </span>
+                  <% when "ABOVE" %>
+                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                      <%= company.current_performance_display %>
+                    </span>
+                  <% when "AVERAGE" %>
+                    <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">
+                      <%= company.current_performance_display %>
+                    </span>
+                  <% when "BELOW" %>
+                    <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+                      <%= company.current_performance_display %>
+                    </span>
+                  <% else %>
+                    <%= company.current_performance_display %>
+                  <% end %>
+                </td>
+                <td class="px-4 py-3">
+                  <%= link_to "View Details", company_path(company),
+                      class: "text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 font-medium" %>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+          <% if @companies.empty? %>
+            <tr class="border-b dark:border-gray-700">
+              <td colspan="8" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                No companies found in your portfolio.
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

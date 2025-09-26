@@ -40,6 +40,7 @@ Rails.application.routes.draw do
     end
 
     resources :funds, only: [ :index, :show ]
+    resources :companies, only: [ :index, :show ]
 
     # Settings namespace with account_id parameter
     scope "/accounts/:account_id/settings", as: "settings" do

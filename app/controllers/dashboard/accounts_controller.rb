@@ -18,7 +18,7 @@ module Dashboard
 
     def switch
       session[:current_account_id] = @account.id
-      redirect_to(root_path)
+      redirect_to(dashboard_path)
     end
 
     private

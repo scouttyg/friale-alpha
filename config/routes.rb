@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   end
 
   scope module: :dashboard do
-    get "/dashboard", to: "example#index", as: :dashboard
+    get "/dashboard", to: "funds#index", as: :dashboard
 
     resources :notifications do
       member do

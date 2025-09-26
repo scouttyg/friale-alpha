@@ -184,6 +184,16 @@ ActiveAdmin.register User do
   scope :confirmed
   scope :unconfirmed
 
+  action_item :sign_in_as_user, priority: 0, only: :show do
+    link_to "Sign in as user", sign_in_as_user_admin_user_path(resource), style: "margin-right: 20px"
+  end
+
+  member_action :sign_in_as_user, method: :get do
+    user = User.find(params[:id])
+    sign_in user
+    redirect_to dashboard_url
+  end
+
   batch_action :confirm_account do |ids|
     users_to_confirm = User.where(id: ids, confirmed_at: nil)
     users_to_confirm.find_each do |user|

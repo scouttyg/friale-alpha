@@ -12,7 +12,6 @@
 
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
-@plugin '@tailwindcss/container-queries';
 @plugin 'flowbite/plugin';
 
 @source '../../../node_modules/flowbite/**/*.js';

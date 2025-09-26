@@ -28,13 +28,6 @@
     <ul class="space-y-2">
       <%= render partial: "shared/sidebar/item",
                  locals: {
-                   link: root_url,
-                   icon_name: "storage",
-                   title: "Example Sidebar Item",
-                   active: request.fullpath.start_with?(/dashboard/)
-                 } %>
-      <%= render partial: "shared/sidebar/item",
-                 locals: {
                    link: funds_path,
                    icon_name: "currency_dollar",
                    title: "Funds",

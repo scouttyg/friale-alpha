@@ -9,10 +9,13 @@ module Dashboard
                              .uniq
     end
 
-    def show
-      @fund_investment = current_account.fund_investor_investments
-                                       .find_by(fund: @fund)
-    end
+  def show
+    @fund_investment = current_account.fund_investor_investments
+                                     .find_by(fund: @fund)
+    @investor_transactions = @fund.fund_investor_transactions
+                                  .joins(:fund_investor_investment)
+                                  .where(fund_investor_investments: { investor_account: current_account }, status: :COMPLETE)
+  end
 
     private
 

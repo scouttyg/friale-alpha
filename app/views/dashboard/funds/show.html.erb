@@ -259,7 +259,7 @@
           </tr>
         </thead>
         <tbody>
-          <% @fund.fund_investor_transactions.where(status: :COMPLETE).each do |transaction| %>
+          <% @investor_transactions.each do |transaction| %>
             <tr class="border-b dark:border-gray-700">
               <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                 <%= transaction.id %>
@@ -275,7 +275,7 @@
               </td>
             </tr>
           <% end %>
-          <% if @fund.fund_investor_transactions.where(status: :COMPLETE).empty? %>
+          <% if @investor_transactions.empty? %>
             <tr class="border-b dark:border-gray-700">
               <td colspan="4" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
                 No completed transactions found.

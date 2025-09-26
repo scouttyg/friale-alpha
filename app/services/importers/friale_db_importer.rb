@@ -556,37 +556,77 @@ module Importers
     def generate_investor_accounts!
       puts "Importing investor accounts..."
 
-      query = <<~SQL
-        SELECT i.id, i.name, ip.user_id, u.email
+      # First, get all unique investors
+      investor_query = <<~SQL
+        SELECT DISTINCT i.id, i.name
         FROM core_investor i
-        LEFT JOIN core_investorprofile ip ON i.id = ip.investor_id
-        LEFT JOIN core_user u ON ip.user_id = u.id
         ORDER BY i.id
       SQL
 
-      result = postgres_connection.exec(query)
+      investor_result = postgres_connection.exec(investor_query)
 
-      result.each do |row|
-        user = User.find_by(email: row["email"]) if row["email"]
-        next unless user # Skip investors without associated users
+      investor_result.each do |investor_row|
+        investor_id = investor_row["id"]
+        investor_name = investor_row["name"]
 
-        investor_account = InvestorAccount.where(name: row["name"]).first_or_initialize
+        # Get all users associated with this investor
+        users_query = <<~SQL
+          SELECT ip.user_id, u.email
+          FROM core_investorprofile ip
+          JOIN core_user u ON ip.user_id = u.id
+          WHERE ip.investor_id = #{investor_id}
+          AND u.is_active = true
+          ORDER BY ip.id
+        SQL
+
+        users_result = postgres_connection.exec(users_query)
+
+        # Skip investors with no associated users
+        next if users_result.ntuples == 0
+
+        # Find or create the investor account
+        investor_account = InvestorAccount.where(name: investor_name).first_or_initialize
         was_new_record = investor_account.new_record?
 
         was_changed = investor_account.changed?
         investor_account.save!
 
-        # Create account membership for the user
-        if was_new_record
-          AccountMember.find_or_create_by(
-            source: investor_account,
-            user: user,
-            access_level: :owner
-          )
+        # Track the account creation/update
+        track_record(:investor_accounts, investor_account, was_changed)
+
+        # Process all associated users
+        users_result.each_with_index do |user_row, index|
+          user = User.find_by(email: user_row["email"])
+          next unless user # Skip if user not found in Rails app
+
+          # First user becomes owner, subsequent users become collaborators
+          access_level = index == 0 ? :owner : :collaborator
+
+          # Check if membership already exists
+          existing_member = AccountMember.find_by(source: investor_account, user: user)
+
+          if existing_member
+            # Update access level if needed (only if current user should be owner but isn't)
+            if access_level == :owner && !existing_member.owner?
+              existing_member.update!(access_level: :owner)
+              puts "  Updated #{user.email} to owner of #{investor_name}"
+            end
+          else
+            # Create new membership
+            AccountMember.create!(
+              source: investor_account,
+              user: user,
+              access_level: access_level
+            )
+
+            access_level_text = access_level == :owner ? "owner" : "collaborator"
+            puts "  Added #{user.email} as #{access_level_text} of #{investor_name}"
+          end
         end
 
-        track_record(:investor_accounts, investor_account, was_changed)
-        log_record_action(investor_account, was_changed, "investor account: #{row['name']} (#{user.email})")
+        # Log the overall action
+        user_count = users_result.ntuples
+        log_record_action(investor_account, was_changed, "investor account: #{investor_name} (#{user_count} user#{'s' if user_count != 1})")
       end
 
       puts "Investor accounts import completed!"
